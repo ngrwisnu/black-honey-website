@@ -12,6 +12,7 @@ const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        facebook: "bg-[#1877F2] text-white hover:bg-[#1877F2]/90",
         success: "bg-success text-success-foreground hover:bg-success-500",
         successDisabled:
           "bg-success-disabled text-success-disabled-foreground cursor-not-allowed",

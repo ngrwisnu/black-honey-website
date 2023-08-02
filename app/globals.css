@@ -39,6 +39,14 @@
     --success-500: 156, 77%, 39%, 1;
     --success-400: 154, 60%, 52%, 1;
     --success-100: 144, 73%, 90%, 1;
+
+    --orange-primary: 28, 96%, 57%, 1;
+    --orange-surface: 27, 100%, 96%, 1;
+
+    --gray-border: rgba(215, 215, 215, 1);
+
+    --body-primary: rgba(13, 13, 12, 1);
+    --body-secondary: rgba(134, 134, 133, 1);
   }
 
   .dark {

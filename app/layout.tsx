@@ -14,11 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <h1 className={`${merienda.className}`}>Hello World</h1>
-        <h3 className={`${inter.className} italic`}>Hello Next</h3>
-        {children}
-      </body>
+      <body className={`${inter.className} min-h-screen`}>{children}</body>
     </html>
   );
 }

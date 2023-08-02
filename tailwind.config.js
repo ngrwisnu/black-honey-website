@@ -58,7 +58,22 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        orange: {
+          primary: "hsl(var(--orange-primary))",
+          surface: "hsl(var(--orange-surface))",
+        },
+        gray: {
+          border: "var(--gray-border)",
+        },
+        body: {
+          primary: "var(--body-primary)",
+          secondary: "var(--body-secondary)",
+        },
         "success-500": "hsl(var(--success-500))",
+      },
+      boxShadow: {
+        content: "0 4px 16px 0px rgba(205, 230, 254, 0.25)",
+        section: "2px 4px 30px 0px rgba(0, 0, 0, 0.04)",
       },
       borderRadius: {
         lg: "var(--radius)",
