@@ -90,7 +90,7 @@ const Register = () => {
                 className={`${
                   /[A-Za-z0-9]{6,}/.test(watchPassword)
                     ? "text-green-500"
-                    : "text-slate-600"
+                    : "text-slate-400"
                 } flex items-center gap-1`}
               >
                 <CheckCircle2 size={18} /> Must be 6 or more characters long
@@ -99,7 +99,7 @@ const Register = () => {
                 className={`${
                   /\d+/.test(watchPassword)
                     ? "text-green-500"
-                    : "text-slate-600"
+                    : "text-slate-400"
                 } flex items-center gap-1`}
               >
                 <CheckCircle2 size={18} /> Must contains 1 or more numbers
@@ -108,7 +108,7 @@ const Register = () => {
                 className={`${
                   /[A-Z]+/.test(watchPassword)
                     ? "text-green-500"
-                    : "text-slate-600"
+                    : "text-slate-400"
                 } flex items-center gap-1`}
               >
                 <CheckCircle2 size={18} /> Must contains 1 or more capital
