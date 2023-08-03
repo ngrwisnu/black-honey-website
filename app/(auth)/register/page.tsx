@@ -1,72 +1,109 @@
+"use client";
+
 import FormContainer from "@/components/ui/auth/form-container";
-import { Button } from "@/components/ui/button";
-import { Facebook } from "lucide-react";
-import Link from "next/link";
+import { registerSchema } from "@/validations/auth-form";
+
 import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Register = () => {
-  const header = (
-    <div
-      className="
-        title
-        flex
-        flex-col
-        items-start
-        gap-1
-        self-stretch
-        "
-    >
-      <h3 className="w-full text-center text-2xl font-semibold leading-7 text-body-primary">
-        Create an Account
-      </h3>
-      <p className="w-full text-base text-body-secondary leading-5 text-center">
-        Welcome to the Black Honey Website
-      </p>
-    </div>
-  );
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      fullname: "",
+      email: "",
+      password: "",
+    },
+  });
 
-  const divider = (
-    <div
-      className="
-        flex
-        items-center
-        gap-1
-        self-stretch
-        "
-    >
-      <span className="h-[1px] flex-1 bg-gray-border"></span>
-      <span className="text text-base text-body-secondary">OR</span>
-      <span className="h-[1px] flex-1 bg-gray-border"></span>
-    </div>
-  );
+  const submitHandler = (data: z.infer<typeof registerSchema>) => {
+    console.log(data);
+  };
 
-  const altButton = (
-    <Button variant="facebook" className="w-full">
-      <Facebook fill="white" size="18" strokeWidth={0} />
-      Register with Facebook
-    </Button>
-  );
-
-  const footer = (
-    <p className="text-sm text-body-secondary leading-4">
-      Already have an account?{" "}
-      <Link
-        as="/login"
-        href="/login"
-        className="text-orange-primary font-semibold"
+  const formContent = (
+    <Form {...form}>
+      <form
+        action=""
+        onSubmit={form.handleSubmit(submitHandler)}
+        className="flex flex-col gap-4"
       >
-        Login here
-      </Link>
-    </p>
+        <FormField
+          control={form.control}
+          name="fullname"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Fullname</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="Enter your fullname"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Enter your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Must contains 1 or more numbers and capital letters
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" variant="success" className="mt-2 w-full">
+          Register
+        </Button>
+      </form>
+    </Form>
   );
 
   return (
     <>
       <FormContainer
-        header={header}
-        divider={divider}
-        altButton={altButton}
-        footer={footer}
+        title="Create an account"
+        description="Welcome to the Black Honey Website"
+        formContent={formContent}
+        footerText="Already have an account?"
       />
     </>
   );

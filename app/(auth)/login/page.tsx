@@ -1,72 +1,85 @@
-import FormContainer from "@/components/ui/auth/form-container";
-import { Button } from "@/components/ui/button";
-import { Facebook } from "lucide-react";
-import Link from "next/link";
+"use client";
 import React from "react";
 
+import FormContainer from "@/components/ui/auth/form-container";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { loginSchema } from "@/validations/auth-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 const Login = () => {
-  const header = (
-    <div
-      className="
-        title
-        flex
-        flex-col
-        items-start
-        gap-1
-        self-stretch
-        "
-    >
-      <h3 className="w-full text-center text-2xl font-semibold leading-7 text-body-primary">
-        Welcome
-      </h3>
-      <p className="w-full text-base text-body-secondary leading-5 text-center">
-        Please login first before continue
-      </p>
-    </div>
-  );
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const divider = (
-    <div
-      className="
-        flex
-        items-center
-        gap-1
-        self-stretch
-        "
-    >
-      <span className="h-[1px] flex-1 bg-gray-border"></span>
-      <span className="text text-base text-body-secondary">OR</span>
-      <span className="h-[1px] flex-1 bg-gray-border"></span>
-    </div>
-  );
+  const submitHandler = (data: z.infer<typeof loginSchema>) => {
+    console.log(data);
+  };
 
-  const altButton = (
-    <Button variant="facebook" className="w-full">
-      <Facebook fill="white" size="18" strokeWidth={0} />
-      Login with Facebook
-    </Button>
-  );
-
-  const footer = (
-    <p className="text-sm text-body-secondary leading-4">
-      Don’t have an account?{" "}
-      <Link
-        as="/register"
-        href="/register"
-        className="text-orange-primary font-semibold"
+  const formContent = (
+    <Form {...form}>
+      <form
+        action=""
+        onSubmit={form.handleSubmit(submitHandler)}
+        className="flex flex-col gap-4"
       >
-        Register here
-      </Link>
-    </p>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Enter your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button variant="success" type="submit" className="mt-2 w-full">
+          Continue
+        </Button>
+      </form>
+    </Form>
   );
 
   return (
     <>
       <FormContainer
-        header={header}
-        divider={divider}
-        altButton={altButton}
-        footer={footer}
+        title="Welcome"
+        description="Please login first before continue"
+        formContent={formContent}
+        footerText="Don’t have an account?"
       />
     </>
   );
