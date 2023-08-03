@@ -30,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
         `}
       >
         <Link
+          as="/"
           href="/"
           className={`${merienda.className} text-4xl font-bold leading-[43.2px]`}
         >
