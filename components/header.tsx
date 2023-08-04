@@ -1,6 +1,7 @@
 "use client";
 
 import { merienda } from "@/app/fonts";
+import { X } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -115,27 +116,27 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
             {isClicked && (
               <div
                 className={`
-              dropdown
-              fixed
-              sm:absolute
-              bottom-0
-              sm:-bottom-[171px]
-              right-0
-              left-0
-              sm:left-auto
-              flex
-              flex-col
-              items-start
-              min-w-[180px]
-              py-2
-              gap-[10px]
-              rounded-md
-              bg-white
-              shadow-section
-              z-10
+                dropdown
+                fixed
+                sm:absolute
+                bottom-0
+                sm:-bottom-[171px]
+                right-0
+                left-0
+                sm:left-auto
+                flex
+                flex-col
+                items-start
+                min-w-[180px]
+                py-2
+                gap-[10px]
+                rounded-md
+                bg-white
+                shadow-section
+                z-10
               `}
               >
-                <ul className="w-full flex flex-col gap-[10px]">
+                <ul className="w-full flex flex-col gap-[10px] order-2">
                   <li>
                     <Link
                       href={"/dashboard"}
@@ -168,6 +169,12 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                     </Link>
                   </li>
                 </ul>
+                <button
+                  className="w-full flex sm:hidden justify-end order-1 py-2 px-4"
+                  onClick={() => setIsClicked(false)}
+                >
+                  <X size={18} />
+                </button>
               </div>
             )}
           </div>
