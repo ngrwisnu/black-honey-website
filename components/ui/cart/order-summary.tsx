@@ -86,7 +86,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
             </div>
           </div>
         </div>
-        {path === "payment" && (
+        {path === "checkout" && (
           <div
             className="flex flex-col items-start gap-1 self-stretch"
             aria-label="Input coupon"
@@ -138,7 +138,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
               <span>Checkout Now</span>
             </Button>
           )}
-          {path === "payment" && (
+          {path === "checkout" && (
             <Button
               variant="success"
               className="w-full"
