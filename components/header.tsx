@@ -19,6 +19,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   return (
     <header
       className={`
+      w-full
       max-h-20 
       py-4 
       flex 

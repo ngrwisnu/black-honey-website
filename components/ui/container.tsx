@@ -1,11 +1,14 @@
 import React, { ReactNode } from "react";
+import { clsx as cx } from "clsx";
 
-const Container = ({ children }: { children: ReactNode }) => {
-  return (
-    <main className="flex min-h-full flex-col items-center justify-between px-4 py-14">
-      {children}
-    </main>
-  );
+const Container = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) => {
+  return <main className={cx(className, "mt-14")}>{children}</main>;
 };
 
 export default Container;

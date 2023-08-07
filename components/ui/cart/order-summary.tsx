@@ -26,7 +26,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
     <div
       className={cx(
         classname,
-        "flex w-[459px] flex-col items-start shrink-0 self-stretch"
+        "flex w-full sm:w-[459px] flex-col items-start shrink-0 self-stretch"
       )}
     >
       <div
