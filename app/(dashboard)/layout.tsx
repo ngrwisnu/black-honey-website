@@ -12,7 +12,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     <>
       <Header />
       <SideNav />
-      <Container className="mt-14">{children}</Container>
+      <Container className="my-14">{children}</Container>
     </>
   );
 };
