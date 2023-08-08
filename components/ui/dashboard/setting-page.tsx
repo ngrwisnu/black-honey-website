@@ -9,12 +9,12 @@ import FormArea from "./form-area";
 
 const SettingPage = () => {
   const fields = [
-    "Full address",
-    "City",
-    "Province",
-    "Postal code",
-    "Phone",
-    "Recipient name",
+    { name: "Full address", type: "text" },
+    { name: "City", type: "text" },
+    { name: "Province", type: "text" },
+    { name: "Postal code", type: "text" },
+    { name: "Phone", type: "text" },
+    { name: "Recipient name", type: "text" },
   ];
 
   return (

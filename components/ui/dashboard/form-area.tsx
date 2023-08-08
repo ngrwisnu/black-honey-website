@@ -17,7 +17,7 @@ import { Input } from "../input";
 import { Button } from "../button";
 import { Check } from "lucide-react";
 
-const FormArea = ({ fields }: { fields: string[] }) => {
+const FormArea = ({ fields }: { fields: { name: string; type: string }[] }) => {
   const form = useForm<z.infer<typeof addressSchema>>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
@@ -41,16 +41,20 @@ const FormArea = ({ fields }: { fields: string[] }) => {
         onSubmit={form.handleSubmit(submitHandler)}
         className="w-full"
       >
-        {fields.map((item) => (
+        {fields?.map((item) => (
           <FormField
-            key={item}
+            key={item.name}
             control={form.control}
-            name={item.toLowerCase().replace(/\s/g, "_")}
+            name={item.name.toLowerCase().replace(/\s/g, "_")}
             render={({ field }) => (
               <FormItem className="py-2">
-                <FormLabel className="text-lg">{item}</FormLabel>
+                <FormLabel className="text-lg">{item.name}</FormLabel>
                 <FormControl className="mt-[10px]">
-                  <Input {...field} className="text-lg border-gray-200" />
+                  <Input
+                    {...field}
+                    type={item.type}
+                    className="text-lg border-gray-200"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

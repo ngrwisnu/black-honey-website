@@ -13,7 +13,7 @@ const ContentSection: React.FC<ContentSectionProps> = ({
 }) => {
   return (
     <section
-      className="flex p-4 w-4/5 flex-col items-center gap-14 rounded-lg bg-white text-body-primary text-lg"
+      className="flex p-4 w-full sm:w-4/5 flex-col items-center gap-14 rounded-lg bg-white text-body-primary text-lg"
       {...props}
     >
       {children}
