@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
@@ -19,9 +19,12 @@ import {
 } from "../form";
 import { Textarea } from "../textarea";
 import { Button } from "../button";
-import { Check } from "lucide-react";
+import { Check, Star } from "lucide-react";
+import { Slider } from "../slider";
 
 const ReviewPage = () => {
+  const [rating, setRating] = useState(5);
+
   const form = useForm<z.infer<typeof reviewSchema>>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
@@ -31,7 +34,7 @@ const ReviewPage = () => {
   });
 
   const submitHandler = (data: z.infer<typeof reviewSchema>) => {
-    console.log(data);
+    console.log({ rating, message: data.message });
   };
 
   return (
@@ -44,13 +47,40 @@ const ReviewPage = () => {
               <form
                 action=""
                 onSubmit={form.handleSubmit(submitHandler)}
-                className="w-full"
+                className="w-full gap-2"
               >
+                <FormField
+                  control={form.control}
+                  name="rating"
+                  render={() => (
+                    <FormItem className="py-2">
+                      <FormLabel className="text-lg">Ratings</FormLabel>
+                      <FormControl className="mt-[10px]">
+                        <div className="w-full sm:w-4/5 flex gap-2">
+                          <Slider
+                            defaultValue={[5]}
+                            max={5}
+                            step={0.5}
+                            onValueChange={(e) => setRating(e[0])}
+                          />
+                          <span className="flex items-center font-semibold text-yellow-600">
+                            {rating}{" "}
+                            <Star
+                              size={26}
+                              className="stroke-0 fill-yellow-500"
+                            />
+                          </span>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="message"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="py-2">
                       <FormLabel className="text-lg">
                         What is your opinion about our product?
                       </FormLabel>
@@ -58,13 +88,14 @@ const ReviewPage = () => {
                         <Textarea
                           {...field}
                           placeholder="We'd love to hear your thoughts"
-                          className="resize-none sm:w-1/2 text-lg border-gray-200"
+                          className="resize-none sm:w-4/5 text-lg border-gray-200"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <Button
                   variant="outline"
                   className="border-body-primary gap-2 mt-6"
