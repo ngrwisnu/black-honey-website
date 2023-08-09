@@ -1,8 +1,23 @@
 import React from "react";
+import { ContentSectionProps } from "./content-section";
+import clsx from "clsx";
 
-const ContentBody = ({ children }: { children: React.ReactNode }) => {
+interface ContentBodyProps extends ContentSectionProps {
+  className?: string;
+}
+
+const ContentBody: React.FC<ContentBodyProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <div className="flex flex-col items-start self-stretch">{children}</div>
+    <div
+      className={clsx(className, "flex flex-col items-start self-stretch")}
+      {...props}
+    >
+      {children}
+    </div>
   );
 };
 
