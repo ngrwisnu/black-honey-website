@@ -140,7 +140,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                 <ul className="w-full flex flex-col gap-[10px] order-2">
                   <li>
                     <Link
-                      href={"/dashboard"}
+                      href={"/dashboard/setting"}
                       className="flex py-2 px-4 justify-center sm:justify-start items-center gap-2 self-stretch text-gray-800 hover:bg-gray-100"
                     >
                       <span className="w-6 h-6 bg-[url(/images/person.svg)] bg-no-repeat"></span>
@@ -149,7 +149,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                   </li>
                   <li>
                     <Link
-                      href={"/dashboard"}
+                      href={"/dashboard/transactions"}
                       className="flex py-2 px-4 justify-center sm:justify-start items-center gap-2 self-stretch text-gray-800 hover:bg-gray-100"
                     >
                       <span className="w-6 h-6 bg-[url(/images/contract.svg)] bg-no-repeat"></span>

@@ -89,6 +89,7 @@ const ReviewPage = () => {
                           {...field}
                           placeholder="We'd love to hear your thoughts"
                           className="resize-none sm:w-4/5 text-lg border-gray-200"
+                          rows={6}
                         />
                       </FormControl>
                       <FormMessage />
