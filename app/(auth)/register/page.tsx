@@ -3,7 +3,7 @@
 import FormContainer from "@/components/ui/auth/form-container";
 import { registerSchema } from "@/validations/auth-form";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CheckCircle2 } from "lucide-react";
 
 const Register = () => {
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -28,6 +29,8 @@ const Register = () => {
       password: "",
     },
   });
+
+  const watchPassword = form.watch("password");
 
   const submitHandler = (data: z.infer<typeof registerSchema>) => {
     console.log(data);
@@ -83,10 +86,34 @@ const Register = () => {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Must contains 1 or more numbers and capital letters
+              <FormDescription
+                className={`${
+                  /[A-Za-z0-9]{6,}/.test(watchPassword)
+                    ? "text-green-500"
+                    : "text-slate-400"
+                } flex items-center gap-1`}
+              >
+                <CheckCircle2 size={18} /> Must be 6 or more characters long
               </FormDescription>
-              <FormMessage />
+              <FormDescription
+                className={`${
+                  /\d+/.test(watchPassword)
+                    ? "text-green-500"
+                    : "text-slate-400"
+                } flex items-center gap-1`}
+              >
+                <CheckCircle2 size={18} /> Must contains 1 or more numbers
+              </FormDescription>
+              <FormDescription
+                className={`${
+                  /[A-Z]+/.test(watchPassword)
+                    ? "text-green-500"
+                    : "text-slate-400"
+                } flex items-center gap-1`}
+              >
+                <CheckCircle2 size={18} /> Must contains 1 or more capital
+                letters
+              </FormDescription>
             </FormItem>
           )}
         />

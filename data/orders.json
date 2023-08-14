@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "qty": 2,
+      "total_price": 120000,
+      "status": "Pending",
+      "product": {
+        "id": 1,
+        "name": "Black Honey - 750 mL",
+        "price": 60000,
+        "thumbnail": "product-1.webp"
+      },
+      "createdAt": "2023-07-24 09:47:59.277+07"
+    },
+    {
+      "id": 1,
+      "qty": 2,
+      "total_price": 120000,
+      "status": "Success",
+      "product": {
+        "id": 1,
+        "name": "Black Honey - 750 mL",
+        "price": 60000,
+        "thumbnail": "product-1.webp"
+      },
+      "createdAt": "2023-06-16 09:47:59.277+07"
+    }
+  ]
+}

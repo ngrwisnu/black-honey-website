@@ -38,7 +38,8 @@ const FormContainer: React.FC<FormContainerProps> = ({
     <div
       className="
         flex
-        w-[344px]
+        sm:w-[344px]
+        w-full
         p-4
         flex-col
         items-start

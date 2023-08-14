@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "type": "E-wallet",
+      "name": "GoPay",
+      "account_number": "667700004000",
+      "thumbnail": "gopay.png"
+    },
+    {
+      "id": 2,
+      "type": "E-wallet",
+      "name": "OVO",
+      "account_number": "667700004000",
+      "thumbnail": "ovo.png"
+    },
+    {
+      "id": 3,
+      "type": "Bank",
+      "name": "Mandiri",
+      "account_number": "2244000066664444",
+      "thumbnail": "mandiri.png"
+    }
+  ]
+}
