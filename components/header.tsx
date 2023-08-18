@@ -18,17 +18,9 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
 
   return (
     <header
-      className={`
-      w-full
-      max-h-20 
-      py-4 
-      flex 
-      items-center 
-      self-stretch 
-      justify-center 
-      md:justify-between 
-      ${logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"}
-      `}
+      className={`w-full max-h-20 py-4 flex px-4 items-center self-stretch justify-center md:justify-between ${
+        logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"
+      }`}
     >
       <div
         className={`
