@@ -5,7 +5,11 @@ import Image from "next/image";
 const Product = () => {
   return (
     <section className="my-40 flex flex-col md:flex-row px-4 items-start w-full gap-10 md:gap-0">
-      <div className="flex justify-center items-center flex-1 order-2 md:order-1 self-stretch">
+      <div
+        data-aos="fade-up"
+        data-aos-delay="500"
+        className="flex justify-center items-center flex-1 order-2 md:order-1 self-stretch"
+      >
         <div
           className="w-full md:w-[472px] h-full flex flex-col justify-center gap-8"
           aria-label="Product's content"
@@ -24,7 +28,10 @@ const Product = () => {
           </Button>
         </div>
       </div>
-      <div className="flex-1 h-full items-start order-1 md:order-2">
+      <div
+        data-aos="fade-up"
+        className="flex-1 h-full items-start order-1 md:order-2"
+      >
         <div className="flex-1 self-stretch">
           <Image
             src="/images/default-image.webp"

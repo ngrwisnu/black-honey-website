@@ -6,7 +6,7 @@ const Benefits = () => {
   return (
     <section className="w-full flex flex-col py-40 px-4 items-center gap-32">
       <ItemRow>
-        <div className="flex-1 w-full md:w-[458px]">
+        <div data-aos="fade-up" className="flex-1 w-full md:w-[458px]">
           <div className="relative w-full lg:w-4/5 h-[567px]">
             <Image
               src="/images/default-image.webp"
@@ -16,7 +16,7 @@ const Benefits = () => {
             />
           </div>
         </div>
-        <div className="flex-1">
+        <div data-aos="fade-up" data-aos-delay="350" className="flex-1">
           <div className="flex flex-col items-start gap-6 text-body-primary text-lg font-normal">
             <h3 className="text-5xl leading-[57.6px]">Good Quality</h3>
             <p>
@@ -27,7 +27,10 @@ const Benefits = () => {
         </div>
       </ItemRow>
       <ItemRow>
-        <div className="flex-1 w-full md:w-[458px] md:order-2">
+        <div
+          data-aos="fade-up"
+          className="flex-1 w-full md:w-[458px] md:order-2"
+        >
           <div className="relative w-full lg:w-4/5 h-[567px]">
             <Image
               src="/images/default-image.webp"
@@ -37,7 +40,11 @@ const Benefits = () => {
             />
           </div>
         </div>
-        <div className="flex-1 md:order-1">
+        <div
+          data-aos="fade-up"
+          data-aos-delay="350"
+          className="flex-1 md:order-1"
+        >
           <div className="flex flex-col items-start gap-6 text-body-primary text-lg font-normal">
             <h3 className="text-5xl leading-[57.6px]">Pure and Natural</h3>
             <p>
