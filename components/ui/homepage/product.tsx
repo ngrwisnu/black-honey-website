@@ -1,8 +1,13 @@
+"use client";
+
 import React from "react";
 import { Button } from "../button";
 import Image from "next/image";
+import { useModal } from "@/store/modal-slice";
 
 const Product = () => {
+  const modal = useModal();
+
   return (
     <section className="my-40 flex flex-col md:flex-row px-4 items-start w-full gap-10 md:gap-0">
       <div
@@ -23,7 +28,12 @@ const Product = () => {
             vitamins, and minerals that can help boost your immune system and
             improve your overall health.
           </p>
-          <Button variant="outline" size="lg" className="w-full md:w-40">
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-full md:w-40"
+            onClick={modal.onOpen}
+          >
             Buy Now
           </Button>
         </div>

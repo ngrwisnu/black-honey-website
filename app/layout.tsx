@@ -1,7 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { inter, merienda } from "./fonts";
+import { inter } from "./fonts";
 import AOSInit from "@/config/aos-init";
+import Modal from "@/components/ui/homepage/modal";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AOSInit />
-      <body className={`${inter.className} min-h-screen`}>{children}</body>
+      <body className={`${inter.className} min-h-screen`}>
+        <Modal />
+        {children}
+      </body>
     </html>
   );
 }
