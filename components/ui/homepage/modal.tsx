@@ -1,14 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../button";
 import { X } from "lucide-react";
 import { Input } from "../input";
 import Image from "next/image";
 import { useModal } from "@/store/modal-slice";
+import { useQuery } from "react-query";
+import { getAllProducts } from "@/lib/api/homepage";
+import { ProductType } from "@/types/types";
+import { currencyFormatter } from "@/lib/utils";
+import { useCart } from "@/store/cart";
 
 const Modal = () => {
+  const [products, setProducts] = useState<ProductType[]>();
+  const [activeProduct, setActiveProduct] = useState<ProductType>();
+
   const modal = useModal();
+  const cart = useCart();
+
+  const { data } = useQuery({
+    queryKey: "products",
+    queryFn: () => getAllProducts(),
+  });
+
+  useEffect(() => {
+    setProducts(data?.data.data);
+
+    if (products) {
+      setActiveProduct(products[0]);
+    }
+  }, [data, products]);
+
+  const sizeHandler = (size: number) => {
+    const selectedProduct = products?.find((item) => item.size === size);
+
+    if (selectedProduct) {
+      setActiveProduct(selectedProduct);
+    }
+  };
+
+  const addToCartHandler = () => {
+    cart.addItem(activeProduct!);
+    modal.onClose();
+  };
 
   if (!modal.isOpen) {
     return;
@@ -23,7 +58,7 @@ const Modal = () => {
         <div className="flex-1" aria-label="Product's preview">
           <div className="relative h-[240px] w-full md:h-full">
             <Image
-              src="/images/default-image.webp"
+              src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${activeProduct?.thumbnail}`}
               fill={true}
               alt="Product's preview"
               style={{ objectFit: "cover" }}
@@ -51,14 +86,14 @@ const Modal = () => {
                 className="mb-1 text-lg font-medium"
                 aria-label="Product's name"
               >
-                Aripicia Black Honey - 750 mL
+                {activeProduct?.name}
               </h4>
               <p className="text-2xl font-bold" aria-label="Price">
-                Rp70.000
+                {currencyFormatter(activeProduct?.price!)}
               </p>
             </div>
             <div className="w-full" aria-label="Stock of the product">
-              <p className="text-sm">Stock: &gt; 10</p>
+              <p className="text-sm">Stock: {activeProduct?.stock}</p>
             </div>
             <div
               className="flex w-full flex-col items-start gap-1"
@@ -66,28 +101,38 @@ const Modal = () => {
             >
               <p>Size</p>
               <div className="flex flex-wrap items-start gap-4">
-                <div className="relative flex items-center justify-center rounded-full border border-gray-950 px-3 py-[6px]">
-                  <Input
-                    type="radio"
-                    id="750"
-                    name="size"
-                    value={750}
-                    className="absolute opacity-0"
-                  />
-                  <label htmlFor="750" className="font-medium">
-                    750 mL
-                  </label>
-                </div>
-                <div className="relative flex items-center justify-center rounded-full border border-gray-950 px-3 py-[6px]">
-                  <Input
-                    type="radio"
-                    id="1000"
-                    name="size"
-                    value={1000}
-                    className="absolute opacity-0"
-                  />
-                  <label htmlFor="1000">1000 mL</label>
-                </div>
+                {products?.map((item: ProductType) => (
+                  <div
+                    key={item.id}
+                    className={`relative flex items-center justify-center rounded-full border-gray-950 px-3 py-[6px] ${
+                      activeProduct?.size == item.size
+                        ? "bg-gray-950"
+                        : "bg-transparent"
+                    } ${
+                      activeProduct?.size == item.size
+                        ? "text-white"
+                        : "text-body-primary"
+                    } ${
+                      activeProduct?.size == item.size
+                        ? "border-none"
+                        : "border"
+                    }`}
+                  >
+                    <Input
+                      type="radio"
+                      id={`${item.size}`}
+                      name="size"
+                      value={item.size}
+                      className="absolute opacity-0"
+                      onChange={(e) =>
+                        sizeHandler(Number(e.currentTarget.value))
+                      }
+                    />
+                    <label htmlFor={`${item.size}`} className="font-medium">
+                      {item.size} mL
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
             <div
@@ -106,6 +151,7 @@ const Modal = () => {
           <Button
             className="self-stretch rounded-full"
             aria-label="Button add to cart"
+            onClick={addToCartHandler}
           >
             Add to Cart
           </Button>
