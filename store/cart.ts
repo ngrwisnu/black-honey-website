@@ -3,20 +3,27 @@ import { ProductType } from "@/types/types";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
+export interface CartItems {
+  qty: number;
+  product: ProductType;
+}
+
 interface CartStore {
-  items: ProductType[];
-  addItem: (data: ProductType) => void;
+  items: CartItems[];
+  addItem: (data: { qty: number; product: ProductType }) => void;
   removeItem: (id: string) => void;
   removeAllItem: () => void;
 }
 
-export const useCart = create(
+const useCart = create(
   persist<CartStore>(
     (set, get) => ({
       items: [],
-      addItem: (data: ProductType) => {
+      addItem: (data: { qty: number; product: ProductType }) => {
         const currentItems = get().items;
-        const existingItem = currentItems.find((item) => item.id === data.id);
+        const existingItem = currentItems.find(
+          (item) => item.product.id === data.product.id,
+        );
 
         if (existingItem) {
           return toast({
@@ -29,7 +36,9 @@ export const useCart = create(
         toast({ title: "Success added item to the cart" });
       },
       removeItem: (id: string) => {
-        set({ items: [...get().items.filter((item) => item.id !== id)] });
+        set({
+          items: [...get().items.filter((item) => item.product.id !== id)],
+        });
       },
       removeAllItem: () => {
         set({ items: [] });
@@ -41,3 +50,5 @@ export const useCart = create(
     },
   ),
 );
+
+export default useCart;

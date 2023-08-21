@@ -1,7 +1,7 @@
 "use client";
 
 import { merienda } from "@/app/fonts";
-import { useCart } from "@/store/cart";
+import useCart from "@/store/cart";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,18 +37,14 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
 
   return (
     <header
-      className={`static flex max-h-20 w-full items-center justify-center self-stretch px-4 py-4 sm:fixed sm:bg-white/50 sm:backdrop-blur-md md:justify-between ${
+      className={`static top-0 flex max-h-20 w-full items-center justify-center self-stretch px-4 py-4 sm:fixed sm:bg-white/50 sm:backdrop-blur-md md:justify-between ${
         logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"
       }`}
     >
       <div
-        className={`
-        logo 
-        flex 
-        flex-1 
-        items-center 
-        ${logoCenter ? "justify-center" : "justify-start"}
-        `}
+        className={`logo flex flex-1 items-center ${
+          logoCenter ? "justify-center" : "justify-start"
+        }`}
       >
         <Link
           as="/"

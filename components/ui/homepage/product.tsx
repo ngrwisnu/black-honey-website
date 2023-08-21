@@ -3,20 +3,20 @@
 import React from "react";
 import { Button } from "../button";
 import Image from "next/image";
-import { useModal } from "@/store/modal-slice";
+import useModal from "@/store/modal-slice";
 
 const Product = () => {
   const modal = useModal();
 
   return (
-    <section className="my-40 flex flex-col md:flex-row px-4 items-start w-full gap-10 md:gap-0">
+    <section className="my-40 flex w-full flex-col items-start gap-10 px-4 md:flex-row md:gap-0">
       <div
         data-aos="fade-up"
         data-aos-delay="500"
-        className="flex justify-center items-center flex-1 order-2 md:order-1 self-stretch"
+        className="order-2 flex flex-1 items-center justify-center self-stretch md:order-1"
       >
         <div
-          className="w-full md:w-[472px] h-full flex flex-col justify-center gap-8"
+          className="flex h-full w-full flex-col justify-center gap-8 md:w-[472px]"
           aria-label="Product's content"
         >
           <h3 className="text-5xl font-medium text-body-primary">
@@ -40,7 +40,7 @@ const Product = () => {
       </div>
       <div
         data-aos="fade-up"
-        className="flex-1 h-full items-start order-1 md:order-2"
+        className="order-1 h-full flex-1 items-start md:order-2"
       >
         <div className="flex-1 self-stretch">
           <Image

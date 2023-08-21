@@ -1,10 +1,18 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-interface CallAPIProps extends AxiosRequestConfig {}
+interface CallAPIProps extends AxiosRequestConfig {
+  token?: string;
+}
 
-const callAPI = async ({ url, method = "GET", data }: CallAPIProps) => {
+const callAPI = async ({ url, method = "GET", data, token }: CallAPIProps) => {
   try {
     let headers = {};
+
+    if (token) {
+      headers = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
 
     const response = await axios({
       url,

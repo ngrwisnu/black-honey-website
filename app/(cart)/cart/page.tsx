@@ -2,37 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import OrderSummary from "@/components/ui/cart/order-summary";
-import order from "@/data/orders.json";
 import { OptionWrapper } from "@/components/ui/cart/option-wrapper";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import Image from "next/image";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-interface OrderTypes {
-  id: number;
-  product_name: string;
-  price: number;
-}
+import useCart, { CartItems } from "@/store/cart";
+import { currencyFormatter } from "@/lib/utils";
 
 const Cart = () => {
-  const [orders, setOrders] = useState<OrderTypes[]>([]);
+  const [orders, setOrders] = useState<CartItems[]>([]);
+
+  const cart = useCart();
 
   useEffect(() => {
-    setOrders(order.data);
-  }, []);
-
-  const data = [
-    {
-      name: "Subtotal",
-      value: "120.000",
-    },
-  ];
+    setOrders(cart.items);
+  }, [cart.items]);
 
   return (
     <>
@@ -46,7 +30,7 @@ const Cart = () => {
             {orders.map((item) => (
               <div
                 className="flex w-full items-center gap-4 self-stretch border-b-[1px] border-b-gray-200 pb-4"
-                key={item.id}
+                key={item.product.id}
               >
                 <div
                   className="flex flex-1 items-center gap-8 font-medium text-body-primary"
@@ -57,7 +41,7 @@ const Cart = () => {
                     aria-label="Thumbnail"
                   >
                     <Image
-                      src={`/images/product-1.webp`}
+                      src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${item.product.thumbnail}`}
                       alt="thumbnail"
                       width={180}
                       height={140}
@@ -65,9 +49,11 @@ const Cart = () => {
                     />
                   </div>
                   <div className="flex flex-1 flex-col items-start gap-2">
-                    <p>{item.product_name}</p>
-                    <p className="font-normal text-body-secondary">Qty x2</p>
-                    <p>{item.price}</p>
+                    <p>{item.product.name}</p>
+                    <p className="font-normal text-body-secondary">
+                      Qty x{item.qty}
+                    </p>
+                    <p>{currencyFormatter(item.product.price)}</p>
                   </div>
                 </div>
                 <div
@@ -78,6 +64,7 @@ const Cart = () => {
                     variant="outline"
                     size="icon"
                     className="rounded p-0 hover:bg-rose-100 sm:border-none"
+                    onClick={() => cart.removeItem(item.product.id)}
                   >
                     <Trash size={20} className="stroke-red-600" />
                   </Button>
@@ -87,7 +74,7 @@ const Cart = () => {
           </OptionWrapper>
         </div>
       </div>
-      <OrderSummary data={data} />
+      <OrderSummary data={orders} />
     </>
   );
 };

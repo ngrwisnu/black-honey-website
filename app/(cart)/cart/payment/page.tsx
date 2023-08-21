@@ -7,15 +7,22 @@ import {
   SummaryTitle,
 } from "@/components/ui/cart/summary-item";
 import { Input } from "@/components/ui/input";
+import useCheckout from "@/store/checkout";
 import { Check } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Payment = () => {
+  const checkoutItem = useCheckout((state) => state.items);
+
+  useEffect(() => {
+    console.log(checkoutItem);
+  }, []);
+
   return (
     <>
       <div className="mx-auto">
         <section
-          className="flex w-full md:w-[506px] p-4 flex-col items-start gap-3 rounded-lg bg-white shadow-section"
+          className="flex w-full flex-col items-start gap-3 rounded-lg bg-white p-4 shadow-section md:w-[506px]"
           aria-label="details"
         >
           <SummaryItem>
@@ -27,7 +34,7 @@ const Payment = () => {
               <span>Rp120.000</span>
             </SummaryList>
           </SummaryItem>
-          <span className="w-full h-[1px] bg-gray-200"></span>
+          <span className="h-[1px] w-full bg-gray-200"></span>
           <SummaryItem>
             <SummaryTitle>Order Detail</SummaryTitle>
             <SummaryList>
@@ -43,7 +50,7 @@ const Payment = () => {
               <span>Rp120.000</span>
             </SummaryList>
           </SummaryItem>
-          <span className="w-full h-[1px] bg-gray-200"></span>
+          <span className="h-[1px] w-full bg-gray-200"></span>
           <SummaryItem>
             <SummaryTitle>Payment Info</SummaryTitle>
             <SummaryList>
@@ -57,11 +64,11 @@ const Payment = () => {
           </SummaryItem>
         </section>
         <section
-          className="flex flex-col p-4 gap-6 items-start w-full md:w-[491px]"
+          className="flex w-full flex-col items-start gap-6 p-4 md:w-[491px]"
           aria-label="Input transfer proof"
         >
           <div
-            className="flex flex-col items-center gap-2 self-stretch text-orange-primary text-sm leading-[16.8px] text-center"
+            className="flex flex-col items-center gap-2 self-stretch text-center text-sm leading-[16.8px] text-orange-primary"
             aria-label="Important notice"
           >
             <h6 className="font-semibold">Important Notice</h6>
@@ -80,7 +87,7 @@ const Payment = () => {
           >
             <label
               htmlFor="payment-proof"
-              className="text-xs text-body-primary leading-[14.4px]"
+              className="text-xs leading-[14.4px] text-body-primary"
             >
               Payment proof
             </label>

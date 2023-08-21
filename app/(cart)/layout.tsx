@@ -10,7 +10,7 @@ const CartLayout: React.FC<CartLayoutProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <Container className="flex flex-col md:flex-row w-full flex-wrap gap-4 items-start">
+      <Container className="mt-14 flex w-full flex-col flex-wrap items-start gap-4 px-4 pt-14 md:flex-row">
         {children}
       </Container>
     </>
