@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface CheckoutDetail {
+export interface CheckoutDetail {
   address_id?: string;
   payment_id?: number;
   qty?: number;
@@ -17,14 +17,10 @@ interface CheckoutStore {
 
 const useCheckout = create(
   persist<CheckoutStore>(
-    (set, get) => ({
+    (set) => ({
       items: [],
       addItem: (data: CheckoutDetail[]) => {
-        const isCheckoutEmpty = get().items.length === 0;
-
-        if (isCheckoutEmpty) {
-          set({ items: [...data] });
-        }
+        set({ items: [...data] });
       },
       clearItems: () => {
         set({ items: [] });

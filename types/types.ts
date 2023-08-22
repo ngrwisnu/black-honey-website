@@ -44,3 +44,10 @@ export interface UserType {
   avatar: string;
   addresses: AddressType[];
 }
+
+export interface TempCheckout {
+  address_id: string;
+  payment_id: number;
+  qty: number;
+  product: ProductType;
+}

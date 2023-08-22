@@ -21,3 +21,17 @@ export function currencyFormatter(price: number) {
 
   return currency;
 }
+
+export function subTotalCalculation(data: any) {
+  let subTotal = 0;
+
+  if (data?.length !== 0) {
+    for (let item of data) {
+      const price = item.qty * item.product.price;
+
+      subTotal += price;
+    }
+  }
+
+  return subTotal;
+}

@@ -24,6 +24,7 @@ const Modal = () => {
   const { data } = useQuery({
     queryKey: "products",
     queryFn: () => getAllProducts(),
+    staleTime: Infinity,
   });
 
   useEffect(() => {

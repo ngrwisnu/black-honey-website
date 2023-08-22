@@ -10,3 +10,11 @@ export const getAllPayments = () => {
     url,
   });
 };
+
+export const getPayment = (id: number) => {
+  const url = `${API_ROOT}/${VERSION}/payments/${id}`;
+
+  return callAPI({
+    url,
+  });
+};
