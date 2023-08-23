@@ -45,9 +45,7 @@ export interface UserType {
   addresses: AddressType[];
 }
 
-export interface TempCheckout {
-  address_id: string;
-  payment_id: number;
-  qty: number;
-  product: ProductType;
+export interface FetchResponse {
+  isError: boolean;
+  data: any;
 }

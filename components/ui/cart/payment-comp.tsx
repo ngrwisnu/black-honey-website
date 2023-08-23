@@ -11,6 +11,7 @@ import { Input } from "../input";
 import { Button } from "../button";
 import { Check } from "lucide-react";
 import Swal from "sweetalert2";
+import { createOrder } from "@/lib/api/checkout";
 
 const PaymentComp = () => {
   const [image, setImage] = useState<File>();
@@ -32,7 +33,7 @@ const PaymentComp = () => {
     }
   };
 
-  const submitHandler = (e: FormEvent) => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!image) {
@@ -48,6 +49,7 @@ const PaymentComp = () => {
       let requiredField = new FormData();
       requiredField.append("address_id", `${item.address_id}`);
       requiredField.append("payment_id", `${item.payment_id}`);
+      requiredField.append("product_id", `${item.product.id}`);
       requiredField.append("qty", `${item.qty}`);
       requiredField.append("image", image!);
 
@@ -61,8 +63,6 @@ const PaymentComp = () => {
       footer:
         '<a href="/dashboard/transactions" class="underline text-blue-600">See purchase history</a>',
     });
-
-    console.log(checkoutData);
   };
 
   return (

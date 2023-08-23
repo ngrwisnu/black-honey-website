@@ -6,14 +6,16 @@ import { X } from "lucide-react";
 import { Input } from "../input";
 import Image from "next/image";
 import useModal from "@/store/modal-slice";
-import { useQuery } from "react-query";
-import { getAllProducts } from "@/lib/api/homepage";
-import { ProductType } from "@/types/types";
+import { FetchResponse, ProductType } from "@/types/types";
 import { currencyFormatter } from "@/lib/utils";
 import useCart from "@/store/cart";
 
-const Modal = () => {
-  const [products, setProducts] = useState<ProductType[]>();
+interface ModalProps {
+  products: FetchResponse | undefined;
+}
+
+const Modal = ({ products }: ModalProps) => {
+  const [productList, setProductList] = useState<ProductType[]>();
   const [activeProduct, setActiveProduct] = useState<ProductType>();
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
@@ -21,26 +23,19 @@ const Modal = () => {
   const modal = useModal();
   const cart = useCart();
 
-  const { data } = useQuery({
-    queryKey: "products",
-    queryFn: () => getAllProducts(),
-    staleTime: Infinity,
-  });
-
   useEffect(() => {
-    if (!data?.isError) {
-      setProducts(data?.data.data);
-    } else {
-      setIsError(true);
-    }
-
     if (products) {
-      setActiveProduct(products[0]);
+      if (!products.isError) {
+        setProductList(products.data.data);
+        setActiveProduct(products.data.data[0]);
+      } else {
+        setIsError(true);
+      }
     }
-  }, [data, products]);
+  }, [products]);
 
   const sizeHandler = (size: number) => {
-    const selectedProduct = products?.find((item) => item.size === size);
+    const selectedProduct = productList?.find((item) => item.size === size);
 
     if (selectedProduct) {
       setActiveProduct(selectedProduct);
@@ -127,7 +122,7 @@ const Modal = () => {
                 >
                   <p>Size</p>
                   <div className="flex flex-wrap items-start gap-4">
-                    {products?.map((item: ProductType) => (
+                    {productList?.map((item: ProductType) => (
                       <div
                         key={item.id}
                         className={`relative flex items-center justify-center rounded-full border-gray-950 px-3 py-[6px] ${

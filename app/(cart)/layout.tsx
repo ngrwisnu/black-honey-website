@@ -1,7 +1,11 @@
 import Header from "@/components/header";
 import Container from "@/components/ui/container";
 import React from "react";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Cart | Black Honey",
+};
 interface CartLayoutProps {
   children: React.ReactNode;
 }

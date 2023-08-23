@@ -1,46 +1,39 @@
 "use client";
 
-import { getAddress } from "@/lib/api/address";
-import { getAllPayments } from "@/lib/api/payment";
-import useCart from "@/store/cart";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { ContentWrapper, OptionWrapper } from "./option-wrapper";
-import { AddressType, PaymentType } from "@/types/types";
+import { AddressType, FetchResponse, PaymentType } from "@/types/types";
 import Image from "next/image";
+import useCart from "@/store/cart";
 import OrderSummary from "./order-summary";
 import CheckoutLoading from "@/app/(cart)/cart/checkout/loading";
 
-const CheckoutComp = () => {
+interface CheckoutCompProps {
+  addresses: FetchResponse | undefined;
+  payments: FetchResponse | undefined;
+}
+
+const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [selectedPayment, setSelectedPayment] = useState(0);
-  const [payments, setPayments] = useState<PaymentType[]>();
-  const [addresses, setAddresses] = useState<AddressType>();
+  const [existPayments, setExistPayments] = useState<PaymentType[]>();
+  const [existAddresses, setExistAddresses] = useState<AddressType[]>();
 
   const items = useCart((state) => state.items);
 
-  const paymentQuery = useQuery({
-    queryKey: "payments",
-    queryFn: () => getAllPayments(),
-    staleTime: 5000,
-    suspense: true,
-  });
-  const addressQuery = useQuery({
-    queryKey: "address",
-    queryFn: () => getAddress(),
-    staleTime: 5000,
-    suspense: true,
-  });
-
   useEffect(() => {
-    if (paymentQuery.status === "success") {
-      setPayments(paymentQuery.data?.data.data);
+    if (addresses) {
+      if (!addresses.isError) {
+        setExistAddresses(addresses.data.data);
+      }
     }
 
-    if (addressQuery.status === "success") {
-      setAddresses(addressQuery.data?.data.data);
+    if (payments) {
+      if (!payments.isError) {
+        setExistPayments(payments.data.data);
+      }
     }
-  }, [addressQuery, paymentQuery]);
+  }, [addresses, payments]);
 
   const checkoutDetail = {
     address_id: selectedAddress,
@@ -61,41 +54,44 @@ const CheckoutComp = () => {
               className="flex-row flex-wrap gap-4 self-stretch"
               aria-label="Content"
             >
-              <div
-                className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
-                  selectedAddress === addresses.id
-                    ? "border-green-600"
-                    : "border-gray-200"
-                }`}
-              >
-                <input
-                  type="radio"
-                  value={addresses.id}
-                  name="address"
-                  className="absolute inset-0 opacity-0"
-                  checked={selectedAddress === addresses.id}
-                  onChange={(e) => setSelectedAddress(e.currentTarget.value)}
-                />
-                <span
-                  className={`h-[18px] w-[18px] shrink-0 rounded-full border-[2px]  ${
-                    selectedAddress === addresses.id
+              {existAddresses?.map((address) => (
+                <div
+                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
+                    selectedAddress === address.id
                       ? "border-green-600"
                       : "border-gray-200"
-                  } ${
-                    selectedAddress === addresses.id
-                      ? "bg-green-100"
-                      : "bg-gray-400/10"
                   }`}
-                ></span>
-                <div className="flex flex-1 flex-col items-start gap-1 text-body-primary">
-                  <p className="font-medium">{addresses.recipient_name}</p>
-                  <p>{`${
-                    addresses.phone.substring(0, 7).replace(/\d/g, "x")! +
-                    addresses.phone.substring(8)
-                  }`}</p>
-                  <p>{addresses.full_address}</p>
+                  key={address.id}
+                >
+                  <input
+                    type="radio"
+                    value={address.id}
+                    name="address"
+                    className="absolute inset-0 opacity-0"
+                    checked={selectedAddress === address.id}
+                    onChange={(e) => setSelectedAddress(e.currentTarget.value)}
+                  />
+                  <span
+                    className={`h-[18px] w-[18px] shrink-0 rounded-full border-[2px]  ${
+                      selectedAddress === address.id
+                        ? "border-green-600"
+                        : "border-gray-200"
+                    } ${
+                      selectedAddress === address.id
+                        ? "bg-green-100"
+                        : "bg-gray-400/10"
+                    }`}
+                  ></span>
+                  <div className="flex flex-1 flex-col items-start gap-1 text-body-primary">
+                    <p className="font-medium">{address.recipient_name}</p>
+                    <p>{`${
+                      address.phone.substring(0, 7).replace(/\d/g, "x")! +
+                      address.phone.substring(8)
+                    }`}</p>
+                    <p>{address.full_address}</p>
+                  </div>
                 </div>
-              </div>
+              ))}
             </ContentWrapper>
           </OptionWrapper>
 
@@ -105,7 +101,7 @@ const CheckoutComp = () => {
               className="flex-row flex-wrap gap-4 self-stretch"
               aria-label="Content"
             >
-              {payments.map((payment: PaymentType) => (
+              {existPayments?.map((payment: PaymentType) => (
                 <div
                   className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
                     selectedPayment === payment.id
