@@ -23,6 +23,7 @@ export interface OrderType {
   qty: number;
   total_price: number;
   status: string;
+  receipt_number: string | null;
   product: ProductType;
   createdAt: string;
 }

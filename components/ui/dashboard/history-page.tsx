@@ -5,33 +5,38 @@ import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
 import ContentBody from "./content-body";
-import data from "@/data/orders.json";
-import { OrderType } from "@/types/types";
+import { FetchResponse, OrderType } from "@/types/types";
 import { Card, CardContent, CardFooter, CardHeader } from "../card";
 import { Badge } from "../badge";
 import { Button } from "../button";
 import { currencyFormatter, dateFormatter } from "@/lib/utils";
 import Image from "next/image";
 
-const HistoryPage = () => {
-  const [orders, setOrders] = useState<OrderType[]>([]);
+interface HistoryPageProps {
+  orders: FetchResponse | undefined;
+}
+
+const HistoryPage = ({ orders }: HistoryPageProps) => {
+  const [orderHistory, setOrderHistory] = useState<OrderType[]>([]);
 
   useEffect(() => {
-    setOrders(data.data);
-  }, []);
+    if (orders) {
+      setOrderHistory(orders.data.data.result.orders);
+    }
+  }, [orders]);
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="flex w-full justify-center">
       <ContentSection>
         <ContentWrapper aria-label="Purchase history">
           <ContentHeader title="Purchase History" />
           <ContentBody className="gap-3">
-            {orders?.map((order) => (
+            {orderHistory.map((order) => (
               <Card
                 key={order.id}
-                className="flex p-4 flex-col items-start gap-4 self-stretch rounded-xl bg-white shadow-md text-lg"
+                className="flex flex-col items-start gap-4 self-stretch rounded-xl bg-white p-4 text-lg shadow-md"
               >
-                <CardHeader className="flex pl-2 pb-2 self-stretch items-start border-b-[1px] border-b-gray-200">
+                <CardHeader className="flex items-start self-stretch border-b-[1px] border-b-gray-200 pb-2 pl-2">
                   <div
                     className="flex gap-4"
                     aria-label="Date purchase and status"
@@ -46,26 +51,26 @@ const HistoryPage = () => {
                           : order.status === "Success"
                           ? "bg-[#D2ECEC]"
                           : "bg-[#FBB8AC]"
-                      } text-body-primary font-medium`}
+                      } font-medium text-body-primary`}
                     >
                       {order.status}
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="flex flex-col sm:flex-row sm:justify-between items-start self-stretch gap-4 sm:gap-0">
+                <CardContent className="flex flex-col items-start gap-4 self-stretch sm:flex-row sm:justify-between sm:gap-0">
                   <div
                     className="flex items-start gap-4"
                     aria-label="Product detail"
                   >
-                    <div className="w-[74px] h-[74px] shrink-0">
+                    <div className="h-[74px] w-[74px] shrink-0">
                       <Image
-                        src={`/images/${order.product.thumbnail}`}
+                        src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${order.product.thumbnail}`}
                         alt="Thumbnail"
                         width={74}
                         height={74}
                       />
                     </div>
-                    <div className="flex flex-col items-start flex-1">
+                    <div className="flex flex-1 flex-col items-start">
                       <h6 className="font-semibold">{order.product.name}</h6>
                       <p className="text-body-secondary">
                         {order.qty} x {currencyFormatter(order.product.price)}
@@ -82,7 +87,7 @@ const HistoryPage = () => {
                     </p>
                   </div>
                 </CardContent>
-                <CardFooter className="w-full flex justify-end">
+                <CardFooter className="flex w-full justify-end">
                   <Button variant="outline" className="w-full sm:w-auto">
                     Detail Transaction
                   </Button>

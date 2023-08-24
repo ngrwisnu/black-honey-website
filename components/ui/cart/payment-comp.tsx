@@ -43,18 +43,16 @@ const PaymentComp = () => {
       });
     }
 
-    let checkoutData = [];
-
+    let requiredField = new FormData();
+    requiredField.append("image", image!);
+    requiredField.append("address_id", `${checkoutItem[0].address_id}`);
+    requiredField.append("payment_id", `${checkoutItem[0].payment_id}`);
     for (let item of checkoutItem) {
-      let requiredField = new FormData();
-      requiredField.append("address_id", `${item.address_id}`);
-      requiredField.append("payment_id", `${item.payment_id}`);
       requiredField.append("product_id", `${item.product.id}`);
       requiredField.append("qty", `${item.qty}`);
-      requiredField.append("image", image!);
-
-      checkoutData.push(requiredField);
     }
+
+    const response = await createOrder(requiredField);
 
     Swal.fire({
       icon: "success",

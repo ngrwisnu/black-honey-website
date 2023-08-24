@@ -9,11 +9,11 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
-    <>
+    <div className="sm:pt-14">
       <Header />
       <SideNav />
-      <Container className="my-14">{children}</Container>
-    </>
+      <Container className="my-14 px-4">{children}</Container>
+    </div>
   );
 };
 
