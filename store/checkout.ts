@@ -1,3 +1,4 @@
+import { ProductType } from "@/types/types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -7,6 +8,7 @@ export interface CheckoutDetail {
   qty?: number;
   product_id?: string;
   payment_proof?: string;
+  product?: ProductType;
 }
 
 interface CheckoutStore {

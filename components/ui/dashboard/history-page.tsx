@@ -21,7 +21,7 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
 
   useEffect(() => {
     if (orders) {
-      setOrderHistory(orders.data.data.result.orders);
+      setOrderHistory(orders.data.data.result);
     }
   }, [orders]);
 

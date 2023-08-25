@@ -11,12 +11,14 @@ import { Input } from "../input";
 import { Button } from "../button";
 import { Check } from "lucide-react";
 import Swal from "sweetalert2";
-import { createOrder } from "@/lib/api/checkout";
+import { useCreateOrder } from "@/hooks/useCreateOrder";
 
 const PaymentComp = () => {
   const [image, setImage] = useState<File>();
 
   const checkoutItem = useCheckout((state) => state.items);
+
+  const { mutate } = useCreateOrder();
 
   const payment = useQuery({
     queryKey: "payments",
@@ -48,18 +50,27 @@ const PaymentComp = () => {
     requiredField.append("address_id", `${checkoutItem[0].address_id}`);
     requiredField.append("payment_id", `${checkoutItem[0].payment_id}`);
     for (let item of checkoutItem) {
-      requiredField.append("product_id", `${item.product.id}`);
+      requiredField.append("product_id", `${item.product?.id}`);
       requiredField.append("qty", `${item.qty}`);
     }
 
-    const response = await createOrder(requiredField);
-
-    Swal.fire({
-      icon: "success",
-      title: "Payment complete",
-      text: "Your order will be process",
-      footer:
-        '<a href="/dashboard/transactions" class="underline text-blue-600">See purchase history</a>',
+    mutate(requiredField, {
+      onSuccess: (data) => {
+        if (!data?.isError) {
+          Swal.fire({
+            icon: "success",
+            title: "Payment complete",
+            text: "Your order will be process",
+            footer:
+              '<a href="/dashboard/transactions" class="underline text-blue-600">See purchase history</a>',
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: data.data,
+          });
+        }
+      },
     });
   };
 
