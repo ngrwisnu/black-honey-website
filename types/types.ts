@@ -50,3 +50,9 @@ export interface FetchResponse {
   isError: boolean;
   data: any;
 }
+
+export interface RegisterField {
+  username: string;
+  email: string;
+  password: string;
+}
