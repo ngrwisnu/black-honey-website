@@ -1,3 +1,4 @@
+import { AddressType } from "@/types/types";
 import callAPI from "./call-api";
 import { API_ROOT, token } from "./utils";
 
@@ -16,5 +17,16 @@ export const getAllAddresses = () => {
   return callAPI({
     url,
     token,
+  });
+};
+
+export const createAddress = (data: Omit<AddressType, "id">) => {
+  const url = `${API_ROOT}/profile/addresses`;
+
+  return callAPI({
+    url,
+    token,
+    method: "POST",
+    data,
   });
 };

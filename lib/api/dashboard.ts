@@ -29,3 +29,17 @@ export const getAllReviews = async () => {
     token,
   });
 };
+
+export const updateUserProfile = async (data: {
+  username?: string;
+  password?: string;
+}) => {
+  const url = `${API_ROOT}/dashboard/profile`;
+
+  return callAPI({
+    url,
+    method: "PUT",
+    token,
+    data,
+  });
+};
