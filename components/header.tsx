@@ -21,6 +21,8 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
 
   const router = useRouter();
 
+  const isLoggedIn = Cookies.get("tk");
+
   useEffect(() => {
     if (items.length !== 0) {
       setIsEmpty(false);
@@ -30,7 +32,11 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   }, [items.length]);
 
   const clickHandler = () => {
-    setIsClicked(!isClicked);
+    if (isLoggedIn) {
+      setIsClicked(!isClicked);
+    } else {
+      router.push("/login");
+    }
   };
 
   const cartHandler = () => {
@@ -38,9 +44,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   };
 
   const logoutHandler = () => {
-    const tk = Cookies.get("tk");
-
-    if (tk) {
+    if (isLoggedIn) {
       Cookies.remove("tk");
       router.push("/login");
     }
