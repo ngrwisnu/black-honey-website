@@ -56,3 +56,8 @@ export interface RegisterField {
   email: string;
   password: string;
 }
+
+export interface UserPayload {
+  fat: number;
+  customer: Omit<UserType, "addresses">;
+}

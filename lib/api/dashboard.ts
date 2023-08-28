@@ -1,7 +1,7 @@
 import callAPI from "./call-api";
-import { API_ROOT, token } from "./utils";
+import { API_ROOT } from "./utils";
 
-export const getTransactionsHistory = async () => {
+export const getTransactionsHistory = async (token: string) => {
   const url = `${API_ROOT}/transactions`;
 
   return callAPI({
@@ -10,7 +10,10 @@ export const getTransactionsHistory = async () => {
   });
 };
 
-export const postReview = async (data: { rating: number; message: string }) => {
+export const postReview = async (
+  data: { rating: number; message: string },
+  token: string,
+) => {
   const url = `${API_ROOT}/review`;
 
   return callAPI({
@@ -21,7 +24,7 @@ export const postReview = async (data: { rating: number; message: string }) => {
   });
 };
 
-export const getAllReviews = async () => {
+export const getAllReviews = async (token: string) => {
   const url = `${API_ROOT}/reviews`;
 
   return callAPI({
@@ -30,10 +33,13 @@ export const getAllReviews = async () => {
   });
 };
 
-export const updateUserProfile = async (data: {
-  username?: string;
-  password?: string;
-}) => {
+export const updateUserProfile = async (
+  data: {
+    username?: string;
+    password?: string;
+  },
+  token: string,
+) => {
   const url = `${API_ROOT}/dashboard/profile`;
 
   return callAPI({

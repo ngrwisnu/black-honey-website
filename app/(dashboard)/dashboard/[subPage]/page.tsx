@@ -2,26 +2,34 @@ import ReviewPage from "@/components/ui/dashboard/review-page";
 import SettingPage from "@/components/ui/dashboard/setting-page";
 import HistoryPage from "@/components/ui/dashboard/history-page";
 import React from "react";
-import { getTransactionsHistory } from "@/lib/api/dashboard";
+import { getAllReviews, getTransactionsHistory } from "@/lib/api/dashboard";
 import { getAllAddresses } from "@/lib/api/address";
+import { cookies } from "next/headers";
 
 export const revalidate = 0;
 
 const SubPage = async ({ params }: { params: { subPage: string } }) => {
+  const cookieStore = cookies();
+  const tk = cookieStore.get("tk");
+
+  const decodedTk = Buffer.from(tk!.value, "base64").toString("ascii");
+
   if (params.subPage === "transactions") {
-    const orders = await getTransactionsHistory();
+    const orders = await getTransactionsHistory(decodedTk);
 
     return <HistoryPage orders={orders} />;
   }
 
   if (params.subPage === "setting") {
-    const addresses = await getAllAddresses();
+    const addresses = await getAllAddresses(decodedTk);
 
     return <SettingPage addresses={addresses} />;
   }
 
   if (params.subPage === "review") {
-    return <ReviewPage />;
+    const review = await getAllReviews(decodedTk);
+
+    return <ReviewPage review={review} />;
   }
 
   return <h1>SubPage: {params.subPage}</h1>;

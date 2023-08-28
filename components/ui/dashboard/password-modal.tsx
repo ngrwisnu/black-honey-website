@@ -54,7 +54,7 @@ const PasswordModal = () => {
         onSuccess: (data) => {
           if (data && !data.isError) {
             Swal.fire({
-              title: "Success updated the password",
+              title: "Success updating the password",
               icon: "success",
             });
 

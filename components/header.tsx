@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import Cookies from "js-cookie";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -33,6 +35,15 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
 
   const cartHandler = () => {
     router.push("/cart");
+  };
+
+  const logoutHandler = () => {
+    const tk = Cookies.get("tk");
+
+    if (tk) {
+      Cookies.remove("tk");
+      router.push("/login");
+    }
   };
 
   return (
@@ -126,14 +137,14 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                     className="h-[1px] w-full bg-gray-200"
                     aria-label="divider"
                   ></li>
-                  <li>
-                    <Link
-                      href={"/login"}
-                      className="flex items-center justify-center gap-2 self-stretch px-4 py-2 text-red-500 hover:bg-gray-100 sm:justify-start"
+                  <li onClick={logoutHandler}>
+                    <Button
+                      variant="ghost"
+                      className="flex w-full items-center justify-center gap-2 self-stretch px-4 py-2 text-red-500 hover:bg-gray-100 sm:justify-start"
                     >
                       <span className="h-6 w-6 bg-[url(/images/logout.svg)] bg-no-repeat"></span>
                       <span>Logout</span>
-                    </Link>
+                    </Button>
                   </li>
                 </ul>
                 <button

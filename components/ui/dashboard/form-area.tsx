@@ -16,7 +16,7 @@ import {
 import { Input } from "../input";
 import { Button } from "../button";
 import { Check, Plus } from "lucide-react";
-import { AddressType, FetchResponse } from "@/types/types";
+import { AddressType } from "@/types/types";
 import { useAddAddress } from "@/hooks/useAddAddress";
 import Swal from "sweetalert2";
 import AddressList from "./address-list";
@@ -49,7 +49,10 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
     mutate(data, {
       onSuccess: (data) => {
         if (!data?.isError) {
-          Swal.fire({ icon: "success", title: "Success added new address" });
+          Swal.fire({
+            icon: "success",
+            title: "Successfully adding a new address",
+          });
         } else {
           Swal.fire({ icon: "error", title: data.data });
         }

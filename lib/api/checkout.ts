@@ -1,7 +1,7 @@
 import callAPI from "./call-api";
-import { API_ROOT, token } from "./utils";
+import { API_ROOT } from "./utils";
 
-export const createOrder = (data: FormData) => {
+export const createOrder = (data: FormData, token: string) => {
   const url = `${API_ROOT}/checkout`;
 
   return callAPI({

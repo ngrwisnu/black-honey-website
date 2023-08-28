@@ -9,7 +9,9 @@ import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import FormArea from "./form-area";
 import useModal from "@/store/modal-slice";
-import { AddressType, FetchResponse } from "@/types/types";
+import { AddressType, FetchResponse, UserPayload } from "@/types/types";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 
 const SettingPage = ({
   addresses,
@@ -17,6 +19,10 @@ const SettingPage = ({
   addresses: FetchResponse | undefined;
 }) => {
   const [address, setAddress] = useState<AddressType[]>([]);
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+  });
 
   const modal = useModal();
 
@@ -25,6 +31,20 @@ const SettingPage = ({
       setAddress(addresses.data.data);
     }
   }, [addresses]);
+
+  useEffect(() => {
+    const tk = Cookies.get("tk");
+
+    if (tk) {
+      const beautyTk = window.atob(tk);
+      const decodedTk: UserPayload = jwt_decode(beautyTk);
+
+      setUser({
+        username: decodedTk.customer.username,
+        email: decodedTk.customer.email,
+      });
+    }
+  }, []);
 
   const fields = [
     { name: "Full address", type: "text" },
@@ -45,7 +65,7 @@ const SettingPage = ({
                 <p>Username</p>
               </div>
               <div className="flex-1">
-                <p>John Doe</p>
+                <p>{user.username}</p>
               </div>
             </div>
             <div className="flex items-center justify-center gap-[10px] self-stretch py-2">
@@ -53,7 +73,7 @@ const SettingPage = ({
                 <p>Email</p>
               </div>
               <div className="flex-1">
-                <p>johndoe@email.com</p>
+                <p>{user.email}</p>
               </div>
             </div>
           </ContentBody>

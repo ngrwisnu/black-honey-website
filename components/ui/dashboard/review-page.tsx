@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
@@ -24,17 +24,16 @@ import { Slider } from "../slider";
 import { usePostReview } from "@/hooks/usePostReview";
 import Swal from "sweetalert2";
 import { FetchResponse } from "@/types/types";
-import { useQuery } from "react-query";
-import { getAllReviews } from "@/lib/api/dashboard";
 
-const ReviewPage = () => {
+const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [rating, setRating] = useState(5);
+  const [reviews, setReviews] = useState([]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: "reviews",
-    queryFn: () => getAllReviews(),
-    suspense: true,
-  });
+  useEffect(() => {
+    if (review) {
+      setReviews(review.data.data);
+    }
+  }, [review]);
 
   const { mutate } = usePostReview();
 
@@ -60,11 +59,7 @@ const ReviewPage = () => {
     });
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (data?.data.data.length !== 0) {
+  if (reviews.length !== 0) {
     return (
       <div className="flex w-full items-center justify-center">
         <div className="w-full rounded-lg border-2 border-dashed border-green-600 bg-green-100 p-4 text-center text-green-600 sm:w-4/5">

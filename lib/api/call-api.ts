@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from "axios";
-
 interface CallAPIProps extends AxiosRequestConfig {
   token?: string;
 }
