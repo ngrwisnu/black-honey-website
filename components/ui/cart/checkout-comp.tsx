@@ -7,6 +7,8 @@ import Image from "next/image";
 import useCart from "@/store/cart";
 import OrderSummary from "./order-summary";
 import CheckoutLoading from "@/app/(cart)/cart/checkout/loading";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -18,6 +20,8 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   const [selectedPayment, setSelectedPayment] = useState(0);
   const [existPayments, setExistPayments] = useState<PaymentType[]>();
   const [existAddresses, setExistAddresses] = useState<AddressType[]>();
+
+  const router = useRouter();
 
   const items = useCart((state) => state.items);
 
@@ -54,6 +58,16 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
               className="flex-row flex-wrap gap-4 self-stretch"
               aria-label="Content"
             >
+              {existAddresses?.length === 0 && (
+                <div
+                  className="relative flex w-full items-center justify-center gap-2 rounded-lg border-[1px]  bg-white p-4 hover:cursor-pointer hover:bg-gray-200 sm:w-[390px]"
+                  onClick={() => router.push("/dashboard/setting")}
+                >
+                  <span className="flex items-center gap-1">
+                    <Plus size={20} /> Add Address
+                  </span>
+                </div>
+              )}
               {existAddresses?.map((address) => (
                 <div
                   className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
