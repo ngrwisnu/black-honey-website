@@ -12,17 +12,21 @@ import { Button } from "../button";
 import { Check } from "lucide-react";
 import Swal from "sweetalert2";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
+import useCart from "@/store/cart";
+import { useToken } from "@/hooks/useToken";
 
 const PaymentComp = () => {
   const [image, setImage] = useState<File>();
 
-  const checkoutItem = useCheckout((state) => state.items);
+  const checkout = useCheckout();
+  const cart = useCart();
+  const token = useToken();
 
   const { mutate } = useCreateOrder();
 
   const payment = useQuery({
     queryKey: "payments",
-    queryFn: () => getPayment(checkoutItem[0].payment_id!),
+    queryFn: () => getPayment(checkout.items[0].payment_id!),
     staleTime: 3000,
     suspense: true,
   });
@@ -47,14 +51,19 @@ const PaymentComp = () => {
 
     let requiredField = new FormData();
     requiredField.append("image", image!);
-    requiredField.append("address_id", `${checkoutItem[0].address_id}`);
-    requiredField.append("payment_id", `${checkoutItem[0].payment_id}`);
-    for (let item of checkoutItem) {
+    requiredField.append("address_id", `${checkout.items[0].address_id}`);
+    requiredField.append("payment_id", `${checkout.items[0].payment_id}`);
+    for (let item of checkout.items) {
       requiredField.append("product_id", `${item.product?.id}`);
       requiredField.append("qty", `${item.qty}`);
     }
 
-    mutate(requiredField, {
+    const required = {
+      data: requiredField,
+      token,
+    };
+
+    mutate(required, {
       onSuccess: (data) => {
         if (!data?.isError) {
           Swal.fire({
@@ -64,6 +73,9 @@ const PaymentComp = () => {
             footer:
               '<a href="/dashboard/transactions" class="underline text-blue-600">See purchase history</a>',
           });
+
+          checkout.clearItems();
+          cart.removeAllItem();
         } else {
           Swal.fire({
             icon: "error",
@@ -74,6 +86,8 @@ const PaymentComp = () => {
     });
   };
 
+  const subTotal = subTotalCalculation(checkout.items);
+
   return (
     <>
       <div className="mx-auto">
@@ -83,7 +97,7 @@ const PaymentComp = () => {
         >
           <SummaryItem>
             <SummaryTitle>Purchase Detail</SummaryTitle>
-            {checkoutItem.map((item: any) => (
+            {checkout.items.map((item: any) => (
               <SummaryList key={item.product.id}>
                 <span>
                   {item.product.name} <span>x{item.qty}</span>
@@ -105,7 +119,7 @@ const PaymentComp = () => {
             </SummaryList>
             <SummaryList classname="font-semibold">
               <span>Total</span>
-              <span>{subTotalCalculation(checkoutItem)}</span>
+              <span>{currencyFormatter(subTotal)}</span>
             </SummaryList>
           </SummaryItem>
           <span className="h-[1px] w-full bg-gray-200"></span>

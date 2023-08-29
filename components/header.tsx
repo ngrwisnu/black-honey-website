@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                   <li onClick={logoutHandler}>
                     <Button
                       variant="ghost"
-                      className="flex w-full items-center justify-center gap-2 self-stretch px-4 py-2 text-red-500 hover:bg-gray-100 sm:justify-start"
+                      className="flex w-full items-center justify-center gap-2 self-stretch px-4 py-2 text-red-500 hover:bg-gray-100 hover:text-red-500 sm:justify-start"
                     >
                       <span className="h-6 w-6 bg-[url(/images/logout.svg)] bg-no-repeat"></span>
                       <span>Logout</span>
