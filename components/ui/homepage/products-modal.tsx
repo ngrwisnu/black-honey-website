@@ -10,6 +10,7 @@ import { FetchResponse, ProductType } from "@/types/types";
 import { currencyFormatter } from "@/lib/utils";
 import useCart from "@/store/cart";
 import Modal from "../modal";
+import { toast } from "../use-toast";
 
 interface ModalProps {
   products: FetchResponse | undefined;
@@ -17,7 +18,7 @@ interface ModalProps {
 
 const ProductsModal = ({ products }: ModalProps) => {
   const [productList, setProductList] = useState<ProductType[] | undefined>();
-  const [activeProduct, setActiveProduct] = useState<ProductType | null>();
+  const [activeProduct, setActiveProduct] = useState<ProductType>();
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
 
@@ -46,6 +47,15 @@ const ProductsModal = ({ products }: ModalProps) => {
   };
 
   const addToCartHandler = () => {
+    if (qty >= activeProduct?.stock!) {
+      toast({
+        title: "Purchase is over the stock",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
     const data = {
       qty,
       product: activeProduct!,
@@ -179,6 +189,7 @@ const ProductsModal = ({ products }: ModalProps) => {
                   type="number"
                   name="quantity"
                   defaultValue={1}
+                  max={activeProduct?.stock}
                   className="w-full rounded-full border-gray-950 md:w-1/3"
                   onChange={(e) => setQty(Number(e.currentTarget.value))}
                 />

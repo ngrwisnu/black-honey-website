@@ -61,7 +61,7 @@ const Cart = () => {
                   aria-label="action button"
                 >
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
                     className="rounded p-0 hover:bg-rose-100 sm:border-none"
                     onClick={() => cart.removeItem(item.product.id)}
