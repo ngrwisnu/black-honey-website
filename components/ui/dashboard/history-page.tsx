@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
@@ -11,6 +11,8 @@ import { Badge } from "../badge";
 import { Button } from "../button";
 import { currencyFormatter, dateFormatter } from "@/lib/utils";
 import Image from "next/image";
+import { Copy } from "lucide-react";
+import { toast } from "../use-toast";
 
 interface HistoryPageProps {
   orders: FetchResponse | undefined;
@@ -19,11 +21,24 @@ interface HistoryPageProps {
 const HistoryPage = ({ orders }: HistoryPageProps) => {
   const [orderHistory, setOrderHistory] = useState<OrderType[]>([]);
 
+  const receiptRef = useRef<HTMLSpanElement | null>(null);
+
   useEffect(() => {
     if (orders) {
       setOrderHistory(orders.data.data.result);
     }
   }, [orders]);
+
+  const receiptNumberHandler = () => {
+    if (receiptRef) {
+      navigator.clipboard.writeText(receiptRef.current?.textContent as string);
+
+      toast({
+        title: "Success copy to clipboard",
+        variant: "success",
+      });
+    }
+  };
 
   return (
     <div className="flex w-full justify-center">
@@ -87,7 +102,22 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                     </p>
                   </div>
                 </CardContent>
-                <CardFooter className="flex w-full justify-end">
+                <CardFooter className="flex w-full flex-col items-start justify-end gap-4 sm:flex-row sm:items-center">
+                  <div className="flex gap-2" aria-label="Receipt number">
+                    <span>Receipt: </span>
+                    {!order.receipt_number ? (
+                      <span className="text-orange-500">Will update soon</span>
+                    ) : (
+                      <span
+                        className="flex items-center gap-1 text-orange-500 hover:cursor-pointer hover:underline"
+                        aria-label="Click to copy to clipboard the receipt number"
+                        onClick={receiptNumberHandler}
+                        ref={receiptRef}
+                      >
+                        {order.receipt_number} <Copy size={20} />
+                      </span>
+                    )}
+                  </div>
                   <Button variant="outline" className="w-full sm:w-auto">
                     Detail Transaction
                   </Button>
