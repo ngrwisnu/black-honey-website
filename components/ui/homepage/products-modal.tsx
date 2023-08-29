@@ -16,8 +16,8 @@ interface ModalProps {
 }
 
 const ProductsModal = ({ products }: ModalProps) => {
-  const [productList, setProductList] = useState<ProductType[]>();
-  const [activeProduct, setActiveProduct] = useState<ProductType>();
+  const [productList, setProductList] = useState<ProductType[] | undefined>();
+  const [activeProduct, setActiveProduct] = useState<ProductType | null>();
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
 
@@ -32,6 +32,8 @@ const ProductsModal = ({ products }: ModalProps) => {
       } else {
         setIsError(true);
       }
+    } else {
+      setProductList(undefined);
     }
   }, [products]);
 
@@ -66,12 +68,27 @@ const ProductsModal = ({ products }: ModalProps) => {
 
   return (
     <Modal>
-      {isError && (
-        <div>
-          <h2>Something went wrong!</h2>
+      {!productList || isError ? (
+        <div className="w-full">
+          <div
+            className="flex items-center justify-end self-stretch"
+            aria-label="Button to close the modal"
+          >
+            <Button variant="ghost" onClick={closeHandler}>
+              <X size={20} />
+            </Button>
+          </div>
+          <div className="mx-auto w-2/3 p-4 pb-8 text-center">
+            <h3 className="mb-4 text-2xl font-bold">
+              Oops! <br /> Something went wrong!
+            </h3>
+            <p>
+              We currently facing an issue in retrieving data. Try to refresh
+              this page in a few moments.
+            </p>
+          </div>
         </div>
-      )}
-      {!isError && (
+      ) : (
         <>
           <div className="flex-1" aria-label="Product's preview">
             <div className="relative h-[240px] w-full md:h-full">
