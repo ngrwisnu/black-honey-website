@@ -21,9 +21,12 @@ import { Input } from "../input";
 import { Button } from "../button";
 import { useUpdateProfile } from "@/hooks/useUpdateProfile";
 import Swal from "sweetalert2";
+import { useToken } from "@/hooks/useToken";
 
 const PasswordModal = () => {
   const [isEqual, setIsEqual] = useState(true);
+
+  const token = useToken();
 
   const modal = useModal();
 
@@ -48,9 +51,14 @@ const PasswordModal = () => {
         password: data.newPassword,
       };
 
+      const required = {
+        data: profileData,
+        token,
+      };
+
       setIsEqual(true);
 
-      mutate(profileData, {
+      mutate(required, {
         onSuccess: (data) => {
           if (data && !data.isError) {
             Swal.fire({

@@ -3,8 +3,16 @@
 import { postReview } from "@/lib/api/dashboard";
 import { useMutation, useQueryClient } from "react-query";
 
-const addReview = (data: { rating: number; message: string }) => {
-  return postReview(data);
+interface AddReview {
+  data: {
+    rating: number;
+    message: string;
+  };
+  token: string;
+}
+
+const addReview = ({ data, token }: AddReview) => {
+  return postReview(data, token);
 };
 
 export const usePostReview = () => {

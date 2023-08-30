@@ -24,10 +24,13 @@ import { Slider } from "../slider";
 import { usePostReview } from "@/hooks/usePostReview";
 import Swal from "sweetalert2";
 import { FetchResponse } from "@/types/types";
+import { useToken } from "@/hooks/useToken";
 
 const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [rating, setRating] = useState(5);
   const [reviews, setReviews] = useState([]);
+
+  const token = useToken();
 
   useEffect(() => {
     if (review) {
@@ -51,7 +54,12 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
       message: data.message!,
     };
 
-    mutate(reviewData);
+    const required = {
+      data: reviewData,
+      token,
+    };
+
+    mutate(required);
 
     Swal.fire({
       title: "Thank you for your Review",

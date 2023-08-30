@@ -20,6 +20,7 @@ import { AddressType } from "@/types/types";
 import { useAddAddress } from "@/hooks/useAddAddress";
 import Swal from "sweetalert2";
 import AddressList from "./address-list";
+import { useToken } from "@/hooks/useToken";
 
 interface FormAreaProps {
   fields: { name: string; type: string }[];
@@ -32,6 +33,8 @@ const formatField = (fieldName: string) => {
 
 const FormArea = ({ fields, addresses }: FormAreaProps) => {
   const [addressList, setAddressList] = useState<AddressType[]>([]);
+
+  const token = useToken();
 
   const { mutate } = useAddAddress();
 
@@ -46,7 +49,12 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
   });
 
   const submitHandler = (data: z.infer<typeof addressSchema>) => {
-    mutate(data, {
+    const required = {
+      data,
+      token,
+    };
+
+    mutate(required, {
       onSuccess: (data) => {
         if (!data?.isError) {
           Swal.fire({

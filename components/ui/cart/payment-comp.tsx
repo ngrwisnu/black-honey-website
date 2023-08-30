@@ -111,11 +111,11 @@ const PaymentComp = () => {
             <SummaryTitle>Order Detail</SummaryTitle>
             <SummaryList>
               <span>Coupon</span>
-              <span>freeshipping</span>
+              <span>-</span>
             </SummaryList>
             <SummaryList>
               <span>Shipping</span>
-              <span>Rp0</span>
+              <span>TBA</span>
             </SummaryList>
             <SummaryList classname="font-semibold">
               <span>Total</span>
