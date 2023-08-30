@@ -8,7 +8,7 @@ const Container = ({
   className?: string;
   children: ReactNode;
 }) => {
-  return <main className={cx(className, "mt-14")}>{children}</main>;
+  return <main className={cx(className)}>{children}</main>;
 };
 
 export default Container;

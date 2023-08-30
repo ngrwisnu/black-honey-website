@@ -1,9 +1,13 @@
 "use client";
 
 import { merienda } from "@/app/fonts";
+import useCart from "@/store/cart";
 import { X } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import Cookies from "js-cookie";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -11,66 +15,68 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(true);
+
+  const items = useCart((state) => state.items);
+
+  const router = useRouter();
+
+  const isLoggedIn = Cookies.get("tk");
+
+  useEffect(() => {
+    if (items.length !== 0) {
+      setIsEmpty(false);
+    } else {
+      setIsEmpty(true);
+    }
+  }, [items.length]);
 
   const clickHandler = () => {
-    setIsClicked(!isClicked);
+    if (isLoggedIn) {
+      setIsClicked(!isClicked);
+    } else {
+      router.push("/login");
+    }
+  };
+
+  const cartHandler = () => {
+    router.push("/cart");
+  };
+
+  const logoutHandler = () => {
+    if (isLoggedIn) {
+      Cookies.remove("tk");
+      router.push("/login");
+    }
   };
 
   return (
     <header
-      className={`
-      w-full
-      max-h-20 
-      py-4 
-      flex 
-      items-center 
-      self-stretch 
-      justify-center 
-      md:justify-between 
-      ${logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"}
-      `}
+      className={`static top-0 z-50 flex max-h-20 w-full items-center justify-center self-stretch px-4 py-4 sm:fixed sm:bg-white/50 sm:backdrop-blur-md md:justify-between ${
+        logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"
+      }`}
     >
       <div
-        className={`
-        logo 
-        flex 
-        flex-1 
-        items-center 
-        ${logoCenter ? "justify-center" : "justify-start"}
-        `}
+        className={`logo flex flex-1 items-center ${
+          logoCenter ? "justify-center" : "justify-start"
+        }`}
       >
         <Link
           as="/"
           href="/"
           className={`${merienda.className} text-4xl font-bold leading-[43.2px]`}
         >
-          Black<span className="text-orange-primary font-normal">Honey</span>
+          Black<span className="font-normal text-orange-primary">Honey</span>
         </Link>
       </div>
       {!logoCenter && (
         <div className="nav flex items-center gap-10">
           <div
-            className="
-            cart
-            fixed
-            sm:relative
-            bottom-8
-            sm:bottom-0
-            right-4
-            sm:right-0
-            shadow-section
-            sm:shadow-none
-            flex
-            justify-center
-            items-center
-            p-3
-            gap-[10px]
-            rounded-full
-            bg-gray-100
-            hover:cursor-pointer
-          "
+            className="cart fixed bottom-8 right-4 flex items-center justify-center gap-[10px]
+            rounded-full bg-gray-100 p-3 shadow-section hover:cursor-pointer sm:relative sm:bottom-0 sm:right-0 sm:shadow-none"
+            onClick={cartHandler}
           >
-            <div className="cart-logo w-6 h-6">
+            <div className="cart-logo h-6 w-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -97,62 +103,37 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                 </g>
               </svg>
             </div>
-            <span className="w-[14px] h-[14px] absolute left-[17px] bottom-[-7px] rounded-full bg-orange-primary"></span>
+            <span
+              className={`absolute bottom-[-7px] left-[17px] h-[14px] w-[14px] rounded-full bg-orange-primary ${
+                isEmpty ? "hidden" : "inline-block"
+              }`}
+            ></span>
           </div>
           <div
             id="user-avatar"
-            className="
-            sm:relative
-            flex
-            w-12
-            h-12
-            rounded-full
-            bg-[url('/images/placeholder.webp')]
-            bg-cover
-            bg-no-repeat
-            hover:cursor-pointer
-            "
+            className=" flex h-12 w-12 rounded-full bg-[url('/images/placeholder.webp')] bg-cover bg-no-repeat hover:cursor-pointer sm:relative"
             onClick={clickHandler}
           >
             {isClicked && (
               <div
-                className={`
-                dropdown
-                fixed
-                sm:absolute
-                bottom-0
-                sm:-bottom-[171px]
-                right-0
-                left-0
-                sm:left-auto
-                flex
-                flex-col
-                items-start
-                min-w-[180px]
-                py-2
-                gap-[10px]
-                rounded-md
-                bg-white
-                shadow-section
-                z-10
-              `}
+                className={` dropdown fixed bottom-0 left-0 right-0 z-10 flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
               >
-                <ul className="w-full flex flex-col gap-[10px] order-2">
+                <ul className="order-2 flex w-full flex-col gap-[10px]">
                   <li>
                     <Link
                       href={"/dashboard/setting"}
-                      className="flex py-2 px-4 justify-center sm:justify-start items-center gap-2 self-stretch text-gray-800 hover:bg-gray-100"
+                      className="flex items-center justify-center gap-2 self-stretch px-4 py-2 text-gray-800 hover:bg-gray-100 sm:justify-start"
                     >
-                      <span className="w-6 h-6 bg-[url(/images/person.svg)] bg-no-repeat"></span>
+                      <span className="h-6 w-6 bg-[url(/images/person.svg)] bg-no-repeat"></span>
                       <span>Profile</span>
                     </Link>
                   </li>
                   <li>
                     <Link
                       href={"/dashboard/transactions"}
-                      className="flex py-2 px-4 justify-center sm:justify-start items-center gap-2 self-stretch text-gray-800 hover:bg-gray-100"
+                      className="flex items-center justify-center gap-2 self-stretch px-4 py-2 text-gray-800 hover:bg-gray-100 sm:justify-start"
                     >
-                      <span className="w-6 h-6 bg-[url(/images/contract.svg)] bg-no-repeat"></span>
+                      <span className="h-6 w-6 bg-[url(/images/contract.svg)] bg-no-repeat"></span>
                       <span>History</span>
                     </Link>
                   </li>
@@ -160,18 +141,18 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
                     className="h-[1px] w-full bg-gray-200"
                     aria-label="divider"
                   ></li>
-                  <li>
-                    <Link
-                      href={"/login"}
-                      className="flex py-2 px-4 justify-center sm:justify-start items-center gap-2 self-stretch text-red-500 hover:bg-gray-100"
+                  <li onClick={logoutHandler}>
+                    <Button
+                      variant="ghost"
+                      className="flex w-full items-center justify-center gap-2 self-stretch px-4 py-2 text-red-500 hover:bg-gray-100 hover:text-red-500 sm:justify-start"
                     >
-                      <span className="w-6 h-6 bg-[url(/images/logout.svg)] bg-no-repeat"></span>
+                      <span className="h-6 w-6 bg-[url(/images/logout.svg)] bg-no-repeat"></span>
                       <span>Logout</span>
-                    </Link>
+                    </Button>
                   </li>
                 </ul>
                 <button
-                  className="w-full flex sm:hidden justify-end order-1 py-2 px-4"
+                  className="order-1 flex w-full justify-end px-4 py-2 sm:hidden"
                   onClick={() => setIsClicked(false)}
                 >
                   <X size={18} />

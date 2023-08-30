@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Button } from "../button";
 import { Pencil } from "lucide-react";
 import ContentHeader from "./content-header";
@@ -6,43 +8,79 @@ import ContentBody from "./content-body";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import FormArea from "./form-area";
+import useModal from "@/store/modal-slice";
+import { AddressType, FetchResponse, UserPayload } from "@/types/types";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 
-const SettingPage = () => {
+const SettingPage = ({
+  addresses,
+}: {
+  addresses: FetchResponse | undefined;
+}) => {
+  const [address, setAddress] = useState<AddressType[]>([]);
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+  });
+
+  const modal = useModal();
+
+  useEffect(() => {
+    if (addresses) {
+      setAddress(addresses.data.data);
+    }
+  }, [addresses]);
+
+  useEffect(() => {
+    const tk = Cookies.get("tk");
+
+    if (tk) {
+      const beautyTk = window.atob(tk);
+      const decodedTk: UserPayload = jwt_decode(beautyTk);
+
+      setUser({
+        username: decodedTk.customer.username,
+        email: decodedTk.customer.email,
+      });
+    }
+  }, []);
+
   const fields = [
     { name: "Full address", type: "text" },
     { name: "City", type: "text" },
     { name: "Province", type: "text" },
-    { name: "Postal code", type: "text" },
     { name: "Phone", type: "text" },
     { name: "Recipient name", type: "text" },
   ];
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="flex w-full justify-center">
       <ContentSection aria-label="Content wrapper">
         <ContentWrapper aria-label="User's profile">
           <ContentHeader title="Profile" />
           <ContentBody>
-            <div className="flex py-2 justify-center items-center gap-[10px] self-stretch">
+            <div className="flex items-center justify-center gap-[10px] self-stretch py-2">
               <div className="flex-1">
                 <p>Username</p>
               </div>
               <div className="flex-1">
-                <p>John Doe</p>
+                <p>{user.username}</p>
               </div>
             </div>
-            <div className="flex py-2 justify-center items-center gap-[10px] self-stretch">
+            <div className="flex items-center justify-center gap-[10px] self-stretch py-2">
               <div className="flex-1">
                 <p>Email</p>
               </div>
               <div className="flex-1">
-                <p>johndoe@email.com</p>
+                <p>{user.email}</p>
               </div>
             </div>
           </ContentBody>
           <Button
             variant="outline"
             className="gap-2 rounded-lg border-body-primary"
+            onClick={modal.onOpen}
           >
             <span>
               <Pencil size={18} />
@@ -53,7 +91,7 @@ const SettingPage = () => {
         <ContentWrapper aria-label="User's Address">
           <ContentHeader title="Address" />
           <ContentBody>
-            <FormArea fields={fields} />
+            <FormArea fields={fields} addresses={address} />
           </ContentBody>
         </ContentWrapper>
       </ContentSection>

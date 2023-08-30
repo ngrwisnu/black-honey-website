@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
@@ -21,9 +21,24 @@ import { Textarea } from "../textarea";
 import { Button } from "../button";
 import { Check, Star } from "lucide-react";
 import { Slider } from "../slider";
+import { usePostReview } from "@/hooks/usePostReview";
+import Swal from "sweetalert2";
+import { FetchResponse } from "@/types/types";
+import { useToken } from "@/hooks/useToken";
 
-const ReviewPage = () => {
+const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [rating, setRating] = useState(5);
+  const [reviews, setReviews] = useState([]);
+
+  const token = useToken();
+
+  useEffect(() => {
+    if (review) {
+      setReviews(review.data.data);
+    }
+  }, [review]);
+
+  const { mutate } = usePostReview();
 
   const form = useForm<z.infer<typeof reviewSchema>>({
     resolver: zodResolver(reviewSchema),
@@ -34,11 +49,42 @@ const ReviewPage = () => {
   });
 
   const submitHandler = (data: z.infer<typeof reviewSchema>) => {
-    console.log({ rating, message: data.message });
+    const reviewData = {
+      rating,
+      message: data.message!,
+    };
+
+    const required = {
+      data: reviewData,
+      token,
+    };
+
+    mutate(required);
+
+    Swal.fire({
+      title: "Thank you for your Review",
+      icon: "success",
+    });
   };
 
+  if (reviews.length !== 0) {
+    return (
+      <div className="flex w-full items-center justify-center">
+        <div className="w-full rounded-lg border-2 border-dashed border-green-600 bg-green-100 p-4 text-center text-green-600 sm:w-4/5">
+          <p>
+            <strong>Thank you for the review!</strong>
+          </p>
+          <p className="w-full sm:mx-auto sm:w-2/3">
+            Your review helps us understand your needs better and ensures we
+            continue to deliver the best products and services.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full flex justify-center">
+    <div className="flex w-full justify-center">
       <ContentSection aria-label="Review section">
         <ContentWrapper>
           <ContentHeader title="Review" />
@@ -56,7 +102,7 @@ const ReviewPage = () => {
                     <FormItem className="py-2">
                       <FormLabel className="text-lg">Ratings</FormLabel>
                       <FormControl className="mt-[10px]">
-                        <div className="w-full sm:w-4/5 flex gap-2">
+                        <div className="flex w-full gap-2 sm:w-4/5">
                           <Slider
                             defaultValue={[5]}
                             max={5}
@@ -67,7 +113,7 @@ const ReviewPage = () => {
                             {rating}{" "}
                             <Star
                               size={26}
-                              className="stroke-0 fill-yellow-500"
+                              className="fill-yellow-500 stroke-0"
                             />
                           </span>
                         </div>
@@ -88,7 +134,7 @@ const ReviewPage = () => {
                         <Textarea
                           {...field}
                           placeholder="We'd love to hear your thoughts"
-                          className="resize-none sm:w-4/5 text-lg border-gray-200"
+                          className="resize-none border-gray-200 text-lg sm:w-4/5"
                           rows={6}
                         />
                       </FormControl>
@@ -99,7 +145,7 @@ const ReviewPage = () => {
 
                 <Button
                   variant="outline"
-                  className="border-body-primary gap-2 mt-6"
+                  className="mt-6 gap-2 border-body-primary"
                 >
                   <span>
                     <Check size={18} />

@@ -17,7 +17,7 @@ const buttonVariants = cva(
         successDisabled:
           "bg-success-disabled text-success-disabled-foreground cursor-not-allowed",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input border-gray-900 bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",

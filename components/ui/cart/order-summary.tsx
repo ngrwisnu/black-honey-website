@@ -1,40 +1,90 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { clsx as cx } from "clsx";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useGetPathname } from "@/hooks/useGetPathname";
 import { Input } from "@/components/ui/input";
+import { CartItems } from "@/store/cart";
+import { currencyFormatter } from "@/lib/utils";
+import { toast } from "../use-toast";
+import useCheckout from "@/store/checkout";
 
 interface OrderSummaryProps {
   classname?: string;
-  data?: {
-    name: string;
-    value: string;
-  }[];
+  data?: CartItems[];
+  checkoutDetail?: {
+    address_id: string;
+    payment_id: number;
+  };
 }
 
-const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
-  const [coupon, setCoupon] = useState("");
+const OrderSummary: React.FC<OrderSummaryProps> = ({
+  classname,
+  data,
+  checkoutDetail,
+}) => {
+  const addCheckoutItem = useCheckout((state) => state.addItem);
+
+  const router = useRouter();
 
   const url = usePathname();
 
   const path = useGetPathname(url);
 
+  let subTotal = 0;
+
+  if (data?.length !== 0) {
+    for (let order of data!) {
+      const price = order.qty * order.product.price;
+
+      subTotal += price;
+    }
+  } else {
+    return;
+  }
+
+  const checkoutHandler = () => {
+    router.push("/cart/checkout");
+  };
+
+  const paymentDetailHandler = () => {
+    if (checkoutDetail?.address_id !== "" && checkoutDetail?.payment_id !== 0) {
+      let checkout = [];
+
+      for (const item of data!) {
+        checkout.push({
+          ...item,
+          address_id: checkoutDetail!.address_id,
+          payment_id: checkoutDetail!.payment_id,
+        });
+      }
+
+      addCheckoutItem(checkout);
+
+      router.push("/cart/payment");
+    } else {
+      toast({
+        title: "Checkout detail is not complete!",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div
       className={cx(
         classname,
-        "flex w-full sm:w-[459px] flex-col items-start shrink-0 self-stretch"
+        "flex w-full shrink-0 flex-col items-start self-stretch sm:w-[459px]",
       )}
     >
       <div
-        className="flex p-4 flex-col items-start gap-4 self-stretch rounded-xl bg-white shadow-section w-full"
+        className="flex w-full flex-col items-start gap-4 self-stretch rounded-xl bg-white p-4 shadow-section"
         aria-label="Order summary"
       >
         <div
-          className="flex justify-center items-center self-stretch text-body-primary"
+          className="flex items-center justify-center self-stretch text-body-primary"
           aria-label="Title"
         >
           <h4 className="flex-1 text-xl font-semibold leading-6">
@@ -42,46 +92,43 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
           </h4>
         </div>
         <div
-          className="flex flex-col justify-center items-start self-stretch"
+          className="flex flex-col items-start justify-center self-stretch"
           aria-label="Summary"
         >
           <div
-            className="flex flex-col justify-center items-start self-stretch w-full"
+            className="flex w-full flex-col items-start justify-center self-stretch"
             aria-label="Summary detail"
           >
-            {data?.map((item) => (
-              <div
-                className="w-full flex flex-col items-start gap-2 text-body-secondary"
-                aria-label="details"
-                key={item.name}
-              >
-                <div
-                  className="flex justify-between items-center self-stretch"
-                  aria-label="subtotal"
-                >
-                  <span>{item.name}</span>
-                  <span className="text-base font-medium text-body-primary">
-                    Rp{item.value}
-                  </span>
-                </div>
-              </div>
-            ))}
             <div
-              className="flex py-4 flex-col justify-center items-start self-stretch"
+              className="flex w-full flex-col items-start gap-2 text-body-secondary"
+              aria-label="details"
+            >
+              <div
+                className="flex items-center justify-between self-stretch"
+                aria-label="subtotal"
+              >
+                <span>Subtotal</span>
+                <span className="text-base font-medium text-body-primary">
+                  {currencyFormatter(subTotal)}
+                </span>
+              </div>
+            </div>
+            <div
+              className="flex flex-col items-start justify-center self-stretch py-4"
               aria-label="divider"
             >
               <span className="h-[1px] self-stretch bg-gray-200"></span>
             </div>
             <div
-              className="w-full flex flex-col items-start gap-2 text-body-primary font-medium text-base"
+              className="flex w-full flex-col items-start gap-2 text-base font-medium text-body-primary"
               aria-label="total"
             >
               <div
-                className="flex justify-between items-center self-stretch"
+                className="flex items-center justify-between self-stretch"
                 aria-label="total"
               >
                 <span>Total</span>
-                <span>Rp120.000</span>
+                <span>{currencyFormatter(subTotal)}</span>
               </div>
             </div>
           </div>
@@ -94,11 +141,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
             <label htmlFor="coupon" className="text-xs text-body-primary">
               Have any coupon?
             </label>
-            <Input
-              id="coupon"
-              placeholder="Coupon code"
-              onBlur={(e) => setCoupon(e.target.value)}
-            />
+            <Input id="coupon" placeholder="Coupon code" />
           </div>
         )}
         <div className="w-full" aria-label="Button wrapper">
@@ -106,9 +149,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
             <Button
               variant="success"
               className="w-full"
-              onClick={() => console.log("Clicked")}
+              onClick={checkoutHandler}
             >
-              <span className="w-[18px] h-[18px] mr-1">
+              <span className="mr-1 h-[18px] w-[18px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -142,10 +185,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ classname, data }) => {
             <Button
               variant="success"
               className="w-full"
-              onClick={() => console.log("Clicked")}
+              onClick={paymentDetailHandler}
             >
               <span>Payment Detail</span>
-              <span className="w-[18px] h-[18px] ml-1">
+              <span className="ml-1 h-[18px] w-[18px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="19"

@@ -1,7 +1,11 @@
 import Header from "@/components/header";
 import Container from "@/components/ui/container";
 import React from "react";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Cart | Black Honey",
+};
 interface CartLayoutProps {
   children: React.ReactNode;
 }
@@ -10,7 +14,7 @@ const CartLayout: React.FC<CartLayoutProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <Container className="flex flex-col md:flex-row w-full flex-wrap gap-4 items-start">
+      <Container className="mt-20 flex w-full flex-col flex-wrap items-start gap-4 px-4 pt-14 md:flex-row">
         {children}
       </Container>
     </>
