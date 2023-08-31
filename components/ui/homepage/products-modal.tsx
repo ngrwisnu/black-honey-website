@@ -138,7 +138,20 @@ const ProductsModal = ({ products }: ModalProps) => {
                 </p>
               </div>
               <div className="w-full" aria-label="Stock of the product">
-                <p className="text-sm">Stock: {activeProduct?.stock}</p>
+                <p
+                  className={`text-sm ${
+                    activeProduct!.stock < 1 ||
+                    activeProduct?.status === "OutofStock"
+                      ? "text-red-500"
+                      : "text-body-primary"
+                  }`}
+                >
+                  Stock:{" "}
+                  {activeProduct!.stock < 1 ||
+                  activeProduct?.status === "OutofStock"
+                    ? "Out of Stock"
+                    : activeProduct?.stock}
+                </p>
               </div>
               <div
                 className="flex w-full flex-col items-start gap-1"
@@ -192,6 +205,7 @@ const ProductsModal = ({ products }: ModalProps) => {
                   max={activeProduct?.stock}
                   className="w-full rounded-full border-gray-950 md:w-1/3"
                   onChange={(e) => setQty(Number(e.currentTarget.value))}
+                  disabled={activeProduct!.stock < 1}
                 />
               </div>
             </div>
@@ -199,6 +213,7 @@ const ProductsModal = ({ products }: ModalProps) => {
               className="self-stretch rounded-full"
               aria-label="Button add to cart"
               onClick={addToCartHandler}
+              disabled={activeProduct!.stock < 1}
             >
               Add to Cart
             </Button>
