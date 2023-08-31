@@ -1,6 +1,5 @@
 "use client";
 
-import { merienda } from "@/app/fonts";
 import useCart from "@/store/cart";
 import { X } from "lucide-react";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
+import Logo from "./logo";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -56,19 +56,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
         logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"
       }`}
     >
-      <div
-        className={`logo flex flex-1 items-center ${
-          logoCenter ? "justify-center" : "justify-start"
-        }`}
-      >
-        <Link
-          as="/"
-          href="/"
-          className={`${merienda.className} text-4xl font-bold leading-[43.2px]`}
-        >
-          Black<span className="font-normal text-orange-primary">Honey</span>
-        </Link>
-      </div>
+      <Logo isCenter={logoCenter!} />
       {!logoCenter && (
         <div className="nav flex items-center gap-10">
           <div

@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Container from "@/components/ui/container";
 import Benefits from "@/components/ui/homepage/benefits";
@@ -20,6 +21,7 @@ export default async function Home() {
         <Product />
         <Benefits />
       </Container>
+      <Footer />
     </>
   );
 }
