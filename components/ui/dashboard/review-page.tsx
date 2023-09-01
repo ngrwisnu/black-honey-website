@@ -25,16 +25,19 @@ import { usePostReview } from "@/hooks/usePostReview";
 import Swal from "sweetalert2";
 import { FetchResponse } from "@/types/types";
 import { useToken } from "@/hooks/useToken";
+import DashboardError from "./error";
 
 const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [rating, setRating] = useState(5);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<[] | undefined>([]);
 
   const token = useToken();
 
   useEffect(() => {
-    if (review) {
+    if (review && !review.isError) {
       setReviews(review.data.data);
+    } else {
+      setReviews(undefined);
     }
   }, [review]);
 
@@ -66,6 +69,10 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
       icon: "success",
     });
   };
+
+  if (!reviews) {
+    return <DashboardError />;
+  }
 
   if (reviews.length !== 0) {
     return (

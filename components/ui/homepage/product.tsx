@@ -9,7 +9,10 @@ const Product = () => {
   const modal = useModal();
 
   return (
-    <section className="my-40 flex w-full flex-col items-start gap-10 px-4 md:flex-row md:gap-0">
+    <section
+      id="products"
+      className="my-40 flex w-full flex-col items-start gap-10 px-4 md:flex-row md:gap-0"
+    >
       <div
         data-aos="fade-up"
         data-aos-delay="500"
