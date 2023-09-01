@@ -5,6 +5,21 @@ import React from "react";
 import { getAllReviews, getTransactionsHistory } from "@/lib/api/dashboard";
 import { getAllAddresses } from "@/lib/api/address";
 import { cookies } from "next/headers";
+import Image from "next/image";
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { subPage: string };
+}) => {
+  if (params.subPage === "transactions")
+    return { title: "Transactions History" };
+  if (params.subPage === "review") return { title: "Review Black Honey" };
+
+  return {
+    title: "Setting",
+  };
+};
 
 export const revalidate = 0;
 
@@ -32,7 +47,13 @@ const SubPage = async ({ params }: { params: { subPage: string } }) => {
     return <ReviewPage review={review} />;
   }
 
-  return <h1>SubPage: {params.subPage}</h1>;
+  return (
+    <div className="flex w-full items-center justify-center py-20">
+      <div className="h-auto w-1/3">
+        <Image src="/images/not-found.png" width={1200} height={960} alt="" />
+      </div>
+    </div>
+  );
 };
 
 export default SubPage;

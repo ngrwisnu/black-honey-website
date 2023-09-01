@@ -13,19 +13,22 @@ import { currencyFormatter, dateFormatter } from "@/lib/utils";
 import Image from "next/image";
 import { Copy } from "lucide-react";
 import { toast } from "../use-toast";
+import DashboardError from "./error";
 
 interface HistoryPageProps {
   orders: FetchResponse | undefined;
 }
 
 const HistoryPage = ({ orders }: HistoryPageProps) => {
-  const [orderHistory, setOrderHistory] = useState<OrderType[]>([]);
+  const [orderHistory, setOrderHistory] = useState<OrderType[] | undefined>([]);
 
   const receiptRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    if (orders) {
+    if (!orders?.isError && orders) {
       setOrderHistory(orders.data.data.result);
+    } else {
+      setOrderHistory(undefined);
     }
   }, [orders]);
 
@@ -39,6 +42,10 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
       });
     }
   };
+
+  if (!orderHistory) {
+    return <DashboardError />;
+  }
 
   return (
     <div className="flex w-full justify-center">
