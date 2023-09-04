@@ -78,7 +78,7 @@ const PasswordModal = () => {
   }
 
   return (
-    <Modal>
+    <Modal overlayHandler={modal.onClose}>
       <div className="w-full p-4">
         <div className="flex justify-end">
           <X onClick={modal.onClose} />
