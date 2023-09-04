@@ -77,7 +77,7 @@ const ProductsModal = ({ products }: ModalProps) => {
   }
 
   return (
-    <Modal>
+    <Modal overlayHandler={closeHandler}>
       {!productList || isError ? (
         <div className="w-full">
           <div
@@ -141,14 +141,14 @@ const ProductsModal = ({ products }: ModalProps) => {
                 <p
                   className={`text-sm ${
                     activeProduct!.stock < 1 ||
-                    activeProduct?.status === "OutofStock"
+                    activeProduct?.status === "OutOfStock"
                       ? "text-red-500"
                       : "text-body-primary"
                   }`}
                 >
                   Stock:{" "}
                   {activeProduct!.stock < 1 ||
-                  activeProduct?.status === "OutofStock"
+                  activeProduct?.status === "OutOfStock"
                     ? "Out of Stock"
                     : activeProduct?.stock}
                 </p>
@@ -205,7 +205,10 @@ const ProductsModal = ({ products }: ModalProps) => {
                   max={activeProduct?.stock}
                   className="w-full rounded-full border-gray-950 md:w-1/3"
                   onChange={(e) => setQty(Number(e.currentTarget.value))}
-                  disabled={activeProduct!.stock < 1}
+                  disabled={
+                    activeProduct!.stock < 1 ||
+                    activeProduct?.status === "OutOfStock"
+                  }
                 />
               </div>
             </div>
@@ -213,7 +216,10 @@ const ProductsModal = ({ products }: ModalProps) => {
               className="self-stretch rounded-full"
               aria-label="Button add to cart"
               onClick={addToCartHandler}
-              disabled={activeProduct!.stock < 1}
+              disabled={
+                activeProduct!.stock < 1 ||
+                activeProduct?.status === "OutOfStock"
+              }
             >
               Add to Cart
             </Button>
