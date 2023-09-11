@@ -43,14 +43,14 @@ const Product = () => {
       </div>
       <div
         data-aos="fade-up"
-        className="order-1 h-full flex-1 items-start md:order-2"
+        className="order-1 h-[800px] flex-1 items-start md:order-2"
       >
-        <div className="flex-1 self-stretch">
+        <div className="relative h-full flex-1 overflow-hidden">
           <Image
-            src="/images/default-image.webp"
-            width={600}
-            height={442}
+            src="/images/products.webp"
+            fill={true}
             alt="Product"
+            style={{ objectFit: "cover" }}
           />
         </div>
       </div>
