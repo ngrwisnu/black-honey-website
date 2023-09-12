@@ -47,7 +47,7 @@ const ProductsModal = ({ products }: ModalProps) => {
   };
 
   const addToCartHandler = () => {
-    if (qty >= activeProduct?.stock!) {
+    if (qty > activeProduct?.stock!) {
       toast({
         title: "Purchase is over the stock",
         variant: "destructive",

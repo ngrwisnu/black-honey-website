@@ -72,6 +72,8 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                           ? "bg-[#FFECBD]"
                           : order.status === "Success"
                           ? "bg-[#D2ECEC]"
+                          : order.status === "Pre-Order"
+                          ? "bg-[#bdacfb]"
                           : "bg-[#FBB8AC]"
                       } font-medium text-body-primary`}
                     >
