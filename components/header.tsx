@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
       {!logoCenter && (
         <div className="nav flex items-center gap-10">
           <div
-            className="cart fixed bottom-8 right-4 flex items-center justify-center gap-[10px]
+            className="cart fixed bottom-8 right-4 z-[999] flex items-center justify-center gap-[10px]
             rounded-full bg-gray-100 p-3 shadow-section hover:cursor-pointer sm:relative sm:bottom-0 sm:right-0 sm:shadow-none"
             onClick={cartHandler}
           >
