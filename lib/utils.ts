@@ -35,3 +35,10 @@ export function subTotalCalculation(data: any) {
 
   return subTotal;
 }
+
+export function firstToUpperCase(text: string): string {
+  let firstLetter = /^\w/.exec(text)!;
+  let restLetter = /(?<=^\w)\w+/.exec(text)!;
+
+  return `${firstLetter[0]?.toUpperCase()}${restLetter.join("")}`;
+}

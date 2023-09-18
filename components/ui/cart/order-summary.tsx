@@ -145,7 +145,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           </div>
         )}
         <div className="w-full" aria-label="Button wrapper">
-          {path === "cart" && (
+          {path === "summary" && (
             <Button
               variant="success"
               className="w-full"

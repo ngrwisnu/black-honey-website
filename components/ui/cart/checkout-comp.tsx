@@ -6,9 +6,9 @@ import { AddressType, FetchResponse, PaymentType } from "@/types/types";
 import Image from "next/image";
 import useCart from "@/store/cart";
 import OrderSummary from "./order-summary";
-import CheckoutLoading from "@/app/(cart)/cart/checkout/loading";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -45,7 +45,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   };
 
   if (!payments || !addresses) {
-    return <CheckoutLoading />;
+    return <CartLoading />;
   }
 
   return (

@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   };
 
   const cartHandler = () => {
-    router.push("/cart");
+    router.push("/cart/summary");
   };
 
   const logoutHandler = () => {
