@@ -6,6 +6,7 @@ import { getAllPayments } from "@/lib/api/payment";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import CartLoading from "./loading";
+import NotFound from "@/components/ui/not-found";
 
 const CartSubPage = async ({ params }: { params: { subPage: string } }) => {
   if (params.subPage === "summary") {
@@ -34,7 +35,7 @@ const CartSubPage = async ({ params }: { params: { subPage: string } }) => {
     );
   }
 
-  return <div>CartSubPage</div>;
+  return <NotFound />;
 };
 
 export default CartSubPage;

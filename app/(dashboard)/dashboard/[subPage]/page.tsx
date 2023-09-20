@@ -6,6 +6,7 @@ import { getAllReviews, getTransactionsHistory } from "@/lib/api/dashboard";
 import { getAllAddresses } from "@/lib/api/address";
 import { cookies } from "next/headers";
 import Image from "next/image";
+import NotFound from "@/components/ui/not-found";
 
 export const generateMetadata = async ({
   params,
@@ -47,13 +48,7 @@ const SubPage = async ({ params }: { params: { subPage: string } }) => {
     return <ReviewPage review={review} />;
   }
 
-  return (
-    <div className="flex w-full items-center justify-center py-20">
-      <div className="h-auto w-1/3">
-        <Image src="/images/not-found.png" width={1200} height={960} alt="" />
-      </div>
-    </div>
-  );
+  return <NotFound />;
 };
 
 export default SubPage;
