@@ -8,7 +8,7 @@ const Jumbotron = () => {
     >
       <h1
         data-aos="fade-up"
-        className="mt-20 pl-4 text-5xl font-normal leading-[72px] text-body-primary sm:w-[485px] md:pl-[140px] md:text-6xl md:leading-[96px] lg:w-[740px]"
+        className="mt-20 px-4 text-5xl font-normal leading-[72px] text-body-primary sm:w-[485px] md:pl-[140px] md:text-6xl md:leading-[96px] lg:w-[740px]"
       >
         Captivating Tastes of{" "}
         <span className="font-light italic">Black Honey</span>
