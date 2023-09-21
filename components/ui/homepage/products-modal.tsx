@@ -101,7 +101,7 @@ const ProductsModal = ({ products }: ModalProps) => {
       ) : (
         <>
           <div className="flex-1" aria-label="Product's preview">
-            <div className="relative h-[240px] w-full md:h-full">
+            <div className="relative h-[180px] w-full sm:h-[240px] md:h-full">
               <Image
                 src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${activeProduct?.thumbnail}`}
                 fill={true}
@@ -111,7 +111,7 @@ const ProductsModal = ({ products }: ModalProps) => {
             </div>
           </div>
           <div
-            className="flex flex-1 flex-col items-start gap-8 p-6 text-body-primary"
+            className="flex flex-1 flex-col items-start gap-8 p-4 text-body-primary sm:p-6"
             aria-label="Modal's content"
           >
             <div

@@ -5,7 +5,6 @@ import Benefits from "@/components/ui/homepage/benefits";
 import Jumbotron from "@/components/ui/homepage/jumbotron";
 import Product from "@/components/ui/homepage/product";
 import ProductsModal from "@/components/ui/homepage/products-modal";
-import StatusProof from "@/components/ui/homepage/status-proof";
 import { getAllProducts } from "@/lib/api/homepage";
 
 export const revalidate = 0;
@@ -16,11 +15,10 @@ export default async function Home() {
   return (
     <>
       <Header />
-      <Container className="flex min-h-screen flex-col items-center">
-        <ProductsModal products={products} />
+      <ProductsModal products={products} />
+      <Container className="flex min-h-screen w-full flex-col items-center">
         <Jumbotron />
         <Product />
-        <StatusProof />
         <Benefits />
       </Container>
       <Footer />
