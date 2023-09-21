@@ -132,7 +132,7 @@ const RegisterPage = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" variant="success" className="mt-2 w-full">
+        <Button type="submit" variant="default" className="mt-2 w-full">
           Register
         </Button>
       </form>

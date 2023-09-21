@@ -31,9 +31,9 @@ const Product = () => {
             </p>
             <div className="flex w-full justify-center sm:justify-start">
               <Button
-                variant="outline"
-                size="lg"
-                className="w-40"
+                variant="main"
+                size="xl"
+                className="w-40 transition-all hover:-translate-y-1"
                 onClick={modal.onOpen}
               >
                 Buy Now

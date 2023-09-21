@@ -23,7 +23,12 @@ const Recipe = () => {
             Use it as an ingredient or drizzle it as a finishing touch. Elevate
             your recipes to a whole new level of flavor
           </p>
-          <Button variant="default" onClick={modal.onOpen}>
+          <Button
+            variant="main"
+            size="xl"
+            className="text-base font-normal uppercase leading-[19.2px] transition-all hover:-translate-y-1"
+            onClick={modal.onOpen}
+          >
             See Products
           </Button>
         </div>

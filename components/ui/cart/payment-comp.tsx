@@ -174,7 +174,7 @@ const PaymentComp = () => {
               onChange={changeHandler}
             />
           </div>
-          <Button variant="success" className="w-full" type="submit">
+          <Button variant="default" className="w-full" type="submit">
             <Check size={18} aria-label="icon check" />
             <span className="ml-1" aria-label="button name">
               Payment Complete
