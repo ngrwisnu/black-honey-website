@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { ContentWrapper, OptionWrapper } from "./option-wrapper";
 import { AddressType, FetchResponse, PaymentType } from "@/types/types";
 import Image from "next/image";
-import useCart from "@/store/cart";
+import useCart, { CartItems } from "@/store/cart";
 import OrderSummary from "./order-summary";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
+import useUser from "@/store/user";
+import { findUserCart } from "@/lib/utils";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -20,10 +22,12 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   const [selectedPayment, setSelectedPayment] = useState(0);
   const [existPayments, setExistPayments] = useState<PaymentType[]>();
   const [existAddresses, setExistAddresses] = useState<AddressType[]>();
+  const [userItems, setUserItems] = useState<CartItems[] | []>([]);
 
   const router = useRouter();
 
   const items = useCart((state) => state.items);
+  const uid = useUser((state) => state.uid);
 
   useEffect(() => {
     if (addresses) {
@@ -38,6 +42,12 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
       }
     }
   }, [addresses, payments]);
+
+  useEffect(() => {
+    const userCart = findUserCart(items, uid!);
+
+    setUserItems(userCart);
+  }, [items, uid]);
 
   const checkoutDetail = {
     address_id: selectedAddress,
@@ -170,7 +180,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
           </OptionWrapper>
         </form>
       </div>
-      <OrderSummary data={items} checkoutDetail={checkoutDetail} />
+      <OrderSummary data={userItems} checkoutDetail={checkoutDetail} />
     </>
   );
 };

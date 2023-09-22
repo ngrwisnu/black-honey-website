@@ -8,6 +8,8 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import Logo from "./logo";
+import useUser from "@/store/user";
+import { findUserCart } from "@/lib/utils";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -18,18 +20,21 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isEmpty, setIsEmpty] = useState(true);
 
   const items = useCart((state) => state.items);
+  const uid = useUser((state) => state.uid);
 
   const router = useRouter();
 
   const isLoggedIn = Cookies.get("tk");
 
   useEffect(() => {
-    if (items.length !== 0) {
+    const userCart = findUserCart(items, uid!);
+
+    if (userCart.length !== 0) {
       setIsEmpty(false);
     } else {
       setIsEmpty(true);
     }
-  }, [items.length]);
+  }, [items, uid]);
 
   const clickHandler = () => {
     if (isLoggedIn) {

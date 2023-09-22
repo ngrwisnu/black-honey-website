@@ -4,13 +4,14 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export interface CartItems {
+  uid: string;
   qty: number;
   product: ProductType;
 }
 
 interface CartStore {
   items: CartItems[];
-  addItem: (data: { qty: number; product: ProductType }) => void;
+  addItem: (data: { uid: string; qty: number; product: ProductType }) => void;
   removeItem: (id: string) => void;
   removeAllItem: () => void;
 }
@@ -19,7 +20,7 @@ const useCart = create(
   persist<CartStore>(
     (set, get) => ({
       items: [],
-      addItem: (data: { qty: number; product: ProductType }) => {
+      addItem: (data) => {
         const currentItems = get().items;
         const existingItem = currentItems.find(
           (item) => item.product.id === data.product.id,

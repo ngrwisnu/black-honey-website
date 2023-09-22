@@ -11,6 +11,7 @@ import { currencyFormatter } from "@/lib/utils";
 import useCart from "@/store/cart";
 import Modal from "../modal";
 import { toast } from "../use-toast";
+import useUser from "@/store/user";
 
 interface ModalProps {
   products: FetchResponse | undefined;
@@ -24,6 +25,7 @@ const ProductsModal = ({ products }: ModalProps) => {
 
   const modal = useModal();
   const cart = useCart();
+  const uid = useUser((state) => state.uid);
 
   useEffect(() => {
     if (products) {
@@ -57,6 +59,7 @@ const ProductsModal = ({ products }: ModalProps) => {
     }
 
     const data = {
+      uid: uid!,
       qty,
       product: activeProduct!,
     };

@@ -4,19 +4,23 @@ import useCart, { CartItems } from "@/store/cart";
 import React, { useEffect, useState } from "react";
 import { OptionWrapper } from "./option-wrapper";
 import Image from "next/image";
-import { currencyFormatter } from "@/lib/utils";
+import { currencyFormatter, findUserCart } from "@/lib/utils";
 import { Button } from "../button";
 import { Trash } from "lucide-react";
 import OrderSummary from "./order-summary";
+import useUser from "@/store/user";
 
 const CartComp = () => {
   const [orders, setOrders] = useState<CartItems[]>([]);
 
   const cart = useCart();
+  const uid = useUser((state) => state.uid);
 
   useEffect(() => {
-    setOrders(cart.items);
-  }, [cart.items]);
+    const userCart = findUserCart(cart.items, uid!);
+
+    setOrders(userCart);
+  }, [uid, cart.items]);
 
   return (
     <>
