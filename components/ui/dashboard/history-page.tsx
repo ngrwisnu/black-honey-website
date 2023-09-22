@@ -127,9 +127,6 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                       </span>
                     )}
                   </div>
-                  <Button variant="outline" className="w-full sm:w-auto">
-                    Detail Transaction
-                  </Button>
                 </CardFooter>
               </Card>
             ))}

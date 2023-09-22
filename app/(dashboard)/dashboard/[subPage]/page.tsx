@@ -5,7 +5,6 @@ import React from "react";
 import { getAllReviews, getTransactionsHistory } from "@/lib/api/dashboard";
 import { getAllAddresses } from "@/lib/api/address";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import NotFound from "@/components/ui/not-found";
 
 export const generateMetadata = async ({
