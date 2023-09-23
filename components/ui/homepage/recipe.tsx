@@ -13,12 +13,14 @@ const Recipe = () => {
       id="recipe"
       className="my-40 flex min-h-[800px] w-full items-center justify-center px-4"
     >
-      <div className="max-w-300 relative flex h-[640px] w-full items-center justify-center">
+      <div className="relative flex h-[640px] w-full max-w-300 items-center justify-center">
         <div
           data-aos="fade-up"
           className="relative z-10 flex flex-col items-center gap-8"
         >
-          <h3 className="text-5xl font-normal">Elevate Your Recipe</h3>
+          <h3 className="text-center text-5xl font-normal">
+            Elevate Your Recipe
+          </h3>
           <p className="max-w-[558px] text-center text-lg">
             Use it as an ingredient or drizzle it as a finishing touch. Elevate
             your recipes to a whole new level of flavor

@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Logo from "./logo";
 import useUser from "@/store/user";
 import { findUserCart } from "@/lib/utils";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -21,10 +22,11 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
 
   const items = useCart((state) => state.items);
   const uid = useUser((state) => state.uid);
+  const username = useUser((state) => state.username);
+
+  const userInitial = useUserProfile(username!);
 
   const router = useRouter();
-
-  const isLoggedIn = Cookies.get("tk");
 
   useEffect(() => {
     const userCart = findUserCart(items, uid!);
@@ -37,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   }, [items, uid]);
 
   const clickHandler = () => {
-    if (isLoggedIn) {
+    if (uid) {
       setIsClicked(!isClicked);
     } else {
       router.push("/login");
@@ -49,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   };
 
   const logoutHandler = () => {
-    if (isLoggedIn) {
+    if (uid) {
       Cookies.remove("tk");
       router.push("/login");
     }
@@ -104,12 +106,15 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
           </div>
           <div
             id="user-avatar"
-            className=" flex h-12 w-12 rounded-full bg-[url('/images/placeholder.webp')] bg-cover bg-no-repeat hover:cursor-pointer sm:relative"
+            className={`flex h-12 w-12 items-center justify-center rounded-full ${
+              userInitial ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
+            } bg-cover bg-no-repeat hover:cursor-pointer sm:relative`}
             onClick={clickHandler}
           >
+            {userInitial ? userInitial.toUpperCase() : ""}
             {isClicked && (
               <div
-                className={` dropdown fixed bottom-0 left-0 right-0 z-10 flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
+                className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
               >
                 <ul className="order-2 flex w-full flex-col gap-[10px]">
                   <li>
