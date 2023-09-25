@@ -4,12 +4,12 @@ import useCart from "@/store/cart";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import Logo from "./logo";
-import { findUserCart, getUserInitial, getUserProfile } from "@/lib/utils";
-import { UserType } from "@/types/types";
+import { findUserCart, getUserInitial } from "@/lib/utils";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -18,52 +18,23 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
-  const [initial, setInitial] = useState<string>("");
-  const [user, setUser] = useState<Omit<UserType, "addresses">>();
+  const [initial, setInitial] = useState<string | undefined>();
 
   const items = useCart((state) => state.items);
+  const userProfile = useUserProfile();
 
   const router = useRouter();
 
-  const userLogged = useCallback(() => {
-    const data = getUserProfile();
-
-    setUser(data);
-  }, []);
-
-  const userCart = useCallback(() => {
-    const data = findUserCart(items, user?.id!);
-    const initial = getUserInitial(user?.username!);
-
-    if (data.length !== 0) {
-      setIsEmpty(false);
-    } else {
-      setIsEmpty(true);
-    }
-
-    setInitial(initial!);
-  }, [items]);
-
   useEffect(() => {
-    userLogged();
-    userCart();
-  }, [userCart]);
+    const initial = getUserInitial(userProfile?.username!);
+    const userCart = findUserCart(items, userProfile?.id);
 
-  console.log(isEmpty);
-
-  // useEffect(() => {
-  //   console.log(user);
-  //   const userCart = findUserCart(items, user?.username!);
-
-  //   if (userCart.length !== 0) {
-  //     setIsEmpty(false);
-  //   } else {
-  //     setIsEmpty(true);
-  //   }
-  // }, [user]);
+    userCart.length !== 0 ? setIsEmpty(false) : setIsEmpty(true);
+    setInitial(initial);
+  }, [userProfile, items]);
 
   const clickHandler = () => {
-    if (user) {
+    if (userProfile) {
       setIsClicked(!isClicked);
     } else {
       router.push("/login");
@@ -75,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   };
 
   const logoutHandler = () => {
-    if (user) {
+    if (userProfile) {
       Cookies.remove("tk");
       router.push("/login");
     }
@@ -131,11 +102,11 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
           <div
             id="user-avatar"
             className={`flex h-12 w-12 items-center justify-center rounded-full ${
-              user ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
+              userProfile ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
             } bg-cover bg-no-repeat hover:cursor-pointer sm:relative`}
             onClick={clickHandler}
           >
-            {user ? initial?.toUpperCase() : ""}
+            {initial ? initial?.toUpperCase() : ""}
             {isClicked && (
               <div
                 className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}

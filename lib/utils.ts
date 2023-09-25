@@ -58,7 +58,7 @@ export function getUserProfile() {
   }
 }
 
-export function findUserCart(items: CartItems[], uid: string) {
+export function findUserCart(items: CartItems[], uid: string | undefined) {
   let userCart: CartItems[] = [];
 
   if (uid) {

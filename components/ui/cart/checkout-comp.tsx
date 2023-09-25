@@ -9,8 +9,8 @@ import OrderSummary from "./order-summary";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
-import useUser from "@/store/user";
 import { findUserCart } from "@/lib/utils";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -27,7 +27,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   const router = useRouter();
 
   const items = useCart((state) => state.items);
-  const uid = useUser((state) => state.uid);
+  const userProfile = useUserProfile();
 
   useEffect(() => {
     if (addresses) {
@@ -44,10 +44,10 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   }, [addresses, payments]);
 
   useEffect(() => {
-    const userCart = findUserCart(items, uid!);
+    const userCart = findUserCart(items, userProfile?.id);
 
     setUserItems(userCart);
-  }, [items, uid]);
+  }, [items, userProfile]);
 
   const checkoutDetail = {
     address_id: selectedAddress,

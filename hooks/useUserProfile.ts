@@ -1,23 +1,15 @@
-"use client";
-
+import { getUserProfile } from "@/lib/utils";
+import { UserProfile } from "@/types/types";
 import { useEffect, useState } from "react";
 
-export const useUserProfile = (username: string) => {
-  const [userInitial, setUserInitial] = useState<string | undefined>();
+export const useUserProfile = () => {
+  const [user, setUser] = useState<UserProfile | undefined>();
 
   useEffect(() => {
-    if (username) {
-      const initial = username.match(/\b\w/g);
+    const response = getUserProfile();
 
-      if (initial && initial?.length > 1) {
-        setUserInitial(`${initial[0]}${initial[1]}`);
-      } else if (initial?.length === 1) {
-        setUserInitial(`${initial[0]}`);
-      } else {
-        setUserInitial(undefined);
-      }
-    }
+    setUser(response);
   }, []);
 
-  return userInitial;
+  return user;
 };

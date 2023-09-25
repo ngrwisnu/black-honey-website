@@ -11,7 +11,8 @@ import { currencyFormatter } from "@/lib/utils";
 import useCart from "@/store/cart";
 import Modal from "../modal";
 import { toast } from "../use-toast";
-import useUser from "@/store/user";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   products: FetchResponse | undefined;
@@ -23,9 +24,10 @@ const ProductsModal = ({ products }: ModalProps) => {
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
 
+  const router = useRouter();
   const modal = useModal();
   const cart = useCart();
-  const uid = useUser((state) => state.uid);
+  const userProfile = useUserProfile();
 
   useEffect(() => {
     if (products) {
@@ -58,8 +60,13 @@ const ProductsModal = ({ products }: ModalProps) => {
       return;
     }
 
+    if (!userProfile?.id) {
+      router.push("/login");
+      return;
+    }
+
     const data = {
-      uid: uid!,
+      uid: userProfile?.id!,
       qty,
       product: activeProduct!,
     };

@@ -8,19 +8,19 @@ import { currencyFormatter, findUserCart } from "@/lib/utils";
 import { Button } from "../button";
 import { Trash } from "lucide-react";
 import OrderSummary from "./order-summary";
-import useUser from "@/store/user";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 const CartComp = () => {
   const [orders, setOrders] = useState<CartItems[]>([]);
 
   const cart = useCart();
-  const uid = useUser((state) => state.uid);
+  const userProfile = useUserProfile();
 
   useEffect(() => {
-    const userCart = findUserCart(cart.items, uid!);
+    const userCart = findUserCart(cart.items, userProfile?.id);
 
     setOrders(userCart);
-  }, [uid, cart.items]);
+  }, [userProfile, cart.items]);
 
   return (
     <>

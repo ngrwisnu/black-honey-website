@@ -147,12 +147,14 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
             </span>
             <span>Save Changed</span>
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => setIsNewAddressClicked(false)}
-          >
-            Cancel
-          </Button>
+          {addressList.length !== 0 && (
+            <Button
+              variant="outline"
+              onClick={() => setIsNewAddressClicked(false)}
+            >
+              Cancel
+            </Button>
+          )}
         </div>
       </form>
     </Form>
