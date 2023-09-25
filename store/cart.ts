@@ -23,7 +23,8 @@ const useCart = create(
       addItem: (data) => {
         const currentItems = get().items;
         const existingItem = currentItems.find(
-          (item) => item.product.id === data.product.id,
+          (item) =>
+            item.product.id === data.product.id && item.uid === data.uid,
         );
 
         if (existingItem) {

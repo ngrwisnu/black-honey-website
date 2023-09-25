@@ -4,8 +4,7 @@ import PaymentComp from "@/components/ui/cart/payment-comp";
 import { getAllAddresses } from "@/lib/api/address";
 import { getAllPayments } from "@/lib/api/payment";
 import { cookies } from "next/headers";
-import React, { Suspense } from "react";
-import CartLoading from "./loading";
+import React from "react";
 import NotFound from "@/components/ui/not-found";
 
 const CartSubPage = async ({ params }: { params: { subPage: string } }) => {
@@ -26,13 +25,7 @@ const CartSubPage = async ({ params }: { params: { subPage: string } }) => {
   }
 
   if (params.subPage === "payment") {
-    return (
-      <>
-        <Suspense fallback={<CartLoading />}>
-          <PaymentComp />
-        </Suspense>
-      </>
-    );
+    return <PaymentComp />;
   }
 
   return <NotFound />;
