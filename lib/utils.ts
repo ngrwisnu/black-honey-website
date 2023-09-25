@@ -61,9 +61,25 @@ export function getUserProfile() {
 export function findUserCart(items: CartItems[], uid: string) {
   let userCart: CartItems[] = [];
 
-  items.forEach((item: CartItems) => {
-    item.uid == uid && userCart.push(item);
-  });
+  if (uid) {
+    items.forEach((item: CartItems) => {
+      item.uid == uid && userCart.push(item);
+    });
+  }
 
   return userCart;
+}
+
+export function getUserInitial(username: string) {
+  if (username) {
+    const initial = username.match(/\b\w/g);
+
+    if (initial && initial?.length > 1) {
+      return `${initial[0]}${initial[1]}`;
+    } else if (initial?.length === 1) {
+      return `${initial[0]}`;
+    } else {
+      return undefined;
+    }
+  }
 }
