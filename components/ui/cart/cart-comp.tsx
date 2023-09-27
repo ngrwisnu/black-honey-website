@@ -23,7 +23,7 @@ const CartComp = () => {
   }, [userProfile, cart.items]);
 
   return (
-    <>
+    <div className="flex w-full max-w-[1440px] flex-col gap-4 md:flex-row">
       <div className="flex w-full flex-1 items-start justify-center self-stretch">
         <div
           className="flex w-full flex-col items-start gap-8 rounded-lg bg-white p-4 shadow-section sm:max-w-[830px]"
@@ -79,7 +79,7 @@ const CartComp = () => {
         </div>
       </div>
       <OrderSummary data={orders} />
-    </>
+    </div>
   );
 };
 

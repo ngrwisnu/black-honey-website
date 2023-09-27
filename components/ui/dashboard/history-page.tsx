@@ -116,7 +116,9 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                   <div className="flex gap-2" aria-label="Receipt number">
                     <span>Receipt: </span>
                     {!order.receipt_number ? (
-                      <span className="text-orange-300">Will update soon</span>
+                      <span className="text-orange-300">
+                        Will be updated soon
+                      </span>
                     ) : (
                       <span
                         className="flex items-center gap-1 text-orange-500 hover:cursor-pointer hover:underline"

@@ -45,7 +45,7 @@ const CartLayout: React.FC<CartLayoutProps> = ({ params, children }) => {
           currentStep={CurrentStep[params.subPage as keyof typeof CurrentStep]}
         />
       )}
-      <Container className="flex w-full flex-col flex-wrap items-start gap-4 px-4 md:flex-row">
+      <Container className="mb-14 flex w-full items-start justify-center px-4 md:mb-0">
         {children}
       </Container>
     </>

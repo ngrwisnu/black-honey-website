@@ -59,7 +59,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   }
 
   return (
-    <>
+    <div className="flex w-full max-w-[1440px] flex-col gap-4 md:flex-row">
       <div className="flex w-full flex-1 items-start justify-center self-stretch">
         <form className="flex w-full flex-col items-start gap-8 rounded-lg bg-white p-4 shadow-section sm:max-w-[830px]">
           <OptionWrapper aria-label="Address options">
@@ -70,7 +70,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
             >
               {existAddresses?.length === 0 && (
                 <div
-                  className="relative flex w-full items-center justify-center gap-2 rounded-lg border-[1px]  bg-white p-4 hover:cursor-pointer hover:bg-gray-200 sm:w-[390px]"
+                  className="relative flex w-full items-center justify-center gap-2 rounded-lg border-[1px]  bg-white p-4 hover:cursor-pointer hover:bg-gray-200 sm:w-2/5"
                   onClick={() => router.push("/dashboard/setting")}
                 >
                   <span className="flex items-center gap-1">
@@ -80,7 +80,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
               )}
               {existAddresses?.map((address) => (
                 <div
-                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
+                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-2/5 ${
                     selectedAddress === address.id
                       ? "border-green-600"
                       : "border-gray-200"
@@ -127,7 +127,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
             >
               {existPayments?.map((payment: PaymentType) => (
                 <div
-                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
+                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-2/5 ${
                     selectedPayment === payment.id
                       ? "border-green-600"
                       : "border-gray-200"
@@ -181,7 +181,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
         </form>
       </div>
       <OrderSummary data={userItems} checkoutDetail={checkoutDetail} />
-    </>
+    </div>
   );
 };
 
