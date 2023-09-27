@@ -2,8 +2,7 @@
 
 import { getPayment } from "@/lib/api/payment";
 import useCheckout from "@/store/checkout";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useQuery } from "react-query";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { toast } from "../use-toast";
 import { SummaryItem, SummaryList, SummaryTitle } from "./summary-item";
 import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
@@ -14,9 +13,12 @@ import Swal from "sweetalert2";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import useCart from "@/store/cart";
 import { useToken } from "@/hooks/useToken";
+import Link from "next/link";
+import { FetchResponse } from "@/types/types";
 
 const PaymentComp = () => {
   const [image, setImage] = useState<File>();
+  const [payment, setPayment] = useState<FetchResponse | undefined>();
 
   const checkout = useCheckout();
   const cart = useCart();
@@ -24,12 +26,32 @@ const PaymentComp = () => {
 
   const { mutate } = useCreateOrder();
 
-  const payment = useQuery({
-    queryKey: "payments",
-    queryFn: () => getPayment(checkout.items[0].payment_id!),
-    staleTime: 3000,
-    suspense: true,
-  });
+  useEffect(() => {
+    if (checkout.items.length !== 0) {
+      const selectedPayment = async () => {
+        const response = await getPayment(checkout.items[0].payment_id!);
+        setPayment(response);
+      };
+
+      selectedPayment();
+    }
+  }, [checkout]);
+
+  useEffect(() => {
+    window.addEventListener("unload", () => {
+      if (checkout.items.length !== 0) {
+        checkout.clearItems();
+      }
+    });
+
+    return () => {
+      window.addEventListener("unload", () => {
+        if (checkout.items.length !== 0) {
+          checkout.clearItems();
+        }
+      });
+    };
+  }, []);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const inputFile = e.target.files?.[0];
@@ -88,9 +110,35 @@ const PaymentComp = () => {
 
   const subTotal = subTotalCalculation(checkout.items);
 
+  if (checkout.items.length === 0 || !payment) {
+    if (!payment) {
+      return (
+        <div className="flex h-[800px] w-full items-center justify-center">
+          <p>
+            Payment method is not found,{" "}
+            <Link href={"/"} className="font-medium text-orange-500 underline">
+              back to home
+            </Link>
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex h-[800px] w-full items-center justify-center">
+        <p>
+          Your cart is empty,{" "}
+          <Link href={"/"} className="font-medium text-orange-500 underline">
+            browse our products
+          </Link>
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="mx-auto">
+      <div className="mx-auto mb-14">
         <section
           className="flex w-full flex-col items-start gap-3 rounded-lg bg-white p-4 shadow-section md:w-[506px]"
           aria-label="details"
@@ -128,13 +176,13 @@ const PaymentComp = () => {
             <SummaryList>
               <span>Payment method</span>
               <span>
-                {payment.data?.data.data.payment_name} -{" "}
-                {payment.data?.data.data.account_number}
+                {payment.data.data.payment_name} -{" "}
+                {payment.data.data.account_number}
               </span>
             </SummaryList>
             <SummaryList>
               <span>Recipient name</span>
-              <span>{payment.data?.data.data.recipient_name}</span>
+              <span>{payment.data.data.recipient_name}</span>
             </SummaryList>
           </SummaryItem>
         </section>

@@ -7,10 +7,12 @@ import Image from "next/image";
 import useCart, { CartItems } from "@/store/cart";
 import OrderSummary from "./order-summary";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
 import { findUserCart } from "@/lib/utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import NotFound from "../not-found";
+import Link from "next/link";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -56,6 +58,19 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
 
   if (!payments || !addresses) {
     return <CartLoading />;
+  }
+
+  if (userItems.length === 0) {
+    return (
+      <div className="flex h-[800px] w-full items-center justify-center">
+        <p>
+          Your cart is empty,{" "}
+          <Link href={"/"} className="font-medium text-orange-500 underline">
+            browse our products
+          </Link>
+        </p>
+      </div>
+    );
   }
 
   return (
