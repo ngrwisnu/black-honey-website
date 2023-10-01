@@ -89,7 +89,7 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                   >
                     <div className="h-[74px] w-[74px] shrink-0">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${order.product.thumbnail}`}
+                        src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${order.product.thumbnail}`}
                         alt="Thumbnail"
                         width={74}
                         height={74}

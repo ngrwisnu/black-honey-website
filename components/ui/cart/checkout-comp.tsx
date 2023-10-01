@@ -174,7 +174,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
                     <p className="font-medium">{payment.payment_name}</p>
                     <div className="h-9 w-20">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${payment.thumbnail}`}
+                        src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${payment.thumbnail}`}
                         alt="thumbnail"
                         className="object-cover"
                         width={80}

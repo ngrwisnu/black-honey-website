@@ -113,7 +113,7 @@ const ProductsModal = ({ products }: ModalProps) => {
           <div className="flex-1" aria-label="Product's preview">
             <div className="relative h-[180px] w-full sm:h-[240px] md:h-full">
               <Image
-                src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${activeProduct?.thumbnail}`}
+                src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${activeProduct?.thumbnail}`}
                 fill={true}
                 alt="Product's preview"
                 style={{ objectFit: "cover" }}

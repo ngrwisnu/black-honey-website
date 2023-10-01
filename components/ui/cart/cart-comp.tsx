@@ -45,7 +45,7 @@ const CartComp = () => {
                     aria-label="Thumbnail"
                   >
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${item.product.thumbnail}`}
+                      src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${item.product.thumbnail}`}
                       alt="thumbnail"
                       width={180}
                       height={140}
