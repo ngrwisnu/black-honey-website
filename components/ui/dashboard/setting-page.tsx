@@ -9,9 +9,8 @@ import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import FormArea from "./form-area";
 import useModal from "@/store/modal-slice";
-import { AddressType, FetchResponse, UserPayload } from "@/types/types";
-import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
+import { AddressType, FetchResponse } from "@/types/types";
+import { getUserProfile } from "@/lib/utils";
 
 const SettingPage = ({
   addresses,
@@ -33,15 +32,12 @@ const SettingPage = ({
   }, [addresses]);
 
   useEffect(() => {
-    const tk = Cookies.get("tk");
+    const user = getUserProfile();
 
-    if (tk) {
-      const beautyTk = window.atob(tk);
-      const decodedTk: UserPayload = jwt_decode(beautyTk);
-
+    if (user) {
       setUser({
-        username: decodedTk.customer.username,
-        email: decodedTk.customer.email,
+        username: user.username,
+        email: user.email,
       });
     }
   }, []);

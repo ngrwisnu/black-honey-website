@@ -21,6 +21,7 @@ import { useAddAddress } from "@/hooks/useAddAddress";
 import Swal from "sweetalert2";
 import AddressList from "./address-list";
 import { useToken } from "@/hooks/useToken";
+import { useRouter } from "next/navigation";
 
 interface FormAreaProps {
   fields: { name: string; type: string }[];
@@ -33,10 +34,18 @@ const formatField = (fieldName: string) => {
 
 const FormArea = ({ fields, addresses }: FormAreaProps) => {
   const [addressList, setAddressList] = useState<AddressType[]>([]);
+  const [isNewAddressClicked, setIsNewAddressClicked] =
+    useState<boolean>(false);
+
+  const router = useRouter();
 
   const token = useToken();
 
   const { mutate } = useAddAddress();
+
+  const form = useForm<z.infer<typeof addressSchema>>({
+    resolver: zodResolver(addressSchema),
+  });
 
   useEffect(() => {
     if (addresses) {
@@ -44,9 +53,11 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
     }
   }, [addresses]);
 
-  const form = useForm<z.infer<typeof addressSchema>>({
-    resolver: zodResolver(addressSchema),
-  });
+  useEffect(() => {
+    if (form.formState.isSubmitSuccessful) {
+      form.reset();
+    }
+  }, [form.formState.isSubmitSuccessful]);
 
   const submitHandler = (data: z.infer<typeof addressSchema>) => {
     const required = {
@@ -55,26 +66,35 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
     };
 
     mutate(required, {
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         if (!data?.isError) {
           Swal.fire({
             icon: "success",
             title: "Successfully adding a new address",
           });
+
+          setIsNewAddressClicked(false);
+          router.refresh();
         } else {
           Swal.fire({ icon: "error", title: data.data });
         }
       },
     });
-
-    console.log(data);
   };
 
-  if (addressList.length !== 0) {
+  const newAddressHandler = () => {
+    setIsNewAddressClicked(true);
+  };
+
+  if (addressList.length !== 0 && !isNewAddressClicked) {
     return (
       <>
         <div className="flex w-full justify-center rounded-lg border-2 border-dashed border-gray-900">
-          <Button variant="ghost" className="w-full gap-1">
+          <Button
+            variant="ghost"
+            className="w-full gap-1"
+            onClick={newAddressHandler}
+          >
             <Plus />
             Add new
           </Button>
@@ -116,12 +136,26 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
             )}
           />
         ))}
-        <Button variant="outline" className="mt-6 gap-2 border-body-primary">
-          <span>
-            <Check size={18} />
-          </span>
-          <span>Save Changed</span>
-        </Button>
+        <div className="mt-6 flex w-full items-center gap-4">
+          <Button
+            type="submit"
+            variant="default"
+            className="gap-2 border-body-primary"
+          >
+            <span>
+              <Check size={18} />
+            </span>
+            <span>Save Changed</span>
+          </Button>
+          {addressList.length !== 0 && (
+            <Button
+              variant="outline"
+              onClick={() => setIsNewAddressClicked(false)}
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
       </form>
     </Form>
   );

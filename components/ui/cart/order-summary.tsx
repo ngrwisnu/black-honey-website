@@ -145,9 +145,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           </div>
         )}
         <div className="w-full" aria-label="Button wrapper">
-          {path === "cart" && (
+          {path === "summary" && (
             <Button
-              variant="success"
+              variant="default"
               className="w-full"
               onClick={checkoutHandler}
             >
@@ -183,7 +183,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           )}
           {path === "checkout" && (
             <Button
-              variant="success"
+              variant="default"
               className="w-full"
               onClick={paymentDetailHandler}
             >

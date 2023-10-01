@@ -46,6 +46,8 @@ export interface UserType {
   addresses: AddressType[];
 }
 
+export type UserProfile = Omit<UserType, "addresses">;
+
 export interface FetchResponse {
   isError: boolean;
   data: any;

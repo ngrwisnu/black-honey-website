@@ -107,7 +107,7 @@ const LoginPage = () => {
             </FormItem>
           )}
         />
-        <Button variant="success" type="submit" className="mt-2 w-full">
+        <Button variant="default" type="submit" className="mt-2 w-full">
           Continue
         </Button>
       </form>

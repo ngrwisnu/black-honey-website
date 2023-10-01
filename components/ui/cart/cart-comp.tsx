@@ -4,22 +4,26 @@ import useCart, { CartItems } from "@/store/cart";
 import React, { useEffect, useState } from "react";
 import { OptionWrapper } from "./option-wrapper";
 import Image from "next/image";
-import { currencyFormatter } from "@/lib/utils";
+import { currencyFormatter, findUserCart } from "@/lib/utils";
 import { Button } from "../button";
 import { Trash } from "lucide-react";
 import OrderSummary from "./order-summary";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 const CartComp = () => {
   const [orders, setOrders] = useState<CartItems[]>([]);
 
   const cart = useCart();
+  const userProfile = useUserProfile();
 
   useEffect(() => {
-    setOrders(cart.items);
-  }, [cart.items]);
+    const userCart = findUserCart(cart.items, userProfile?.id);
+
+    setOrders(userCart);
+  }, [userProfile, cart.items]);
 
   return (
-    <>
+    <div className="flex w-full max-w-[1440px] flex-col gap-4 md:flex-row">
       <div className="flex w-full flex-1 items-start justify-center self-stretch">
         <div
           className="flex w-full flex-col items-start gap-8 rounded-lg bg-white p-4 shadow-section sm:max-w-[830px]"
@@ -41,7 +45,7 @@ const CartComp = () => {
                     aria-label="Thumbnail"
                   >
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${item.product.thumbnail}`}
+                      src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${item.product.thumbnail}`}
                       alt="thumbnail"
                       width={180}
                       height={140}
@@ -75,7 +79,7 @@ const CartComp = () => {
         </div>
       </div>
       <OrderSummary data={orders} />
-    </>
+    </div>
   );
 };
 

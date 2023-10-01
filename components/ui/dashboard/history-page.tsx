@@ -8,7 +8,6 @@ import ContentBody from "./content-body";
 import { FetchResponse, OrderType } from "@/types/types";
 import { Card, CardContent, CardFooter, CardHeader } from "../card";
 import { Badge } from "../badge";
-import { Button } from "../button";
 import { currencyFormatter, dateFormatter } from "@/lib/utils";
 import Image from "next/image";
 import { Copy } from "lucide-react";
@@ -34,7 +33,9 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
 
   const receiptNumberHandler = () => {
     if (receiptRef) {
-      navigator.clipboard.writeText(receiptRef.current?.textContent as string);
+      const receiptNumber = receiptRef.current?.textContent?.replace(" ", "");
+
+      navigator.clipboard.writeText(receiptNumber as string);
 
       toast({
         title: "Success copy to clipboard",
@@ -88,7 +89,7 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                   >
                     <div className="h-[74px] w-[74px] shrink-0">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${order.product.thumbnail}`}
+                        src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${order.product.thumbnail}`}
                         alt="Thumbnail"
                         width={74}
                         height={74}
@@ -115,7 +116,9 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                   <div className="flex gap-2" aria-label="Receipt number">
                     <span>Receipt: </span>
                     {!order.receipt_number ? (
-                      <span className="text-orange-500">Will update soon</span>
+                      <span className="text-orange-300">
+                        Will be updated soon
+                      </span>
                     ) : (
                       <span
                         className="flex items-center gap-1 text-orange-500 hover:cursor-pointer hover:underline"
@@ -127,9 +130,6 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                       </span>
                     )}
                   </div>
-                  <Button variant="outline" className="w-full sm:w-auto">
-                    Detail Transaction
-                  </Button>
                 </CardFooter>
               </Card>
             ))}

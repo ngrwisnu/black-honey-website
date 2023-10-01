@@ -34,13 +34,13 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        main: {
+          DEFAULT: "hsl(var(--main))",
+          foreground: "hsl(var(--main-foreground))",
+        },
         success: {
           DEFAULT: "hsl(var(--success-600))",
           foreground: "hsl(var(--primary-foreground))",
-        },
-        "success-disabled": {
-          DEFAULT: "hsl(var(--success-100))",
-          foreground: "hsl(var(--success-400))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -93,6 +93,13 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      spacing: {
+        34: "136px",
+        300: "1200px",
+      },
+      maxWidth: {
+        300: "1200px",
       },
     },
   },

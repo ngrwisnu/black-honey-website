@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import { ContentWrapper, OptionWrapper } from "./option-wrapper";
 import { AddressType, FetchResponse, PaymentType } from "@/types/types";
 import Image from "next/image";
-import useCart from "@/store/cart";
+import useCart, { CartItems } from "@/store/cart";
 import OrderSummary from "./order-summary";
-import CheckoutLoading from "@/app/(cart)/cart/checkout/loading";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
+import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
+import { findUserCart } from "@/lib/utils";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import NotFound from "../not-found";
+import Link from "next/link";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -20,10 +24,12 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
   const [selectedPayment, setSelectedPayment] = useState(0);
   const [existPayments, setExistPayments] = useState<PaymentType[]>();
   const [existAddresses, setExistAddresses] = useState<AddressType[]>();
+  const [userItems, setUserItems] = useState<CartItems[] | []>([]);
 
   const router = useRouter();
 
   const items = useCart((state) => state.items);
+  const userProfile = useUserProfile();
 
   useEffect(() => {
     if (addresses) {
@@ -39,17 +45,36 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
     }
   }, [addresses, payments]);
 
+  useEffect(() => {
+    const userCart = findUserCart(items, userProfile?.id);
+
+    setUserItems(userCart);
+  }, [items, userProfile]);
+
   const checkoutDetail = {
     address_id: selectedAddress,
     payment_id: selectedPayment,
   };
 
   if (!payments || !addresses) {
-    return <CheckoutLoading />;
+    return <CartLoading />;
+  }
+
+  if (userItems.length === 0) {
+    return (
+      <div className="flex h-[800px] w-full items-center justify-center">
+        <p>
+          Your cart is empty,{" "}
+          <Link href={"/"} className="font-medium text-orange-500 underline">
+            browse our products
+          </Link>
+        </p>
+      </div>
+    );
   }
 
   return (
-    <>
+    <div className="flex w-full max-w-[1440px] flex-col gap-4 md:flex-row">
       <div className="flex w-full flex-1 items-start justify-center self-stretch">
         <form className="flex w-full flex-col items-start gap-8 rounded-lg bg-white p-4 shadow-section sm:max-w-[830px]">
           <OptionWrapper aria-label="Address options">
@@ -60,7 +85,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
             >
               {existAddresses?.length === 0 && (
                 <div
-                  className="relative flex w-full items-center justify-center gap-2 rounded-lg border-[1px]  bg-white p-4 hover:cursor-pointer hover:bg-gray-200 sm:w-[390px]"
+                  className="relative flex w-full items-center justify-center gap-2 rounded-lg border-[1px]  bg-white p-4 hover:cursor-pointer hover:bg-gray-200 sm:w-2/5"
                   onClick={() => router.push("/dashboard/setting")}
                 >
                   <span className="flex items-center gap-1">
@@ -70,7 +95,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
               )}
               {existAddresses?.map((address) => (
                 <div
-                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
+                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-2/5 ${
                     selectedAddress === address.id
                       ? "border-green-600"
                       : "border-gray-200"
@@ -117,7 +142,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
             >
               {existPayments?.map((payment: PaymentType) => (
                 <div
-                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-[390px] ${
+                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-2/5 ${
                     selectedPayment === payment.id
                       ? "border-green-600"
                       : "border-gray-200"
@@ -149,7 +174,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
                     <p className="font-medium">{payment.payment_name}</p>
                     <div className="h-9 w-20">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${payment.thumbnail}`}
+                        src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${payment.thumbnail}`}
                         alt="thumbnail"
                         className="object-cover"
                         width={80}
@@ -170,8 +195,8 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
           </OptionWrapper>
         </form>
       </div>
-      <OrderSummary data={items} checkoutDetail={checkoutDetail} />
-    </>
+      <OrderSummary data={userItems} checkoutDetail={checkoutDetail} />
+    </div>
   );
 };
 

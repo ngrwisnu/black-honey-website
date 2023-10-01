@@ -18,7 +18,7 @@ export default function Authlayout({
   return (
     <div className="min-h-full">
       <Header logoCenter />
-      <Container className="mt-20 flex w-full items-center justify-center px-4 pt-14">
+      <Container className="flex w-full items-center justify-center px-4 pt-34">
         {children}
       </Container>
       <footer className="flex min-w-full shrink-0 items-center justify-center py-4">

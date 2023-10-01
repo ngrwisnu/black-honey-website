@@ -11,6 +11,8 @@ import { currencyFormatter } from "@/lib/utils";
 import useCart from "@/store/cart";
 import Modal from "../modal";
 import { toast } from "../use-toast";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   products: FetchResponse | undefined;
@@ -22,8 +24,10 @@ const ProductsModal = ({ products }: ModalProps) => {
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
 
+  const router = useRouter();
   const modal = useModal();
   const cart = useCart();
+  const userProfile = useUserProfile();
 
   useEffect(() => {
     if (products) {
@@ -56,7 +60,13 @@ const ProductsModal = ({ products }: ModalProps) => {
       return;
     }
 
+    if (!userProfile?.id) {
+      router.push("/login");
+      return;
+    }
+
     const data = {
+      uid: userProfile?.id!,
       qty,
       product: activeProduct!,
     };
@@ -101,9 +111,9 @@ const ProductsModal = ({ products }: ModalProps) => {
       ) : (
         <>
           <div className="flex-1" aria-label="Product's preview">
-            <div className="relative h-[240px] w-full md:h-full">
+            <div className="relative h-[180px] w-full sm:h-[240px] md:h-full">
               <Image
-                src={`${process.env.NEXT_PUBLIC_DEV_ROOT}/images/uploads/${activeProduct?.thumbnail}`}
+                src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${activeProduct?.thumbnail}`}
                 fill={true}
                 alt="Product's preview"
                 style={{ objectFit: "cover" }}
@@ -111,7 +121,7 @@ const ProductsModal = ({ products }: ModalProps) => {
             </div>
           </div>
           <div
-            className="flex flex-1 flex-col items-start gap-8 p-6 text-body-primary"
+            className="flex flex-1 flex-col items-start gap-8 p-4 text-body-primary sm:p-6"
             aria-label="Modal's content"
           >
             <div

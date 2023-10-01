@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const PaymentLoading = () => {
+const CartLoading = () => {
   return (
     <>
       <div className="flex w-full flex-1 items-start justify-center self-stretch">
@@ -13,4 +13,4 @@ const PaymentLoading = () => {
   );
 };
 
-export default PaymentLoading;
+export default CartLoading;

@@ -8,6 +8,8 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import Logo from "./logo";
+import { findUserCart, getUserInitial } from "@/lib/utils";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -16,23 +18,23 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
+  const [initial, setInitial] = useState<string | undefined>();
 
   const items = useCart((state) => state.items);
+  const userProfile = useUserProfile();
 
   const router = useRouter();
 
-  const isLoggedIn = Cookies.get("tk");
-
   useEffect(() => {
-    if (items.length !== 0) {
-      setIsEmpty(false);
-    } else {
-      setIsEmpty(true);
-    }
-  }, [items.length]);
+    const initial = getUserInitial(userProfile?.username!);
+    const userCart = findUserCart(items, userProfile?.id);
+
+    userCart.length !== 0 ? setIsEmpty(false) : setIsEmpty(true);
+    setInitial(initial);
+  }, [userProfile, items]);
 
   const clickHandler = () => {
-    if (isLoggedIn) {
+    if (userProfile) {
       setIsClicked(!isClicked);
     } else {
       router.push("/login");
@@ -40,11 +42,11 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   };
 
   const cartHandler = () => {
-    router.push("/cart");
+    router.push("/cart/summary");
   };
 
   const logoutHandler = () => {
-    if (isLoggedIn) {
+    if (userProfile) {
       Cookies.remove("tk");
       router.push("/login");
     }
@@ -60,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
       {!logoCenter && (
         <div className="nav flex items-center gap-10">
           <div
-            className="cart fixed bottom-8 right-4 flex items-center justify-center gap-[10px]
+            className="cart fixed bottom-8 right-4 z-[999] flex items-center justify-center gap-[10px]
             rounded-full bg-gray-100 p-3 shadow-section hover:cursor-pointer sm:relative sm:bottom-0 sm:right-0 sm:shadow-none"
             onClick={cartHandler}
           >
@@ -99,12 +101,15 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
           </div>
           <div
             id="user-avatar"
-            className=" flex h-12 w-12 rounded-full bg-[url('/images/placeholder.webp')] bg-cover bg-no-repeat hover:cursor-pointer sm:relative"
+            className={`flex h-12 w-12 items-center justify-center rounded-full ${
+              userProfile ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
+            } bg-cover bg-no-repeat hover:cursor-pointer sm:relative`}
             onClick={clickHandler}
           >
+            {initial ? initial?.toUpperCase() : ""}
             {isClicked && (
               <div
-                className={` dropdown fixed bottom-0 left-0 right-0 z-10 flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
+                className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
               >
                 <ul className="order-2 flex w-full flex-col gap-[10px]">
                   <li>
