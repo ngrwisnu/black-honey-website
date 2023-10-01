@@ -28,7 +28,7 @@ const Recipe = () => {
           <Button
             variant="main"
             size="xl"
-            className="text-base font-normal uppercase leading-[19.2px] transition-all hover:-translate-y-1"
+            className="text-base font-normal leading-[19.2px] transition-all hover:-translate-y-1"
             onClick={modal.onOpen}
           >
             See Products
