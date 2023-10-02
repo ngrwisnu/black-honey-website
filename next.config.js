@@ -7,6 +7,10 @@ const nextConfig = {
         port: "3000",
         protocol: "http",
       },
+      {
+        protocol: "https",
+        hostname: "admin-blackhoney-dev.onrender.com",
+      },
     ],
   },
 };
