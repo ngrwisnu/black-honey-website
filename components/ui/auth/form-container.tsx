@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface FormContainerProps {
   title: string;
@@ -64,8 +65,19 @@ const FormContainer: React.FC<FormContainerProps> = ({
         </div>
       </div>
       <div className="alternative-btn w-full">
-        <Button variant="outline" className="w-full" onClick={handleClick}>
-          {page === "login" ? "Login" : "Register"} with Google
+        <Button
+          variant="outline"
+          className="relative w-full"
+          onClick={handleClick}
+        >
+          <Image
+            src={"/images/google.png"}
+            alt="Google"
+            width={48}
+            height={48}
+            className="absolute left-4 h-6 w-6"
+          />
+          {page === "login" ? "Sign in" : "Sign up"} with Google
         </Button>
       </div>
       <div className="footer w-full">
