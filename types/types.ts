@@ -42,7 +42,7 @@ export interface UserType {
   username: string;
   email: string;
   role: string;
-  avatar: string;
+  avatar?: string;
   addresses: AddressType[];
 }
 

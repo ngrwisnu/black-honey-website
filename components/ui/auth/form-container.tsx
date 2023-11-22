@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Facebook } from "lucide-react";
+import Image from "next/image";
 
 interface FormContainerProps {
   title: string;
@@ -35,8 +35,8 @@ const FormContainer: React.FC<FormContainerProps> = ({
     }
   }, [path]);
 
-  const handleClick = () => {
-    console.log("Fb btn is clicked!");
+  const handleClick = async () => {
+    window.open("http://localhost:3000/auth/google", "_self");
   };
 
   return (
@@ -57,7 +57,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
         </div>
       )}
       <div className="form-wrapper w-full">{formContent}</div>
-      {/* <div className="divider w-full">
+      <div className="divider w-full">
         <div className="flex items-center gap-1 self-stretch">
           <span className="h-[1px] flex-1 bg-gray-border"></span>
           <span className="text text-base text-body-secondary">OR</span>
@@ -65,11 +65,21 @@ const FormContainer: React.FC<FormContainerProps> = ({
         </div>
       </div>
       <div className="alternative-btn w-full">
-        <Button variant="facebook" className="w-full" onClick={handleClick}>
-          <Facebook fill="white" size="18" strokeWidth={0} />
-          {page === "login" ? "Login" : "Register"} with Facebook
+        <Button
+          variant="outline"
+          className="relative w-full"
+          onClick={handleClick}
+        >
+          <Image
+            src={"/images/google.png"}
+            alt="Google"
+            width={48}
+            height={48}
+            className="absolute left-4 h-6 w-6"
+          />
+          {page === "login" ? "Sign in" : "Sign up"} with Google
         </Button>
-      </div> */}
+      </div>
       <div className="footer w-full">
         <p className="text-sm leading-4 text-body-secondary">
           {footerText}{" "}

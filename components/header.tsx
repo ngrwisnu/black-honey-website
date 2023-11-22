@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Logo from "./logo";
 import { findUserCart, getUserInitial } from "@/lib/utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import Image from "next/image";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -103,10 +104,19 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
             id="user-avatar"
             className={`flex h-12 w-12 items-center justify-center rounded-full ${
               userProfile ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
-            } bg-cover bg-no-repeat hover:cursor-pointer sm:relative`}
+            } relative bg-cover bg-no-repeat hover:cursor-pointer`}
             onClick={clickHandler}
           >
-            {initial ? initial?.toUpperCase() : ""}
+            {userProfile?.avatar && (
+              <Image
+                src={userProfile.avatar}
+                alt="avatar"
+                width={48}
+                height={48}
+                className="rounded-full"
+              />
+            )}
+            {initial && !userProfile?.avatar ? initial?.toUpperCase() : ""}
             {isClicked && (
               <div
                 className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}

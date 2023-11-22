@@ -140,14 +140,12 @@ const RegisterPage = () => {
   );
 
   return (
-    <>
-      <FormContainer
-        title="Create an account"
-        description="Welcome to the Black Honey Website"
-        formContent={formContent}
-        footerText="Already have an account?"
-      />
-    </>
+    <FormContainer
+      title="Create an account"
+      description="Welcome to the Black Honey Website"
+      formContent={formContent}
+      footerText="Already have an account?"
+    />
   );
 };
 
