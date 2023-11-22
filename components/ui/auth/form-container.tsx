@@ -36,7 +36,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
   }, [path]);
 
   const handleClick = async () => {
-    window.open("http://localhost:3000/auth/google", "_self");
+    window.open(`${process.env.NEXT_PUBLIC_HOST}/auth/google`, "_self");
   };
 
   return (
