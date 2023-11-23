@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
-import ContentBody from "./content-body";
 import { FetchResponse, OrderType } from "@/types/types";
 import { Card, CardContent, CardFooter, CardHeader } from "../card";
 import { Badge } from "../badge";
@@ -13,10 +12,13 @@ import Image from "next/image";
 import { Copy } from "lucide-react";
 import { toast } from "../use-toast";
 import DashboardError from "./error";
+import dynamic from "next/dynamic";
 
 interface HistoryPageProps {
   orders: FetchResponse | undefined;
 }
+
+const ContentBody = dynamic(() => import("./content-body"));
 
 const HistoryPage = ({ orders }: HistoryPageProps) => {
   const [orderHistory, setOrderHistory] = useState<OrderType[] | undefined>([]);

@@ -7,6 +7,8 @@ import Product from "@/components/ui/homepage/product";
 import ProductsModal from "@/components/ui/homepage/products-modal";
 import Recipe from "@/components/ui/homepage/recipe";
 import { getAllProducts } from "@/lib/api/homepage";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export const revalidate = 0;
 
@@ -16,7 +18,9 @@ export default async function Home() {
   return (
     <>
       <Header />
-      <ProductsModal products={products} />
+      <Suspense fallback={<Loading />}>
+        <ProductsModal products={products} />
+      </Suspense>
       <Container className="flex min-h-screen w-full flex-col items-center">
         <Jumbotron />
         <Product />
