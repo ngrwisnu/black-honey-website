@@ -9,14 +9,16 @@ import useModal from "@/store/modal-slice";
 import { FetchResponse, ProductType } from "@/types/types";
 import { currencyFormatter } from "@/lib/utils";
 import useCart from "@/store/cart";
-import Modal from "../modal";
 import { toast } from "../use-toast";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 interface ModalProps {
   products: FetchResponse | undefined;
 }
+
+const Modal = dynamic(() => import("../modal"), { ssr: false });
 
 const ProductsModal = ({ products }: ModalProps) => {
   const [productList, setProductList] = useState<ProductType[] | undefined>();

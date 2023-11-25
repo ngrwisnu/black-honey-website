@@ -4,13 +4,15 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../button";
 import { Pencil } from "lucide-react";
 import ContentHeader from "./content-header";
-import ContentBody from "./content-body";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import FormArea from "./form-area";
 import useModal from "@/store/modal-slice";
 import { AddressType, FetchResponse } from "@/types/types";
 import { getUserProfile } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+const ContentBody = dynamic(() => import("./content-body"));
 
 const SettingPage = ({
   addresses,

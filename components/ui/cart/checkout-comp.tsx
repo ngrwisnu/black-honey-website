@@ -7,11 +7,10 @@ import Image from "next/image";
 import useCart, { CartItems } from "@/store/cart";
 import OrderSummary from "./order-summary";
 import { Plus } from "lucide-react";
-import { notFound, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
 import { findUserCart } from "@/lib/utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import NotFound from "../not-found";
 import Link from "next/link";
 
 interface CheckoutCompProps {

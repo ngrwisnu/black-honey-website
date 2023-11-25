@@ -9,8 +9,8 @@ import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import Logo from "./logo";
 import { findUserCart, getUserInitial } from "@/lib/utils";
-import { useUserProfile } from "@/hooks/useUserProfile";
 import Image from "next/image";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface HeaderProps {
   logoCenter?: boolean;

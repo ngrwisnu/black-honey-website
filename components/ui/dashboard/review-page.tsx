@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import ContentSection from "./content-section";
 import ContentWrapper from "./content-wrapper";
 import ContentHeader from "./content-header";
-import ContentBody from "./content-body";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { reviewSchema } from "@/validations/review-form";
@@ -26,6 +25,9 @@ import Swal from "sweetalert2";
 import { FetchResponse } from "@/types/types";
 import { useToken } from "@/hooks/useToken";
 import DashboardError from "./error";
+import dynamic from "next/dynamic";
+
+const ContentBody = dynamic(() => import("./content-body"));
 
 const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [rating, setRating] = useState(5);
