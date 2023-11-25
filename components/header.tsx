@@ -10,33 +10,32 @@ import Cookies from "js-cookie";
 import Logo from "./logo";
 import { findUserCart, getUserInitial } from "@/lib/utils";
 import Image from "next/image";
-import { UserProfile } from "@/types/types";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface HeaderProps {
   logoCenter?: boolean;
-  oauthToken?: UserProfile;
 }
 
-const Header: React.FC<HeaderProps> = ({ logoCenter, oauthToken }) => {
+const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [initial, setInitial] = useState<string | undefined>();
 
   const items = useCart((state) => state.items);
+  const userProfile = useUserProfile();
 
   const router = useRouter();
 
   useEffect(() => {
-    const initial = getUserInitial(oauthToken?.username!);
-    const userCart = findUserCart(items, oauthToken?.id);
-    console.log("OAuth: ", oauthToken);
+    const initial = getUserInitial(userProfile?.username!);
+    const userCart = findUserCart(items, userProfile?.id);
 
     userCart.length !== 0 ? setIsEmpty(false) : setIsEmpty(true);
     setInitial(initial);
-  }, [oauthToken, items]);
+  }, [userProfile, items]);
 
   const clickHandler = () => {
-    if (oauthToken) {
+    if (userProfile) {
       setIsClicked(!isClicked);
     } else {
       router.push("/login");
@@ -48,13 +47,11 @@ const Header: React.FC<HeaderProps> = ({ logoCenter, oauthToken }) => {
   };
 
   const logoutHandler = () => {
-    if (oauthToken) {
+    if (userProfile) {
       Cookies.remove("tk");
       router.push("/login");
     }
   };
-
-  console.log("User Profile >> \n", oauthToken);
 
   return (
     <header
@@ -106,20 +103,20 @@ const Header: React.FC<HeaderProps> = ({ logoCenter, oauthToken }) => {
           <div
             id="user-avatar"
             className={`flex h-12 w-12 items-center justify-center rounded-full ${
-              oauthToken ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
+              userProfile ? "bg-main" : "bg-[url('/images/placeholder.webp')]"
             } relative bg-cover bg-no-repeat hover:cursor-pointer`}
             onClick={clickHandler}
           >
-            {oauthToken?.avatar && (
+            {userProfile?.avatar && (
               <Image
-                src={oauthToken.avatar}
+                src={userProfile.avatar}
                 alt="avatar"
                 width={48}
                 height={48}
                 className="rounded-full"
               />
             )}
-            {initial && !oauthToken?.avatar ? initial?.toUpperCase() : ""}
+            {initial && !userProfile?.avatar ? initial?.toUpperCase() : ""}
             {isClicked && (
               <div
                 className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
