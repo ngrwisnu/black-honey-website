@@ -9,15 +9,27 @@ import Recipe from "@/components/ui/homepage/recipe";
 import { getAllProducts } from "@/lib/api/homepage";
 import { Suspense } from "react";
 import Loading from "./loading";
+import { cookies } from "next/headers";
+import jwt_decode from "jwt-decode";
+import { UserPayload, UserProfile } from "@/types/types";
 
 export const revalidate = 0;
 
 export default async function Home() {
   const products = await getAllProducts();
+  const cookie = cookies().get("tk");
+  let oauthTk: UserProfile | undefined = undefined;
+
+  if (cookie) {
+    const decoded = Buffer.from(cookie?.value, "base64").toString("ascii");
+    const tk: UserPayload = jwt_decode(decoded);
+    oauthTk = tk.customer;
+    console.log("Cookies >> \n", tk.customer);
+  }
 
   return (
     <>
-      <Header />
+      <Header oauthToken={oauthTk} />
       <Suspense fallback={<Loading />}>
         <ProductsModal products={products} />
       </Suspense>
