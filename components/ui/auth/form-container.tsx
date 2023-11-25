@@ -3,8 +3,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-// import { Button } from "@/components/ui/button";
-// import Image from "next/image";
 
 interface FormContainerProps {
   title: string;
@@ -34,10 +32,6 @@ const FormContainer: React.FC<FormContainerProps> = ({
       setPage(currentPage[0]);
     }
   }, [path]);
-
-  const handleClick = async () => {
-    window.open(`${process.env.NEXT_PUBLIC_HOST}/auth/google`, "_self");
-  };
 
   return (
     <div className="flex w-full flex-col items-start gap-6 rounded-md bg-white p-4 shadow-section sm:w-[344px]">
