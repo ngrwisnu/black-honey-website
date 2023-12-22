@@ -22,8 +22,8 @@ export const register = (data: RegisterField) => {
   });
 };
 
-export const loginWithOauth = () => {
-  const url = `${API_ROOT}/google/success`;
+export const loginWithOauth = (query: string | null) => {
+  const url = `${API_ROOT}/google/success?rid=${query}`;
 
   return callAPI({
     url,
