@@ -92,8 +92,12 @@ const PaymentComp = () => {
             icon: "success",
             title: "Payment complete",
             text: "Your order will be process",
+            confirmButtonText: `
+              <a href="/dashboard/transactions" class="">See purchase history</a>
+            `,
+            confirmButtonColor: "#030712",
             footer:
-              '<a href="/dashboard/transactions" class="underline text-blue-600">See purchase history</a>',
+              '<a href="/" class="underline text-blue-600">Go to homepage</a>',
           });
 
           checkout.clearItems();
@@ -220,6 +224,16 @@ const PaymentComp = () => {
             type="file"
             onChange={changeHandler}
           />
+          <small className="text-xs italic text-neutral-500">
+            Download dummy payment receipt{" "}
+            <a
+              href="/images/dummy-receipt.webp"
+              download="dummy-receipt"
+              className="text-blue-500 hover:cursor-pointer"
+            >
+              here
+            </a>
+          </small>
         </div>
         <Button variant="default" className="w-full" type="submit">
           <Check size={18} aria-label="icon check" />
