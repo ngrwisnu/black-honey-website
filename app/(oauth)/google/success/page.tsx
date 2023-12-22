@@ -22,22 +22,32 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (search === "" || search === null || search.length !== 218) {
-      push("/login");
-    } else {
-      checkUserFromOauth();
+    Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: `${search}`,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }, []);
 
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Welcome! We're redirecting you to the homepage now.",
-        timer: 2000,
-        showConfirmButton: false,
-      }).then(() => {
-        push("/");
-      });
-    }
-  }, [search, checkUserFromOauth]);
+  // useEffect(() => {
+  //   if (search === "" || search === null || search.length !== 218) {
+  //     push("/login");
+  //   } else {
+  //     checkUserFromOauth();
+
+  //     Swal.fire({
+  //       icon: "success",
+  //       title: "Success",
+  //       text: "Welcome! We're redirecting you to the homepage now.",
+  //       timer: 2000,
+  //       showConfirmButton: false,
+  //     }).then(() => {
+  //       push("/");
+  //     });
+  //   }
+  // }, [search, checkUserFromOauth]);
 
   return <></>;
 };
