@@ -3,9 +3,15 @@ interface CallAPIProps extends AxiosRequestConfig {
   token?: string;
 }
 
-const callAPI = async ({ url, method = "GET", data, token }: CallAPIProps) => {
+const callAPI = async ({
+  url,
+  method = "GET",
+  data,
+  withCredentials,
+  token,
+}: CallAPIProps) => {
   try {
-    let headers = {};
+    let headers;
 
     if (token) {
       headers = {
@@ -18,6 +24,7 @@ const callAPI = async ({ url, method = "GET", data, token }: CallAPIProps) => {
       method,
       data,
       headers,
+      withCredentials,
     });
 
     if (response) {

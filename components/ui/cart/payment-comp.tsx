@@ -92,8 +92,12 @@ const PaymentComp = () => {
             icon: "success",
             title: "Payment complete",
             text: "Your order will be process",
+            confirmButtonText: `
+              <a href="/dashboard/transactions" class="">See purchase history</a>
+            `,
+            confirmButtonColor: "#030712",
             footer:
-              '<a href="/dashboard/transactions" class="underline text-blue-600">See purchase history</a>',
+              '<a href="/" class="underline text-blue-600">Go to homepage</a>',
           });
 
           checkout.clearItems();
@@ -137,100 +141,108 @@ const PaymentComp = () => {
   }
 
   return (
-    <>
-      <div className="mx-auto mb-14">
-        <section
-          className="flex w-full flex-col items-start gap-3 rounded-lg bg-white p-4 shadow-section md:w-[506px]"
-          aria-label="details"
-        >
-          <SummaryItem>
-            <SummaryTitle>Purchase Detail</SummaryTitle>
-            {checkout.items.map((item: any) => (
-              <SummaryList key={item.product.id}>
-                <span>
-                  {item.product.name} <span>x{item.qty}</span>
-                </span>
-                <span>{currencyFormatter(item.qty * item.product.price)}</span>
-              </SummaryList>
-            ))}
-          </SummaryItem>
-          <span className="h-[1px] w-full bg-gray-200"></span>
-          <SummaryItem>
-            <SummaryTitle>Order Detail</SummaryTitle>
-            <SummaryList>
-              <span>Coupon</span>
-              <span>-</span>
-            </SummaryList>
-            <SummaryList>
-              <span>Shipping</span>
-              <span>TBA</span>
-            </SummaryList>
-            <SummaryList classname="font-semibold">
-              <span>Total</span>
-              <span>{currencyFormatter(subTotal)}</span>
-            </SummaryList>
-          </SummaryItem>
-          <span className="h-[1px] w-full bg-gray-200"></span>
-          <SummaryItem>
-            <SummaryTitle>Payment Info</SummaryTitle>
-            <SummaryList>
-              <span>Payment method</span>
+    <div className="mx-auto mb-14">
+      <section
+        className="flex w-full flex-col items-start gap-3 rounded-lg bg-white p-4 shadow-section md:w-[506px]"
+        aria-label="details"
+      >
+        <SummaryItem>
+          <SummaryTitle>Purchase Detail</SummaryTitle>
+          {checkout.items.map((item: any) => (
+            <SummaryList key={item.product.id}>
               <span>
-                {payment.data.data.payment_name} -{" "}
-                {payment.data.data.account_number}
+                {item.product.name} <span>x{item.qty}</span>
               </span>
+              <span>{currencyFormatter(item.qty * item.product.price)}</span>
             </SummaryList>
-            <SummaryList>
-              <span>Recipient name</span>
-              <span>{payment.data.data.recipient_name}</span>
-            </SummaryList>
-          </SummaryItem>
-        </section>
-        <form
-          className="flex w-full flex-col items-start gap-6 p-4 md:w-[491px]"
-          aria-label="Input transfer proof"
-          onSubmit={submitHandler}
-        >
-          <div
-            className="flex flex-col items-center gap-2 self-stretch text-center text-sm leading-[16.8px] text-orange-primary"
-            aria-label="Important notice"
-          >
-            <h6 className="font-semibold">Important Notice</h6>
-            <p>
-              Please ensure that you input the correct payment amount before
-              proceeding with the transfer
-            </p>
-            <p className="italic">
-              Pastikan anda memasukkan jumlah pembayaran yang sesuai sebelum
-              melanjutkan proses pembayaran{" "}
-            </p>
-          </div>
-          <div
-            className="flex flex-col items-start gap-1 self-stretch"
-            aria-label="Input file"
-          >
-            <label
-              htmlFor="payment-proof"
-              className="text-xs leading-[14.4px] text-body-primary"
-            >
-              Payment proof
-            </label>
-            <Input
-              id="payment-proof"
-              name="payment-proof"
-              type="file"
-              onChange={changeHandler}
-            />
-          </div>
-          <Button variant="default" className="w-full" type="submit">
-            <Check size={18} aria-label="icon check" />
-            <span className="ml-1" aria-label="button name">
-              Payment Complete
+          ))}
+        </SummaryItem>
+        <span className="h-[1px] w-full bg-gray-200"></span>
+        <SummaryItem>
+          <SummaryTitle>Order Detail</SummaryTitle>
+          <SummaryList>
+            <span>Coupon</span>
+            <span>-</span>
+          </SummaryList>
+          <SummaryList>
+            <span>Shipping</span>
+            <span>TBA</span>
+          </SummaryList>
+          <SummaryList classname="font-semibold">
+            <span>Total</span>
+            <span>{currencyFormatter(subTotal)}</span>
+          </SummaryList>
+        </SummaryItem>
+        <span className="h-[1px] w-full bg-gray-200"></span>
+        <SummaryItem>
+          <SummaryTitle>Payment Info</SummaryTitle>
+          <SummaryList>
+            <span>Payment method</span>
+            <span>
+              {payment.data.data.payment_name} -{" "}
+              {payment.data.data.account_number}
             </span>
-          </Button>
-        </form>
-      </div>
-    </>
+          </SummaryList>
+          <SummaryList>
+            <span>Recipient name</span>
+            <span>{payment.data.data.recipient_name}</span>
+          </SummaryList>
+        </SummaryItem>
+      </section>
+      <form
+        className="flex w-full flex-col items-start gap-6 p-4 md:w-[491px]"
+        aria-label="Input transfer proof"
+        onSubmit={submitHandler}
+      >
+        <div
+          className="flex flex-col items-center gap-2 self-stretch text-center text-sm leading-[16.8px] text-orange-primary"
+          aria-label="Important notice"
+        >
+          <h6 className="font-semibold">Important Notice</h6>
+          <p>
+            Please ensure that you input the correct payment amount before
+            proceeding with the transfer
+          </p>
+          <p className="italic">
+            Pastikan anda memasukkan jumlah pembayaran yang sesuai sebelum
+            melanjutkan proses pembayaran{" "}
+          </p>
+        </div>
+        <div
+          className="flex flex-col items-start gap-1 self-stretch"
+          aria-label="Input file"
+        >
+          <label
+            htmlFor="payment-proof"
+            className="text-xs leading-[14.4px] text-body-primary"
+          >
+            Payment proof
+          </label>
+          <Input
+            id="payment-proof"
+            name="payment-proof"
+            type="file"
+            onChange={changeHandler}
+          />
+          <small className="text-xs italic text-neutral-500">
+            Download dummy payment receipt{" "}
+            <a
+              href="/images/dummy-receipt.webp"
+              download="dummy-receipt"
+              className="text-blue-500 hover:cursor-pointer"
+            >
+              here
+            </a>
+          </small>
+        </div>
+        <Button variant="default" className="w-full" type="submit">
+          <Check size={18} aria-label="icon check" />
+          <span className="ml-1" aria-label="button name">
+            Payment Complete
+          </span>
+        </Button>
+      </form>
+    </div>
   );
 };
 

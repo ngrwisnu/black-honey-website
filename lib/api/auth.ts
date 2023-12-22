@@ -21,3 +21,21 @@ export const register = (data: RegisterField) => {
     data,
   });
 };
+
+export const loginWithOauth = (query: string | null) => {
+  const url = `${API_ROOT}/google/success?rid=${query}`;
+
+  return callAPI({
+    url,
+    withCredentials: true,
+  });
+};
+
+export const oauthLogout = () => {
+  const url = `${API_ROOT}/logout`;
+
+  return callAPI({
+    url,
+    withCredentials: true,
+  });
+};

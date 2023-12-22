@@ -11,6 +11,7 @@ import Logo from "./logo";
 import { findUserCart, getUserInitial } from "@/lib/utils";
 import Image from "next/image";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { oauthLogout } from "@/lib/api/auth";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -46,11 +47,13 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
     router.push("/cart/summary");
   };
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     if (userProfile) {
       Cookies.remove("tk");
+
       router.push("/login");
     }
+    oauthLogout();
   };
 
   return (
