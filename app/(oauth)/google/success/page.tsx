@@ -22,13 +22,11 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    checkUserFromOauth();
-  }, [checkUserFromOauth]);
-
-  useEffect(() => {
     if (search === "" || search === null || search.length !== 218) {
       push("/login");
     } else {
+      checkUserFromOauth();
+
       Swal.fire({
         icon: "success",
         title: "Success",
@@ -39,7 +37,7 @@ const Page = () => {
         push("/");
       });
     }
-  }, [search]);
+  }, [search, checkUserFromOauth]);
 
   return <></>;
 };
