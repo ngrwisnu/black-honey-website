@@ -27,6 +27,7 @@ export const loginWithOauth = () => {
 
   return callAPI({
     url,
+    withCredentials: true,
   });
 };
 
