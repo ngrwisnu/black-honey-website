@@ -19,6 +19,21 @@ export default function Home() {
   const [products, setProducts] = useState<any>();
 
   useEffect(() => {
+    const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const midtransClientKey = process.env.NEXT_PUBLIC_CLIENT_KEY!;
+
+    let midtransScript = document.createElement("script");
+    midtransScript.src = midtransScriptUrl;
+    midtransScript.setAttribute("data-client-key", midtransClientKey);
+
+    document.body.appendChild(midtransScript);
+
+    return () => {
+      document.body.removeChild(midtransScript);
+    };
+  }, []);
+
+  useEffect(() => {
     const getProducts = async () => {
       const result = await getAllProducts();
 

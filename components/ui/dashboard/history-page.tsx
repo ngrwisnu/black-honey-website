@@ -71,13 +71,11 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                     </span>
                     <Badge
                       className={`${
-                        order.status === "Pending"
-                          ? "bg-[#FFECBD]"
-                          : order.status === "Success"
-                          ? "bg-[#D2ECEC]"
-                          : order.status === "Pre-Order"
-                          ? "bg-[#bdacfb]"
-                          : "bg-[#FBB8AC]"
+                        order.status === "Pending" && "bg-[#FFECBD]"
+                      } ${order.status === "Success" && "bg-[#D2ECEC]"} ${
+                        order.status === "Pre-Order" && "bg-[#bdacfb]"
+                      } ${
+                        order.status === "Reject" && "bg-[#FBB8AC]"
                       } font-medium text-body-primary`}
                     >
                       {order.status}
@@ -104,18 +102,35 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                       </p>
                     </div>
                   </div>
-                  <div
-                    className="flex flex-col items-start"
-                    aria-label="Total price"
-                  >
-                    <span>Total</span>
-                    <p className="font-semibold">
-                      {currencyFormatter(order.total_price)}
-                    </p>
+                  <div className="flex flex-col gap-3 lg:w-1/4">
+                    <div
+                      className="flex flex-col items-start"
+                      aria-label="Total price"
+                    >
+                      <span>Total</span>
+                      <p className="font-semibold">
+                        {currencyFormatter(order.total_price)}
+                      </p>
+                    </div>
+                    <div
+                      className="flex flex-col items-start"
+                      aria-label="Payment status"
+                    >
+                      <span>Payment status</span>
+                      <Badge className="flex flex-row items-center gap-1 bg-[#D2ECEC]">
+                        <span className="h-2 w-2 rounded-full bg-green-500"></span>
+                        <p className="font-medium text-neutral-900">
+                          {order.payment_status}
+                        </p>
+                      </Badge>
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex w-full flex-col items-start justify-end gap-4 sm:flex-row sm:items-center">
-                  <div className="flex gap-2" aria-label="Receipt number">
+                  <div
+                    className="flex gap-2 lg:w-1/4"
+                    aria-label="Receipt number"
+                  >
                     <span>Receipt: </span>
                     {!order.receipt_number ? (
                       <span className="text-orange-300">

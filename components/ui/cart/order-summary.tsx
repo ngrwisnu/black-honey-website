@@ -16,7 +16,6 @@ interface OrderSummaryProps {
   data?: CartItems[];
   checkoutDetail?: {
     address_id: string;
-    payment_id: number;
   };
 }
 
@@ -50,14 +49,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   };
 
   const paymentDetailHandler = () => {
-    if (checkoutDetail?.address_id !== "" && checkoutDetail?.payment_id !== 0) {
+    if (checkoutDetail?.address_id !== "") {
       let checkout = [];
 
       for (const item of data!) {
         checkout.push({
           ...item,
           address_id: checkoutDetail!.address_id,
-          payment_id: checkoutDetail!.payment_id,
         });
       }
 
