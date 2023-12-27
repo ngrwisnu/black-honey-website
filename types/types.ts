@@ -63,3 +63,16 @@ export interface UserPayload {
   fat: number;
   customer: Omit<UserType, "addresses">;
 }
+
+export interface MidtransPayload {
+  order_id: string;
+  gross_amount: number;
+  item_details: string;
+  address_id: string;
+}
+
+export interface CreateOrderPayload {
+  order_id: string;
+  item_details: string;
+  transaction_details: string;
+}

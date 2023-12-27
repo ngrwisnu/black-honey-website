@@ -71,13 +71,11 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                     </span>
                     <Badge
                       className={`${
-                        order.status === "Pending"
-                          ? "bg-[#FFECBD]"
-                          : order.status === "Success"
-                          ? "bg-[#D2ECEC]"
-                          : order.status === "Pre-Order"
-                          ? "bg-[#bdacfb]"
-                          : "bg-[#FBB8AC]"
+                        order.status === "Pending" && "bg-[#FFECBD]"
+                      } ${order.status === "Success" && "bg-[#D2ECEC]"} ${
+                        order.status === "Pre-Order" && "bg-[#bdacfb]"
+                      } ${
+                        order.status === "Reject" && "bg-[#FBB8AC]"
                       } font-medium text-body-primary`}
                     >
                       {order.status}

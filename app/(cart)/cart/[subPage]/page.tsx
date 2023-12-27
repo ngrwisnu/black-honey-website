@@ -21,7 +21,7 @@ const CartSubPage = async ({ params }: { params: { subPage: string } }) => {
       redirect("/login");
     }
 
-    const decodedTk = Buffer.from(tk!.value, "base64").toString("ascii");
+    const decodedTk = Buffer.from(tk.value, "base64").toString("ascii");
 
     const addresses = await getAllAddresses(decodedTk);
     const payments = await getAllPayments();
