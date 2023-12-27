@@ -174,7 +174,7 @@ const ProductsModal = ({ products }: ModalProps) => {
                   {productList?.map((item: ProductType) => (
                     <div
                       key={item.id}
-                      className={`relative flex items-center justify-center rounded-full border-gray-950 px-3 py-[6px] ${
+                      className={`relative flex items-center justify-center rounded-md border-gray-950 px-3 py-[6px] ${
                         activeProduct?.size == item.size
                           ? "bg-gray-950"
                           : "bg-transparent"
@@ -215,7 +215,7 @@ const ProductsModal = ({ products }: ModalProps) => {
                   name="quantity"
                   defaultValue={1}
                   max={activeProduct?.stock}
-                  className="w-full rounded-full border-gray-950 md:w-1/3"
+                  className="w-full rounded-md border-gray-950 md:w-1/3"
                   onChange={(e) => setQty(Number(e.currentTarget.value))}
                   disabled={
                     activeProduct!.stock < 1 ||
@@ -225,7 +225,7 @@ const ProductsModal = ({ products }: ModalProps) => {
               </div>
             </div>
             <Button
-              className="self-stretch rounded-full"
+              className="self-stretch rounded-md"
               aria-label="Button add to cart"
               onClick={addToCartHandler}
               disabled={

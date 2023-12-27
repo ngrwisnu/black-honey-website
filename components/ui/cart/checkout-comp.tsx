@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ContentWrapper, OptionWrapper } from "./option-wrapper";
-import { AddressType, FetchResponse, PaymentType } from "@/types/types";
-import Image from "next/image";
+import { AddressType, FetchResponse } from "@/types/types";
 import useCart, { CartItems } from "@/store/cart";
 import OrderSummary from "./order-summary";
 import { Plus } from "lucide-react";
@@ -15,13 +14,10 @@ import Link from "next/link";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
-  payments: FetchResponse | undefined;
 }
 
-const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
+const CheckoutComp = ({ addresses }: CheckoutCompProps) => {
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [selectedPayment, setSelectedPayment] = useState(0);
-  const [existPayments, setExistPayments] = useState<PaymentType[]>();
   const [existAddresses, setExistAddresses] = useState<AddressType[]>();
   const [userItems, setUserItems] = useState<CartItems[] | []>([]);
 
@@ -36,13 +32,7 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
         setExistAddresses(addresses.data.data);
       }
     }
-
-    if (payments) {
-      if (!payments.isError) {
-        setExistPayments(payments.data.data);
-      }
-    }
-  }, [addresses, payments]);
+  }, [addresses]);
 
   useEffect(() => {
     const userCart = findUserCart(items, userProfile?.id);
@@ -52,10 +42,9 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
 
   const checkoutDetail = {
     address_id: selectedAddress,
-    payment_id: selectedPayment,
   };
 
-  if (!payments || !addresses) {
+  if (!addresses) {
     return <CartLoading />;
   }
 
@@ -127,66 +116,6 @@ const CheckoutComp = ({ addresses, payments }: CheckoutCompProps) => {
                       address.phone.substring(8)
                     }`}</p>
                     <p>{address.full_address}</p>
-                  </div>
-                </div>
-              ))}
-            </ContentWrapper>
-          </OptionWrapper>
-
-          <OptionWrapper aria-label="Payment options">
-            <h3 className="text-xl font-semibold">Payment Method</h3>
-            <ContentWrapper
-              className="flex-row flex-wrap gap-4 self-stretch"
-              aria-label="Content"
-            >
-              {existPayments?.map((payment: PaymentType) => (
-                <div
-                  className={`relative flex w-full items-start gap-2 rounded-lg border-[1px]  bg-white p-4 sm:w-2/5 ${
-                    selectedPayment === payment.id
-                      ? "border-green-600"
-                      : "border-gray-200"
-                  }`}
-                  key={payment.id}
-                >
-                  <input
-                    type="radio"
-                    value={payment.id}
-                    name={payment.payment_name}
-                    className="absolute inset-0 opacity-0"
-                    checked={selectedPayment === payment.id}
-                    onChange={(e) =>
-                      setSelectedPayment(Number(e.currentTarget.value))
-                    }
-                  />
-                  <span
-                    className={`h-[18px] w-[18px] shrink-0 rounded-full border-[2px]  ${
-                      selectedPayment === payment.id
-                        ? "border-green-600"
-                        : "border-gray-200"
-                    } ${
-                      selectedPayment === payment.id
-                        ? "bg-green-100"
-                        : "bg-gray-400/10"
-                    }`}
-                  ></span>
-                  <div className="flex flex-1 flex-col items-start gap-1 text-body-primary">
-                    <p className="font-medium">{payment.payment_name}</p>
-                    <div className="h-9 w-20">
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_HOST}/images/uploads/${payment.thumbnail}`}
-                        alt="thumbnail"
-                        className="object-cover"
-                        width={80}
-                        height={36}
-                      />
-                    </div>
-                    <p>
-                      {payment.account_number
-                        .toString()
-                        .substring(0, 7)
-                        .replace(/\d/g, "x") +
-                        payment.account_number.toString().substring(8)}
-                    </p>
                   </div>
                 </div>
               ))}
