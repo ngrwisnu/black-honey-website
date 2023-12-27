@@ -37,7 +37,9 @@ export default function Home() {
     const getProducts = async () => {
       const result = await getAllProducts();
 
-      if (result) {
+      if (result?.data.data.length === 0) {
+        setProducts(undefined);
+      } else {
         setProducts(result);
       }
     };
