@@ -56,6 +56,11 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
         <ContentWrapper aria-label="Purchase history">
           <ContentHeader title="Purchase History" />
           <ContentBody className="gap-3">
+            {orderHistory.length === 0 && (
+              <h4 className="w-full text-center">
+                Your purchase history is empty
+              </h4>
+            )}
             {orderHistory.map((order) => (
               <Card
                 key={order.id}

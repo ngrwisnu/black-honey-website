@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import FormContainer from "./form-container";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,8 +23,9 @@ import { FetchResponse } from "@/types/types";
 import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
-  const router = useRouter();
+  const [isPasswordShow, setIsPasswordShow] = useState(false);
 
+  const router = useRouter();
   const { mutate } = useRegister();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -50,6 +51,10 @@ const RegisterPage = () => {
     });
   };
 
+  const showPasswordHandler = () => {
+    setIsPasswordShow(!isPasswordShow);
+  };
+
   const formContent = (
     <Form {...form}>
       <form
@@ -64,11 +69,7 @@ const RegisterPage = () => {
             <FormItem>
               <FormLabel>Fullname</FormLabel>
               <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter your fullname"
-                  {...field}
-                />
+                <Input type="text" placeholder='e.g. "John Doe"' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,7 +82,11 @@ const RegisterPage = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email" {...field} />
+                <Input
+                  type="email"
+                  placeholder='e.g. "example@email.com"'
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,12 +99,26 @@ const RegisterPage = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  {...field}
-                />
+                <div className="relative overflow-y-hidden">
+                  <Input
+                    type={isPasswordShow ? "text" : "password"}
+                    placeholder="Enter your password"
+                    {...field}
+                  />
+                  <div
+                    onClick={showPasswordHandler}
+                    className={`absolute right-2 transition-all duration-300 ${
+                      isPasswordShow ? "-top-full" : "top-0"
+                    } h-full text-sm text-slate-500 hover:cursor-pointer`}
+                  >
+                    <div className="flex h-full items-center">Show</div>
+                    <div className="flex h-full items-center">Hide</div>
+                  </div>
+                </div>
               </FormControl>
+              <FormDescription className="text-slate-400">
+                Must contains at least:
+              </FormDescription>
               <FormDescription
                 className={`${
                   /[A-Za-z0-9]{6,}/.test(watchPassword)
@@ -107,7 +126,7 @@ const RegisterPage = () => {
                     : "text-slate-400"
                 } flex items-center gap-1`}
               >
-                <CheckCircle2 size={18} /> Must be 6 or more characters long
+                <CheckCircle2 size={18} /> 6 or more characters long
               </FormDescription>
               <FormDescription
                 className={`${
@@ -116,7 +135,7 @@ const RegisterPage = () => {
                     : "text-slate-400"
                 } flex items-center gap-1`}
               >
-                <CheckCircle2 size={18} /> Must contains 1 or more numbers
+                <CheckCircle2 size={18} /> 1 or more numbers
               </FormDescription>
               <FormDescription
                 className={`${
@@ -125,8 +144,7 @@ const RegisterPage = () => {
                     : "text-slate-400"
                 } flex items-center gap-1`}
               >
-                <CheckCircle2 size={18} /> Must contains 1 or more capital
-                letters
+                <CheckCircle2 size={18} /> 1 or more capital letters
               </FormDescription>
               <FormMessage />
             </FormItem>
