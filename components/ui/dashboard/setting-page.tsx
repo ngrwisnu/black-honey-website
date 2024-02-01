@@ -11,6 +11,7 @@ import useModal from "@/store/modal-slice";
 import { AddressType, FetchResponse } from "@/types/types";
 import { getUserProfile } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import DeleteAccount from "./delete-account";
 
 const ContentBody = dynamic(() => import("./content-body"));
 
@@ -53,8 +54,8 @@ const SettingPage = ({
   ];
 
   return (
-    <div className="flex w-full justify-center">
-      <ContentSection aria-label="Content wrapper">
+    <div className="flex w-full flex-col items-center justify-center gap-14">
+      <ContentSection className="bg-white" aria-label="Content wrapper">
         <ContentWrapper aria-label="User's profile">
           <ContentHeader title="Profile" />
           <ContentBody>
@@ -93,6 +94,7 @@ const SettingPage = ({
           </ContentBody>
         </ContentWrapper>
       </ContentSection>
+      <DeleteAccount />
     </div>
   );
 };
