@@ -49,3 +49,13 @@ export const updateUserProfile = async (
     data,
   });
 };
+
+export const deleteAccount = async (token: string) => {
+  const url = `${API_ROOT}/user/account`;
+
+  return callAPI({
+    url,
+    method: "DELETE",
+    token,
+  });
+};

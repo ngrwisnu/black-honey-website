@@ -106,6 +106,9 @@ const PasswordModal = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormDescription className="text-slate-400">
+                    Must contains at least:
+                  </FormDescription>
                   <FormDescription
                     className={`${
                       /[A-Za-z0-9]{6,}/.test(watchNewPassword)
@@ -113,7 +116,7 @@ const PasswordModal = () => {
                         : "text-slate-400"
                     } flex items-center gap-1`}
                   >
-                    <CheckCircle2 size={18} /> Must be 6 or more characters long
+                    <CheckCircle2 size={18} /> 6 or more characters long
                   </FormDescription>
                   <FormDescription
                     className={`${
@@ -122,7 +125,7 @@ const PasswordModal = () => {
                         : "text-slate-400"
                     } flex items-center gap-1`}
                   >
-                    <CheckCircle2 size={18} /> Must contains 1 or more numbers
+                    <CheckCircle2 size={18} /> 1 or more numbers
                   </FormDescription>
                   <FormDescription
                     className={`${
@@ -131,8 +134,7 @@ const PasswordModal = () => {
                         : "text-slate-400"
                     } flex items-center gap-1`}
                   >
-                    <CheckCircle2 size={18} /> Must contains 1 or more capital
-                    letters
+                    <CheckCircle2 size={18} /> 1 or more capital letters
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
