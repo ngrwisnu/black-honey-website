@@ -11,12 +11,13 @@ const DeleteAccount = () => {
   const deleteHandler = () => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "This will delete all data permanently!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#FFF",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: `<span class="text-black">Cancel</span>`,
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
