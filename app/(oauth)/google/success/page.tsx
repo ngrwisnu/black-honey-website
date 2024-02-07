@@ -35,7 +35,7 @@ const Page = () => {
       .then(() => {
         push("/");
       });
-  }, []);
+  }, [push, search]);
 
   return <></>;
 };

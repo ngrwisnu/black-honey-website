@@ -6,8 +6,16 @@ import { Button } from "../button";
 import { Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
 import ContentWrapper from "./content-wrapper";
+import { useToken } from "@/hooks/useToken";
+import { useDeleteAccount } from "@/hooks/useDeleteAccount";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const DeleteAccount = () => {
+  const router = useRouter();
+  const token = useToken();
+  const { mutate } = useDeleteAccount();
+
   const deleteHandler = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -20,10 +28,25 @@ const DeleteAccount = () => {
       cancelButtonText: `<span class="text-black">Cancel</span>`,
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
+        mutate(token, {
+          onSuccess: async (data) => {
+            if (!data?.isError) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+
+              setTimeout(() => {
+                Cookies.remove("tk");
+                router.push("/register");
+              }, 2000);
+            } else {
+              Swal.fire({ icon: "error", title: data.data.message });
+            }
+          },
         });
       }
     });

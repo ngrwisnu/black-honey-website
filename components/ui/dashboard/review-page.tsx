@@ -26,6 +26,7 @@ import { FetchResponse } from "@/types/types";
 import { useToken } from "@/hooks/useToken";
 import DashboardError from "./error";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 const ContentBody = dynamic(() => import("./content-body"));
 
@@ -34,6 +35,7 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [reviews, setReviews] = useState<[] | undefined>([]);
 
   const token = useToken();
+  const router = useRouter();
 
   useEffect(() => {
     if (review && !review.isError) {
@@ -48,7 +50,7 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const form = useForm<z.infer<typeof reviewSchema>>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
-      rating: 0,
+      rating: 5,
       message: "",
     },
   });
@@ -70,6 +72,8 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
       title: "Thank you for your Review",
       icon: "success",
     });
+
+    router.refresh();
   };
 
   if (!reviews) {
