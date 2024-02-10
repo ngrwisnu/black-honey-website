@@ -43,7 +43,7 @@ const LoginPage = () => {
     if (data?.isError) {
       setLoginValid({
         isError: true,
-        message: data.data.error,
+        message: data.data.message,
       });
     } else {
       setLoginValid({

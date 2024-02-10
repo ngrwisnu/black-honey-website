@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 
 export interface ContentSectionProps {
@@ -5,15 +6,20 @@ export interface ContentSectionProps {
   props?: {
     [key: string]: any;
   };
+  className?: string;
 }
 
 const ContentSection: React.FC<ContentSectionProps> = ({
+  className,
   children,
   ...props
 }) => {
   return (
     <section
-      className="flex p-4 w-full sm:w-4/5 flex-col items-center gap-14 rounded-lg bg-white text-body-primary text-lg"
+      className={clsx(
+        className,
+        "flex w-full flex-col items-center gap-14 rounded-lg p-4 text-lg text-body-primary sm:w-4/5",
+      )}
       {...props}
     >
       {children}
