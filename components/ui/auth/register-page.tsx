@@ -24,6 +24,10 @@ import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
+  const [registerValid, setIsRegisterValid] = useState({
+    isError: false,
+    message: "",
+  });
 
   const router = useRouter();
   const { mutate } = useRegister();
@@ -40,7 +44,12 @@ const RegisterPage = () => {
   const watchPassword = form.watch("password");
 
   const onRegisterSuccess = (data: FetchResponse | undefined) => {
-    if (!data?.isError) {
+    if (data?.isError) {
+      setIsRegisterValid({
+        isError: true,
+        message: data.data.message,
+      });
+    } else {
       router.push("/login");
     }
   };
@@ -163,6 +172,7 @@ const RegisterPage = () => {
       description="Welcome to the Black Honey Website"
       formContent={formContent}
       footerText="Already have an account?"
+      loginValid={registerValid}
     />
   );
 };

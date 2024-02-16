@@ -39,10 +39,12 @@ const callAPI = async ({
         isError: true,
         data: error.response.data,
       };
-    } else {
+    } else if (error.code === "ERR_NETWORK") {
       return {
         isError: true,
-        data: error.message,
+        data: {
+          message: "Internal Server is Offline!",
+        },
       };
     }
   }
