@@ -83,3 +83,10 @@ export function getUserInitial(username: string) {
     }
   }
 }
+
+export function isCouponExpired(expiredDate: string) {
+  const today = new Date().valueOf();
+  const expired = new Date(`${expiredDate}`).valueOf();
+
+  return today >= expired;
+}
