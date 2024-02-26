@@ -1,13 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { clsx as cx } from "clsx";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { useGetPathname } from "@/hooks/useGetPathname";
 import { Input } from "@/components/ui/input";
 import { CartItems } from "@/store/cart";
-import { currencyFormatter, isCouponExpired } from "@/lib/utils";
+import {
+  currencyFormatter,
+  isCouponValid,
+  totalAfterDiscount,
+} from "@/lib/utils";
 import { toast } from "../use-toast";
 import useCheckout from "@/store/checkout";
 import { useGetCouponByCode } from "@/hooks/useCoupon";
@@ -30,6 +34,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 }) => {
   const [coupon, setCoupon] = useState("");
   const [couponDetail, setCouponDetail] = useState<FetchResponse>();
+  const [isApplied, setIsApplied] = useState<boolean | undefined>();
+
   const addCheckoutItem = useCheckout((state) => state.addItem);
   const { mutate } = useGetCouponByCode();
 
@@ -56,18 +62,24 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   const paymentDetailHandler = () => {
     if (checkoutDetail?.address_id !== "") {
-      let checkout = [];
+      const cid =
+        couponDetail?.data.data && isApplied
+          ? couponDetail?.data.data.id
+          : undefined;
+      // let checkout = [];
 
-      for (const item of data!) {
-        checkout.push({
-          ...item,
-          address_id: checkoutDetail!.address_id,
-        });
-      }
+      // for (const item of data!) {
+      //   checkout.push({
+      //     ...item,
+      //     address_id: checkoutDetail!.address_id,
+      //   });
+      // }
 
-      addCheckoutItem(checkout);
+      console.log(cid);
+      // console.log(checkout);
+      // addCheckoutItem(checkout);
 
-      router.push("/cart/payment");
+      // router.push("/cart/payment");
     } else {
       toast({
         title: "Checkout detail is not complete!",
@@ -77,6 +89,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   };
 
   const applyCouponHandler = () => {
+    if (coupon === "") return;
+
     const required = {
       code: coupon,
       token,
@@ -84,9 +98,18 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
     mutate(required, {
       onSuccess: (data) => {
+        if (data?.data.data) {
+          setIsApplied(isCouponValid(data?.data.data));
+        }
         setCouponDetail(data);
+        setCoupon("");
       },
     });
+  };
+
+  const removeCouponHandler = () => {
+    setCouponDetail(undefined);
+    setIsApplied(false);
   };
 
   return (
@@ -145,8 +168,24 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 aria-label="total"
               >
                 <span>Total</span>
-                <span>{currencyFormatter(subTotal)}</span>
+                <span
+                  className={`${isApplied ? "line-through" : "no-underline"} ${
+                    isApplied && "text-red-300"
+                  }`}
+                >
+                  {currencyFormatter(subTotal)}
+                </span>
               </div>
+              {isApplied && (
+                <div className="w-full text-end font-semibold">
+                  {currencyFormatter(
+                    totalAfterDiscount(
+                      couponDetail?.data.data,
+                      subTotal,
+                    ) as number,
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -163,6 +202,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 <Input
                   id="coupon"
                   placeholder="Coupon code"
+                  value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
                 />
               </div>
@@ -170,21 +210,27 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 Apply
               </Button>
             </div>
-            <div className="relative w-full">
-              {couponDetail?.isError ||
-              couponDetail?.data.data.status === "InActive" ||
-              isCouponExpired(couponDetail?.data.data.expired) ? (
+            <div className="relative flex w-full flex-col">
+              {(couponDetail?.isError ||
+                (couponDetail?.data.data &&
+                  !isCouponValid(couponDetail?.data.data))) && (
                 <p>Code is not valid!</p>
-              ) : (
-                (couponDetail?.data.data.image || "") &&
-                couponDetail?.data.data.status === "Active" && (
+              )}
+              {isApplied && couponDetail?.data.data && (
+                <>
+                  <span
+                    className="mb-2 w-full text-end text-xs underline hover:cursor-pointer"
+                    onClick={removeCouponHandler}
+                  >
+                    Remove
+                  </span>
                   <Image
-                    src={couponDetail.data.data.image}
-                    alt={`${couponDetail.data.data.name} coupon`}
+                    src={couponDetail?.data.data.image || ""}
+                    alt={`${couponDetail?.data.data.name} coupon`}
                     height={200}
-                    width={400}
+                    width={600}
                   />
-                )
+                </>
               )}
             </div>
           </>

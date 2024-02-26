@@ -77,3 +77,14 @@ export interface CreateOrderPayload {
   item_details: string;
   transaction_details: string;
 }
+
+export interface CouponType {
+  id: string;
+  name: string;
+  code: string;
+  discount_type: string;
+  discount_amount: string;
+  expired: string;
+  status: string;
+  image: string | null;
+}

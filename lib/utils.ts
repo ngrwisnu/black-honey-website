@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
-import { UserPayload } from "@/types/types";
+import { CouponType, UserPayload } from "@/types/types";
 import jwt_decode from "jwt-decode";
 import { CartItems } from "@/store/cart";
 
@@ -89,4 +89,26 @@ export function isCouponExpired(expiredDate: string) {
   const expired = new Date(`${expiredDate}`).valueOf();
 
   return today >= expired;
+}
+
+export function isCouponValid(detail: CouponType) {
+  const isExpired = isCouponExpired(detail.expired);
+
+  return !isExpired && detail.status === "Active";
+}
+
+export function totalAfterDiscount(detail: CouponType, total: number) {
+  if (!detail) return total;
+
+  if (detail.discount_type === "fixed") {
+    return total - +detail.discount_amount;
+  }
+
+  if (detail.discount_type === "percent") {
+    return total - (+detail.discount_amount / 100) * total;
+  }
+
+  if (detail.discount_type === "free") {
+    return total;
+  }
 }

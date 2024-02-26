@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 interface CallAPIProps extends AxiosRequestConfig {
   token?: string;
 }
@@ -34,7 +34,7 @@ const callAPI = async ({
       };
     }
   } catch (error: any) {
-    if (error.response) {
+    if (error.response || error instanceof AxiosError) {
       return {
         isError: true,
         data: error.response.data,
