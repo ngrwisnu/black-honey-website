@@ -1,23 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { clsx as cx } from "clsx";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { useGetPathname } from "@/hooks/useGetPathname";
 import { Input } from "@/components/ui/input";
 import { CartItems } from "@/store/cart";
-import {
-  currencyFormatter,
-  isCouponValid,
-  totalAfterDiscount,
-} from "@/lib/utils";
+import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
 import { toast } from "../use-toast";
 import useCheckout from "@/store/checkout";
 import { useGetCouponByCode } from "@/hooks/useCoupon";
 import { useToken } from "@/hooks/useToken";
 import { FetchResponse } from "@/types/types";
 import Image from "next/image";
+import { isCouponValid, totalAfterDiscount } from "./utils";
 
 interface OrderSummaryProps {
   classname?: string;
@@ -47,13 +44,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   let subTotal = 0;
 
   if (data?.length !== 0) {
-    for (let order of data!) {
-      const price = order.qty * order.product.price;
-
-      subTotal += price;
-    }
-  } else {
-    return;
+    subTotal = subTotalCalculation(data);
   }
 
   const checkoutHandler = () => {
@@ -62,24 +53,19 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   const paymentDetailHandler = () => {
     if (checkoutDetail?.address_id !== "") {
-      const cid =
-        couponDetail?.data.data && isApplied
-          ? couponDetail?.data.data.id
-          : undefined;
-      // let checkout = [];
+      let checkout = [];
 
-      // for (const item of data!) {
-      //   checkout.push({
-      //     ...item,
-      //     address_id: checkoutDetail!.address_id,
-      //   });
-      // }
+      for (const item of data!) {
+        checkout.push({
+          ...item,
+          address_id: checkoutDetail!.address_id,
+          coupon: couponDetail?.data.data,
+        });
+      }
 
-      console.log(cid);
-      // console.log(checkout);
-      // addCheckoutItem(checkout);
+      addCheckoutItem(checkout);
 
-      // router.push("/cart/payment");
+      router.push("/cart/payment");
     } else {
       toast({
         title: "Checkout detail is not complete!",

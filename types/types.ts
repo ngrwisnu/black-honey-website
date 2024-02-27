@@ -70,6 +70,7 @@ export interface MidtransPayload {
   gross_amount: number;
   item_details: string;
   address_id: string;
+  coupon_details: string;
 }
 
 export interface CreateOrderPayload {

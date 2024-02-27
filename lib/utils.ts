@@ -83,32 +83,3 @@ export function getUserInitial(username: string) {
     }
   }
 }
-
-export function isCouponExpired(expiredDate: string) {
-  const today = new Date().valueOf();
-  const expired = new Date(`${expiredDate}`).valueOf();
-
-  return today >= expired;
-}
-
-export function isCouponValid(detail: CouponType) {
-  const isExpired = isCouponExpired(detail.expired);
-
-  return !isExpired && detail.status === "Active";
-}
-
-export function totalAfterDiscount(detail: CouponType, total: number) {
-  if (!detail) return total;
-
-  if (detail.discount_type === "fixed") {
-    return total - +detail.discount_amount;
-  }
-
-  if (detail.discount_type === "percent") {
-    return total - (+detail.discount_amount / 100) * total;
-  }
-
-  if (detail.discount_type === "free") {
-    return total;
-  }
-}
