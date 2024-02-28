@@ -77,6 +77,7 @@ export interface CreateOrderPayload {
   order_id: string;
   item_details: string;
   transaction_details: string;
+  coupon_id: string | undefined;
 }
 
 export interface CouponType {

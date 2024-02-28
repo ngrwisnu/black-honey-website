@@ -50,3 +50,15 @@ export function getDiscountPrice(
     return price;
   }
 }
+
+export function countdown(gap: number) {
+  const day = Math.floor(gap / 86400000);
+  const hr = Math.floor((gap % 86400000) / 3600000);
+  const min = Math.floor((gap % 3600000) / 60000);
+  const sec = Math.floor((gap % 60000) / 1000);
+
+  return [day, hr, min, sec].map((num) => {
+    let str = num.toString();
+    return str.length === 1 ? str.padStart(2, "0") : str;
+  });
+}

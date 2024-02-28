@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { clsx as cx } from "clsx";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ import { useToken } from "@/hooks/useToken";
 import { FetchResponse } from "@/types/types";
 import Image from "next/image";
 import { isCouponValid, totalAfterDiscount } from "./utils";
+import { useCountdown } from "@/hooks/useCountdown";
 
 interface OrderSummaryProps {
   classname?: string;
@@ -203,7 +204,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 <p>Code is not valid!</p>
               )}
               {isApplied && couponDetail?.data.data && (
-                <>
+                <div className="flex flex-col gap-1">
                   <span
                     className="mb-2 w-full text-end text-xs underline hover:cursor-pointer"
                     onClick={removeCouponHandler}
@@ -216,7 +217,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                     height={200}
                     width={600}
                   />
-                </>
+                  {/* <span className="text-center">{`${day}:${hr}:${min}:${sec}`}</span> */}
+                </div>
               )}
             </div>
           </>

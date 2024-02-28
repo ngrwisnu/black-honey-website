@@ -10,7 +10,7 @@ import { useToken } from "@/hooks/useToken";
 import Link from "next/link";
 import { CreateOrderPayload, MidtransPayload } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
-import { getTransactionToken } from "@/lib/api/checkout";
+import { getMidtransToken } from "@/lib/api/checkout";
 import useCart from "@/store/cart";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import Swal from "sweetalert2";
@@ -64,7 +64,7 @@ const PaymentComp = () => {
       address_id: checkout.items[0].address_id!,
     };
 
-    const response = await getTransactionToken(body, token);
+    const response = await getMidtransToken(body, token);
 
     // @ts-ignore
     window.snap.pay(response?.data.data.token, {
@@ -73,6 +73,7 @@ const PaymentComp = () => {
           order_id: result.order_id,
           item_details: JSON.stringify(checkout.items),
           transaction_details: JSON.stringify(result),
+          coupon_id: checkout.items[0].coupon?.id,
         };
 
         const required = {
