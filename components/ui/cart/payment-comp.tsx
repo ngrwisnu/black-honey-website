@@ -1,7 +1,7 @@
 "use client";
 
 import useCheckout from "@/store/checkout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SummaryItem, SummaryList, SummaryTitle } from "./summary-item";
 import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
 import { Button } from "../button";
@@ -10,12 +10,15 @@ import { useToken } from "@/hooks/useToken";
 import Link from "next/link";
 import { CreateOrderPayload, MidtransPayload } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
-import { getTransactionToken } from "@/lib/api/checkout";
+import { getMidtransToken } from "@/lib/api/checkout";
 import useCart from "@/store/cart";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import Swal from "sweetalert2";
+import { getDiscountPrice, totalAfterDiscount } from "./utils";
 
 const PaymentComp = () => {
+  const [totalPrice, setTotalPrice] = useState(0);
+
   const checkout = useCheckout();
   const cart = useCart();
   const token = useToken();
@@ -38,17 +41,30 @@ const PaymentComp = () => {
     };
   }, [checkout]);
 
-  const subTotal = subTotalCalculation(checkout.items);
+  useEffect(() => {
+    const subTotal = subTotalCalculation(checkout.items);
+
+    setTotalPrice(subTotal);
+  }, [checkout.items, totalPrice]);
 
   const payHandler = async () => {
+    const totalPurchase = totalAfterDiscount(
+      checkout.items[0].coupon,
+      totalPrice,
+    ) as number;
+
     const body: MidtransPayload = {
       order_id: uuidv4(),
-      gross_amount: subTotal,
+      gross_amount: totalPurchase,
+      coupon_details: JSON.stringify({
+        id: checkout.items[0].coupon?.id,
+        price: getDiscountPrice(checkout.items[0].coupon, totalPrice),
+      }),
       item_details: JSON.stringify(checkout.items),
       address_id: checkout.items[0].address_id!,
     };
 
-    const response = await getTransactionToken(body, token);
+    const response = await getMidtransToken(body, token);
 
     // @ts-ignore
     window.snap.pay(response?.data.data.token, {
@@ -57,6 +73,7 @@ const PaymentComp = () => {
           order_id: result.order_id,
           item_details: JSON.stringify(checkout.items),
           transaction_details: JSON.stringify(result),
+          coupon_id: checkout.items[0].coupon?.id,
         };
 
         const required = {
@@ -131,15 +148,35 @@ const PaymentComp = () => {
           <SummaryTitle>Order Detail</SummaryTitle>
           <SummaryList>
             <span>Coupon</span>
-            <span>-</span>
+            <span>{checkout.items[0].coupon?.code ?? "-"}</span>
           </SummaryList>
           <SummaryList>
             <span>Shipping</span>
             <span>TBA</span>
           </SummaryList>
           <SummaryList classname="font-semibold">
+            <span>Total Price</span>
+            <span>{currencyFormatter(totalPrice)}</span>
+          </SummaryList>
+          <SummaryList classname="font-normal">
+            <span>Discount</span>
+            <span>{`-${currencyFormatter(
+              getDiscountPrice(checkout.items[0].coupon, totalPrice) as number,
+            )}`}</span>
+          </SummaryList>
+        </SummaryItem>
+        <span className="h-[1px] w-full bg-gray-200"></span>
+        <SummaryItem>
+          <SummaryList classname="font-semibold">
             <span>Total</span>
-            <span>{currencyFormatter(subTotal)}</span>
+            <span>
+              {currencyFormatter(
+                totalAfterDiscount(
+                  checkout.items[0].coupon,
+                  totalPrice,
+                ) as number,
+              )}
+            </span>
           </SummaryList>
         </SummaryItem>
       </section>

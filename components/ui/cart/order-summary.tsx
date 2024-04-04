@@ -1,15 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { clsx as cx } from "clsx";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { useGetPathname } from "@/hooks/useGetPathname";
 import { Input } from "@/components/ui/input";
 import { CartItems } from "@/store/cart";
-import { currencyFormatter } from "@/lib/utils";
+import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
 import { toast } from "../use-toast";
 import useCheckout from "@/store/checkout";
+import { useGetCouponByCode } from "@/hooks/useCoupon";
+import { useToken } from "@/hooks/useToken";
+import { FetchResponse } from "@/types/types";
+import Image from "next/image";
+import { isCouponValid, totalAfterDiscount } from "./utils";
+import { useCountdown } from "@/hooks/useCountdown";
 
 interface OrderSummaryProps {
   classname?: string;
@@ -24,24 +30,22 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   data,
   checkoutDetail,
 }) => {
+  const [coupon, setCoupon] = useState("");
+  const [couponDetail, setCouponDetail] = useState<FetchResponse>();
+  const [isApplied, setIsApplied] = useState<boolean | undefined>();
+
   const addCheckoutItem = useCheckout((state) => state.addItem);
+  const { mutate } = useGetCouponByCode();
 
   const router = useRouter();
-
   const url = usePathname();
-
+  const token = useToken();
   const path = useGetPathname(url);
 
   let subTotal = 0;
 
   if (data?.length !== 0) {
-    for (let order of data!) {
-      const price = order.qty * order.product.price;
-
-      subTotal += price;
-    }
-  } else {
-    return;
+    subTotal = subTotalCalculation(data);
   }
 
   const checkoutHandler = () => {
@@ -56,6 +60,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         checkout.push({
           ...item,
           address_id: checkoutDetail!.address_id,
+          coupon: couponDetail?.data.data,
         });
       }
 
@@ -68,6 +73,30 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         variant: "destructive",
       });
     }
+  };
+
+  const applyCouponHandler = () => {
+    if (coupon === "") return;
+
+    const required = {
+      code: coupon,
+      token,
+    };
+
+    mutate(required, {
+      onSuccess: (data) => {
+        if (data?.data.data) {
+          setIsApplied(isCouponValid(data?.data.data));
+        }
+        setCouponDetail(data);
+        setCoupon("");
+      },
+    });
+  };
+
+  const removeCouponHandler = () => {
+    setCouponDetail(undefined);
+    setIsApplied(false);
   };
 
   return (
@@ -126,21 +155,73 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 aria-label="total"
               >
                 <span>Total</span>
-                <span>{currencyFormatter(subTotal)}</span>
+                <span
+                  className={`${isApplied ? "line-through" : "no-underline"} ${
+                    isApplied && "text-red-300"
+                  }`}
+                >
+                  {currencyFormatter(subTotal)}
+                </span>
               </div>
+              {isApplied && (
+                <div className="w-full text-end font-semibold">
+                  {currencyFormatter(
+                    totalAfterDiscount(
+                      couponDetail?.data.data,
+                      subTotal,
+                    ) as number,
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
         {path === "checkout" && (
-          <div
-            className="flex flex-col items-start gap-1 self-stretch"
-            aria-label="Input coupon"
-          >
-            <label htmlFor="coupon" className="text-xs text-body-primary">
-              Have any coupon?
-            </label>
-            <Input id="coupon" placeholder="Coupon code" />
-          </div>
+          <>
+            <div
+              className="flex flex-row items-end gap-4 self-stretch"
+              aria-label="Input coupon"
+            >
+              <div className="w-full">
+                <label htmlFor="coupon" className="text-xs text-body-primary">
+                  Have any coupon?
+                </label>
+                <Input
+                  id="coupon"
+                  placeholder="Coupon code"
+                  value={coupon}
+                  onChange={(e) => setCoupon(e.target.value)}
+                />
+              </div>
+              <Button variant="main" onClick={applyCouponHandler}>
+                Apply
+              </Button>
+            </div>
+            <div className="relative flex w-full flex-col">
+              {(couponDetail?.isError ||
+                (couponDetail?.data.data &&
+                  !isCouponValid(couponDetail?.data.data))) && (
+                <p>Code is not valid!</p>
+              )}
+              {isApplied && couponDetail?.data.data && (
+                <div className="flex flex-col gap-1">
+                  <span
+                    className="mb-2 w-full text-end text-xs underline hover:cursor-pointer"
+                    onClick={removeCouponHandler}
+                  >
+                    Remove
+                  </span>
+                  <Image
+                    src={couponDetail?.data.data.image || ""}
+                    alt={`${couponDetail?.data.data.name} coupon`}
+                    height={200}
+                    width={600}
+                  />
+                  {/* <span className="text-center">{`${day}:${hr}:${min}:${sec}`}</span> */}
+                </div>
+              )}
+            </div>
+          </>
         )}
         <div className="w-full" aria-label="Button wrapper">
           {path === "summary" && (

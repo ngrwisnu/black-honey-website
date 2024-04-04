@@ -70,10 +70,23 @@ export interface MidtransPayload {
   gross_amount: number;
   item_details: string;
   address_id: string;
+  coupon_details: string;
 }
 
 export interface CreateOrderPayload {
   order_id: string;
   item_details: string;
   transaction_details: string;
+  coupon_id: string | undefined;
+}
+
+export interface CouponType {
+  id: string;
+  name: string;
+  code: string;
+  discount_type: string;
+  discount_amount: string;
+  expired: string;
+  status: string;
+  image: string | null;
 }

@@ -13,7 +13,7 @@ export const createOrder = (data: CreateOrderPayload, token: string) => {
   });
 };
 
-export const getTransactionToken = (data: MidtransPayload, token: string) => {
+export const getMidtransToken = (data: MidtransPayload, token: string) => {
   const url = `${API_ROOT}/api/v1/midtrans/token`;
 
   return callAPI({

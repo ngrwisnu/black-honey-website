@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
-import { UserPayload } from "@/types/types";
+import { CouponType, UserPayload } from "@/types/types";
 import jwt_decode from "jwt-decode";
 import { CartItems } from "@/store/cart";
 
