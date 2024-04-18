@@ -101,12 +101,10 @@ const ProductsModal = ({ products }: ModalProps) => {
             </Button>
           </div>
           <div className="mx-auto w-2/3 p-4 pb-8 text-center">
-            <h3 className="mb-4 text-2xl font-bold">
-              Oops! <br /> Something went wrong!
-            </h3>
+            <h3 className="mb-4 text-2xl font-bold">Oops!</h3>
             <p>
-              We currently facing an issue in retrieving data. Try to refresh
-              this page in a few moments.
+              We&apos;re spinning up the server and may take a few seconds. Try
+              to refresh this page in a few moments.
             </p>
           </div>
         </div>
