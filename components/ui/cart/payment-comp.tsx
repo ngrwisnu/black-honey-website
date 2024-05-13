@@ -65,6 +65,7 @@ const PaymentComp = () => {
     };
 
     const response = await getMidtransToken(body, token);
+    console.log(response);
 
     // @ts-ignore
     window.snap.pay(response?.data.data.token, {
@@ -191,6 +192,14 @@ const PaymentComp = () => {
           Pay Now
         </span>
       </Button>
+      <p className="mt-6 w-full bg-red-100 p-4 md:w-[506px]">
+        All transaction made in this environment is <strong>not real</strong>{" "}
+        and does not require <strong>real payment</strong>. You can use this{" "}
+        <Link href="https://simulator.sandbox.midtrans.com/" target="_blank">
+          <span className="text-blue-400">link</span>
+        </Link>{" "}
+        to perform the test transaction.
+      </p>
     </div>
   );
 };

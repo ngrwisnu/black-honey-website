@@ -25,7 +25,7 @@ const Footer = () => {
           </ul>
           <div className="flex flex-col items-center justify-center gap-2 self-stretch sm:items-start">
             <p className="mx-auto text-xs md:mx-0">
-              &copy; Black Honey 2023. All right reserved.
+              &copy; Black Honey 2024. All right reserved.
             </p>
           </div>
         </div>

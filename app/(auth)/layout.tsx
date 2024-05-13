@@ -23,7 +23,7 @@ export default function Authlayout({
       </Container>
       <footer className="flex min-w-full shrink-0 items-center justify-center py-4">
         <p className="text-center text-sm leading-4 text-body-primary">
-          &copy; Copyright 2023, Black Honey
+          &copy; Copyright 2024, Black Honey
         </p>
       </footer>
     </div>
