@@ -7,7 +7,7 @@
       "status": "Pending",
       "product": {
         "id": 1,
-        "name": "Black Honey - 750 mL",
+        "name": "Black Honey - 750 gr",
         "price": 60000,
         "thumbnail": "product-1.webp"
       },
@@ -20,7 +20,7 @@
       "status": "Success",
       "product": {
         "id": 1,
-        "name": "Black Honey - 750 mL",
+        "name": "Black Honey - 750 gr",
         "price": 60000,
         "thumbnail": "product-1.webp"
       },

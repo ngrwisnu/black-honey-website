@@ -197,7 +197,7 @@ const ProductsModal = ({ products }: ModalProps) => {
                         }
                       />
                       <label htmlFor={`${item.size}`} className="font-medium">
-                        {item.size} mL
+                        {item.size} gr
                       </label>
                     </div>
                   ))}
