@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function dateFormatter(date: string) {
-  const newDate = new Date(date);
+  const newDate = new Date(+date);
 
   const options: any = { year: "numeric", month: "long", day: "numeric" };
 
