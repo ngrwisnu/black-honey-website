@@ -13,6 +13,7 @@ const customJestConfig = {
     "^@/components/(.*)$": "<rootDir>/components/$1",
   },
   modulePaths: ["<rootDir>"],
+  modulePathIgnorePatterns: ["<rootDir>/components/ui/*.tsx"],
   collectCoverage: false,
   collectCoverageFrom: [
     "**/*.{js,jsx,ts,tsx}",
@@ -31,7 +32,22 @@ const customJestConfig = {
     "!<rootDir>/.vscode/**",
     "!<rootDir>/*.config.js",
     "!<rootDir>/*.config.ts",
+    "!<rootDir>/components/ui/*.{js,jsx,ts,tsx}",
   ],
+  coverageThreshold: {
+    global: {
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: -10,
+    },
+    "./components/": {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
