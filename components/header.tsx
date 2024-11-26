@@ -69,6 +69,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
             className="cart fixed bottom-8 right-4 z-[999] flex items-center justify-center gap-[10px]
             rounded-full bg-gray-100 p-3 shadow-section hover:cursor-pointer sm:relative sm:bottom-0 sm:right-0 sm:shadow-none"
             onClick={cartHandler}
+            aria-label="cart-button"
           >
             <div className="cart-logo h-6 w-6">
               <svg
@@ -124,7 +125,10 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
               <div
                 className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
               >
-                <ul className="order-2 flex w-full flex-col gap-[10px]">
+                <ul
+                  className="order-2 flex w-full flex-col gap-[10px]"
+                  aria-label="dropdown"
+                >
                   <li>
                     <Link
                       href={"/dashboard/setting"}

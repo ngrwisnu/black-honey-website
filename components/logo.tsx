@@ -11,6 +11,7 @@ const Logo = ({
 }) => {
   return (
     <div
+      data-testid="logo"
       className={`logo flex flex-1 items-center ${
         isCenter ? "justify-center" : "justify-start"
       }`}
