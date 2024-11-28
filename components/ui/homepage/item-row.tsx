@@ -12,8 +12,9 @@ const ItemRow = ({
     <div
       className={clsx(
         className,
-        "flex flex-col md:flex-row gap-10 w-full max-w-[1166px] items-center justify-between"
+        "flex w-full max-w-[1166px] flex-col items-center justify-between gap-10 md:flex-row",
       )}
+      aria-label="benefit-row"
     >
       {children}
     </div>
