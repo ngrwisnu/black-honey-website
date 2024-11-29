@@ -22,8 +22,8 @@ const SideNav = () => {
   return (
     <>
       <div
-        className="w-full flex sm:hidden p-4 absolute top-20 left-0 z-10"
-        aria-label="Hamburger menu"
+        className="absolute left-0 top-20 z-10 flex w-full p-4 sm:hidden"
+        aria-label="hamburger-menu"
         onClick={() => setIsOpen(!isOpen)}
       >
         <AlignJustify />
@@ -31,10 +31,11 @@ const SideNav = () => {
       <div
         className={cx(
           isOpen ? "-left-0" : "-left-full",
-          "w-4/5 sm:w-full flex flex-col sm:flex-row justify-start sm:justify-center items-center absolute sm:relative top-20 sm:left-0 sm:top-0 sm:mt-20 bottom-0 shadow-xl sm:shadow-none bg-white sm:bg-transparent transition-all duration-300"
+          "absolute bottom-0 top-20 flex w-4/5 flex-col items-center justify-start bg-white shadow-xl transition-all duration-300 sm:relative sm:left-0 sm:top-0 sm:mt-20 sm:w-full sm:flex-row sm:justify-center sm:bg-transparent sm:shadow-none",
         )}
+        aria-label="nav-wrapper"
       >
-        <nav className="flex flex-col sm:flex-row justify-center sm:justify-normal items-start sm:rounded-full sm:border-[1px] sm:border-gray-100 w-full flex-1 sm:flex-initial sm:h-auto sm:w-[1200px] overflow-hidden">
+        <nav className="flex w-full flex-1 flex-col items-start justify-center overflow-hidden sm:h-auto sm:w-[1200px] sm:flex-initial sm:flex-row sm:justify-normal sm:rounded-full sm:border-[1px] sm:border-gray-100">
           {navList.map((item: { link: string; name: string }) => (
             <Link
               href={item.link}
@@ -44,7 +45,7 @@ const SideNav = () => {
                 path === item.name.toLowerCase()
                   ? "sm:shadow-none"
                   : "sm:shadow-section",
-                "w-full flex px-8 py-4 justify-center items-center sm:flex-1 text-lg font-normal text-body-primary"
+                "flex w-full items-center justify-center px-8 py-4 text-lg font-normal text-body-primary sm:flex-1",
               )}
               onClick={() => setIsOpen(false)}
             >
