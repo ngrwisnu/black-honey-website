@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import Jumbotron from "../jumbotron";
 import Product from "../product";
-import { create } from "zustand";
 import Benefits from "../benefits";
 import Recipe from "../recipe";
 
