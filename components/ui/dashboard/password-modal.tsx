@@ -103,6 +103,7 @@ const PasswordModal = () => {
                       type="password"
                       placeholder="Enter the new password"
                       className="border-gray-400"
+                      aria-label="password-field"
                       {...field}
                     />
                   </FormControl>
@@ -151,6 +152,7 @@ const PasswordModal = () => {
                       type="password"
                       placeholder="Your new password"
                       className="border-gray-400"
+                      aria-label="confirm-password-field"
                       {...field}
                     />
                   </FormControl>
