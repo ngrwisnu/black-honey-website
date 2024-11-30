@@ -4,7 +4,7 @@ import Product from "../product";
 import Benefits from "../benefits";
 import Recipe from "../recipe";
 
-jest.mock("../../../../store/modal-slice", () => {
+jest.mock("@/store/modal-slice", () => {
   const originalModule = jest.requireActual("zustand").create;
   return {
     __esModule: true,

@@ -35,6 +35,7 @@ const CartComp = () => {
               <div
                 className="flex w-full items-center gap-4 self-stretch border-b-[1px] border-b-gray-200 pb-4"
                 key={item.product.id}
+                aria-label="order-item"
               >
                 <div
                   className="flex flex-1 items-center gap-8 font-medium text-body-primary"
@@ -68,6 +69,7 @@ const CartComp = () => {
                     variant="ghost"
                     size="icon"
                     className="rounded p-0 hover:bg-rose-100 sm:border-none"
+                    aria-label="remove-item"
                     onClick={() => cart.removeItem(item.product.id)}
                   >
                     <Trash size={20} className="stroke-red-600" />
