@@ -188,7 +188,7 @@ const PaymentComp = () => {
         onClick={payHandler}
       >
         <Check size={18} aria-label="icon check" />
-        <span className="ml-1" aria-label="button name">
+        <span className="ml-1" aria-label="pay-button">
           Pay Now
         </span>
       </Button>
