@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { clsx as cx } from "clsx";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,7 +15,6 @@ import { useToken } from "@/hooks/useToken";
 import { FetchResponse } from "@/types/types";
 import Image from "next/image";
 import { isCouponValid, totalAfterDiscount } from "./utils";
-import { useCountdown } from "@/hooks/useCountdown";
 
 interface OrderSummaryProps {
   classname?: string;
@@ -37,7 +36,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const addCheckoutItem = useCheckout((state) => state.addItem);
   const { mutate } = useGetCouponByCode();
 
-  const router = useRouter();
+  const { push } = useRouter();
   const url = usePathname();
   const token = useToken();
   const path = useGetPathname(url);
@@ -49,7 +48,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   }
 
   const checkoutHandler = () => {
-    router.push("/cart/checkout");
+    push("/cart/checkout");
   };
 
   const paymentDetailHandler = () => {
@@ -66,7 +65,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
       addCheckoutItem(checkout);
 
-      router.push("/cart/payment");
+      push("/cart/payment");
     } else {
       toast({
         title: "Checkout detail is not complete!",
