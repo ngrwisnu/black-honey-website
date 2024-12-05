@@ -195,6 +195,7 @@ const ProductsModal = ({ products }: ModalProps) => {
                         onChange={(e) =>
                           sizeHandler(Number(e.currentTarget.value))
                         }
+                        aria-label="product-list"
                       />
                       <label htmlFor={`${item.size}`} className="font-medium">
                         {item.size} gr
@@ -207,8 +208,9 @@ const ProductsModal = ({ products }: ModalProps) => {
                 className="flex w-full flex-col items-start gap-1"
                 aria-label="Purchase quantity"
               >
-                <p>Quantity</p>
+                <label htmlFor="order-qty">Quantity</label>
                 <Input
+                  id="order-qty"
                   type="number"
                   name="quantity"
                   defaultValue={1}

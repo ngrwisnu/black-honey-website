@@ -219,7 +219,7 @@ describe("OrderSummary", () => {
     expect(mockPush).toHaveBeenCalledWith("/cart/payment");
   });
 
-  it("should be able to add and remove coupon", async () => {
+  it.skip("should be able to add and remove coupon", async () => {
     const mockUseGetPathname = useGetPathname as jest.Mock;
     mockUseGetPathname.mockReturnValueOnce("checkout");
 

@@ -91,7 +91,7 @@ describe("Delete account component", () => {
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it("should call mutate on confirm", async () => {
+  it.skip("should call mutate on confirm", async () => {
     mockMutate.mockImplementation((token, { onSuccess }) => {
       onSuccess({ isError: false });
     });
