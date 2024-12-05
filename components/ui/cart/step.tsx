@@ -30,6 +30,7 @@ const Step: React.FC<StepProps> = ({ variant, label }) => {
           strokeWidth={`
           ${variant === "disabled" ? "0" : "4"}
         `}
+          data-testid="step-path"
         />
       </svg>
       <span

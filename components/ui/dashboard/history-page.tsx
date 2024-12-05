@@ -65,6 +65,7 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
               <Card
                 key={order.id}
                 className="flex flex-col items-start gap-4 self-stretch rounded-xl bg-white p-4 text-lg shadow-md"
+                aria-label="order-card"
               >
                 <CardHeader className="flex items-start self-stretch border-b-[1px] border-b-gray-200 pb-2 pl-2">
                   <div

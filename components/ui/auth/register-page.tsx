@@ -80,7 +80,7 @@ const RegisterPage = () => {
               <FormControl>
                 <Input type="text" placeholder='e.g. "John Doe"' {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-message" />
             </FormItem>
           )}
         />
@@ -97,7 +97,7 @@ const RegisterPage = () => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-message" />
             </FormItem>
           )}
         />
@@ -110,6 +110,7 @@ const RegisterPage = () => {
               <FormControl>
                 <div className="relative overflow-y-hidden">
                   <Input
+                    id="password-field"
                     type={isPasswordShow ? "text" : "password"}
                     placeholder="Enter your password"
                     {...field}
@@ -119,6 +120,10 @@ const RegisterPage = () => {
                     className={`absolute right-2 transition-all duration-300 ${
                       isPasswordShow ? "-top-full" : "top-0"
                     } h-full text-sm text-slate-500 hover:cursor-pointer`}
+                    aria-label={
+                      isPasswordShow ? "show-password" : "hide-password"
+                    }
+                    data-testid="password-visibility"
                   >
                     <div className="flex h-full items-center">Show</div>
                     <div className="flex h-full items-center">Hide</div>
@@ -155,7 +160,7 @@ const RegisterPage = () => {
               >
                 <CheckCircle2 size={18} /> 1 or more capital letters
               </FormDescription>
-              <FormMessage />
+              <FormMessage data-testid="error-message" />
             </FormItem>
           )}
         />

@@ -26,10 +26,6 @@ export function totalAfterDiscount(
   if (detail.discount_type === "percent") {
     return total - (+detail.discount_amount / 100) * total;
   }
-
-  if (detail.discount_type === "free") {
-    return total;
-  }
 }
 
 export function getDiscountPrice(
@@ -44,10 +40,6 @@ export function getDiscountPrice(
 
   if (discount.discount_type === "percent") {
     return (+discount.discount_amount / 100) * price;
-  }
-
-  if (discount.discount_type === "free") {
-    return price;
   }
 }
 

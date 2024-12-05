@@ -75,6 +75,7 @@ const CheckoutComp = ({ addresses }: CheckoutCompProps) => {
                 <div
                   className="relative flex w-full items-center justify-center gap-2 rounded-lg border-[1px]  bg-white p-4 hover:cursor-pointer hover:bg-gray-200 sm:w-2/5"
                   onClick={() => router.push("/dashboard/setting")}
+                  aria-label="add-address-button"
                 >
                   <span className="flex items-center gap-1">
                     <Plus size={20} /> Add Address
@@ -89,6 +90,8 @@ const CheckoutComp = ({ addresses }: CheckoutCompProps) => {
                       : "border-gray-200"
                   }`}
                   key={address.id}
+                  aria-label="address-item"
+                  data-testid={address.id}
                 >
                   <input
                     type="radio"

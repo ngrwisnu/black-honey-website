@@ -99,7 +99,7 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
             Add new
           </Button>
         </div>
-        <div className="mt-4 flex flex-wrap gap-4">
+        <div data-testid="addresses" className="mt-4 flex flex-wrap gap-4">
           {addressList.map((item) => (
             <AddressList item={item} key={item.id} />
           ))}
