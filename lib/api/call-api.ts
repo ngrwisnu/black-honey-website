@@ -35,15 +35,26 @@ const callAPI = async ({
     }
   } catch (error: any) {
     if (error.response || error instanceof AxiosError) {
-      return {
-        isError: true,
-        data: error.response.data,
-      };
-    } else if (error.code === "ERR_NETWORK") {
+      switch (error.code) {
+        case "ERR_NETWORK":
+          return {
+            isError: true,
+            data: {
+              message: "The server is currently unavailable!",
+            },
+          };
+
+        default:
+          return {
+            isError: true,
+            data: error.response.data,
+          };
+      }
+    } else {
       return {
         isError: true,
         data: {
-          message: "Internal Server is Offline!",
+          message: "Something went wrong!",
         },
       };
     }
