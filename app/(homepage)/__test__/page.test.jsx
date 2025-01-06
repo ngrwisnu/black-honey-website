@@ -17,7 +17,7 @@ describe.skip("Homepage", () => {
   it("should open product modal", async () => {
     render(<HomePage />);
 
-    const buttonEl = screen.getByRole("button", { name: /buy now/i });
+    const buttonEl = screen.getByTestId("see-products-btn");
     fireEvent.click(buttonEl);
 
     const modalEl = screen.getByRole("heading", { level: 3 });

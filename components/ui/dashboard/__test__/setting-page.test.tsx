@@ -9,6 +9,10 @@ jest.mock("../user-profile", () =>
   )),
 );
 
+jest.mock("../delete-account.tsx", () =>
+  jest.fn(() => <button>delete account</button>),
+);
+
 const address = {
   isError: false,
   data: {
@@ -33,6 +37,11 @@ describe("Setting page", () => {
       screen.getByRole("heading", {
         level: 1,
         name: "User Profile",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "delete account",
       }),
     ).toBeInTheDocument();
   });

@@ -25,6 +25,7 @@ const ProductsModal = ({ products }: ModalProps) => {
   const [activeProduct, setActiveProduct] = useState<ProductType>();
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const modal = useModal();
@@ -32,15 +33,21 @@ const ProductsModal = ({ products }: ModalProps) => {
   const userProfile = useUserProfile();
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (products) {
       if (!products.isError) {
         setProductList(products.data.data);
         setActiveProduct(products.data.data[0]);
+
+        setIsLoading(false);
       } else {
         setIsError(true);
+        setIsLoading(false);
       }
     } else {
       setProductList(undefined);
+      setIsLoading(false);
     }
   }, [products]);
 
@@ -101,10 +108,13 @@ const ProductsModal = ({ products }: ModalProps) => {
             </Button>
           </div>
           <div className="mx-auto w-2/3 p-4 pb-8 text-center">
-            <h3 className="mb-4 text-2xl font-bold">Oops!</h3>
+            <h3 className="mb-4 text-2xl font-bold">
+              {isLoading ? "Collecting products. Please wait." : "Oops!"}
+            </h3>
             <p>
-              We&apos;re spinning up the server and may take a few seconds. Try
-              to refresh this page in a few moments.
+              {isLoading
+                ? "It may take a moment."
+                : "Failed collecting the products"}
             </p>
           </div>
         </div>

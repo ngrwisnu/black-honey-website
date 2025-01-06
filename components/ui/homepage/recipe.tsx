@@ -30,6 +30,7 @@ const Recipe = () => {
             size="xl"
             className="text-base font-normal leading-[19.2px] transition-all hover:-translate-y-1"
             onClick={modal.onOpen}
+            data-testid="open-products-modal-btn"
           >
             See Products
           </Button>
