@@ -36,7 +36,7 @@ const Product = () => {
                 className="w-40 transition-all hover:-translate-y-1"
                 onClick={modal.onOpen}
               >
-                Buy Now
+                See products
               </Button>
             </div>
           </div>
