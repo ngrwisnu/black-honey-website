@@ -21,11 +21,10 @@ interface ModalProps {
 const Modal = dynamic(() => import("../modal"), { ssr: false });
 
 const ProductsModal = ({ products }: ModalProps) => {
-  const [productList, setProductList] = useState<ProductType[] | undefined>();
+  const [productList, setProductList] = useState<ProductType[] | null>();
   const [activeProduct, setActiveProduct] = useState<ProductType>();
   const [qty, setQty] = useState(1);
   const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const modal = useModal();
@@ -33,21 +32,15 @@ const ProductsModal = ({ products }: ModalProps) => {
   const userProfile = useUserProfile();
 
   useEffect(() => {
-    setIsLoading(true);
-
     if (products) {
       if (!products.isError) {
         setProductList(products.data.data);
         setActiveProduct(products.data.data[0]);
-
-        setIsLoading(false);
       } else {
         setIsError(true);
-        setIsLoading(false);
       }
     } else {
-      setProductList(undefined);
-      setIsLoading(false);
+      setProductList(null);
     }
   }, [products]);
 
@@ -97,7 +90,7 @@ const ProductsModal = ({ products }: ModalProps) => {
 
   return (
     <Modal overlayHandler={closeHandler}>
-      {!productList || isError ? (
+      {!productList ? (
         <div className="w-full">
           <div
             className="flex items-center justify-end self-stretch"
@@ -109,12 +102,12 @@ const ProductsModal = ({ products }: ModalProps) => {
           </div>
           <div className="mx-auto w-2/3 p-4 pb-8 text-center">
             <h3 className="mb-4 text-2xl font-bold">
-              {isLoading ? "Collecting products. Please wait." : "Oops!"}
+              {isError ? "Oops!" : "Collecting products. Please wait."}
             </h3>
             <p>
-              {isLoading
-                ? "It may take a moment."
-                : "Failed collecting the products"}
+              {isError
+                ? "Failed collecting the products"
+                : "It may take a moment."}
             </p>
           </div>
         </div>
