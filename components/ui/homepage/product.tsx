@@ -35,6 +35,7 @@ const Product = () => {
                 size="xl"
                 className="w-40 transition-all hover:-translate-y-1"
                 onClick={modal.onOpen}
+                data-testid="open-products-modal-btn"
               >
                 See products
               </Button>

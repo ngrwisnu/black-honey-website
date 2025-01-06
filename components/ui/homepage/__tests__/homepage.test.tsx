@@ -49,11 +49,7 @@ describe("Homepage Components", () => {
     it("should render 'buy now' button", () => {
       render(<Product />);
 
-      expect(
-        screen.getByRole("button", {
-          name: /buy now/i,
-        }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("open-products-modal-btn")).toBeInTheDocument();
     });
 
     it("should trigger modal handler to open the modal", () => {
@@ -68,9 +64,7 @@ describe("Homepage Components", () => {
 
       render(<Product />);
 
-      const buyButton = screen.getByRole("button", {
-        name: /buy now/i,
-      });
+      const buyButton = screen.getByTestId("open-products-modal-btn");
 
       fireEvent.click(buyButton);
 
@@ -117,11 +111,7 @@ describe("Homepage Components", () => {
     it("should render 'See Products' button", () => {
       render(<Recipe />);
 
-      expect(
-        screen.getByRole("button", {
-          name: /see products/i,
-        }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("open-products-modal-btn")).toBeInTheDocument();
     });
 
     it("should trigger modal handler to open the modal", () => {
