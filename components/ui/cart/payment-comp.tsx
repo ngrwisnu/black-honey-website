@@ -3,13 +3,12 @@
 import useCheckout from "@/store/checkout";
 import { useEffect, useState } from "react";
 import { SummaryItem, SummaryList, SummaryTitle } from "./summary-item";
-import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
+import { currencyFormatter, nanoid, subTotalCalculation } from "@/lib/utils";
 import { Button } from "../button";
 import { Check } from "lucide-react";
 import { useToken } from "@/hooks/useToken";
 import Link from "next/link";
 import { CreateOrderPayload, MidtransPayload } from "@/types/types";
-import { v4 as uuidv4 } from "uuid";
 import { getMidtransToken } from "@/lib/api/checkout";
 import useCart from "@/store/cart";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
@@ -54,7 +53,7 @@ const PaymentComp = () => {
     ) as number;
 
     const body: MidtransPayload = {
-      order_id: uuidv4(),
+      order_id: nanoid(),
       gross_amount: totalPurchase,
       coupon_details: JSON.stringify({
         id: checkout.items[0].coupon?.id,

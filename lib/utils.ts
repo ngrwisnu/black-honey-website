@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { CouponType, UserPayload } from "@/types/types";
 import jwt_decode from "jwt-decode";
 import { CartItems } from "@/store/cart";
+import { customAlphabet } from "nanoid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -83,3 +84,8 @@ export function getUserInitial(username: string) {
     }
   }
 }
+
+export const nanoid = customAlphabet(
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  23,
+);
