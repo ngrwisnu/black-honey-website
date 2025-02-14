@@ -13,6 +13,8 @@ import { Copy } from "lucide-react";
 import { toast } from "../use-toast";
 import DashboardError from "./error";
 import dynamic from "next/dynamic";
+import { useToken } from "@/hooks/useToken";
+import ExpiredSession from "../expired-session";
 
 interface HistoryPageProps {
   orders: FetchResponse | undefined;
@@ -23,10 +25,10 @@ const ContentBody = dynamic(() => import("./content-body"));
 const HistoryPage = ({ orders }: HistoryPageProps) => {
   const [orderHistory, setOrderHistory] = useState<OrderType[] | undefined>([]);
 
+  const { expired } = useToken();
   const receiptRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    console.log(orders);
     if (!orders?.isError && orders) {
       setOrderHistory(orders.data.data.result);
     } else {
@@ -46,6 +48,10 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
       });
     }
   };
+
+  if (expired) {
+    return <ExpiredSession />;
+  }
 
   if (!orderHistory) {
     return <DashboardError />;

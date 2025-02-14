@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 
 const DeleteAccount = () => {
   const router = useRouter();
-  const token = useToken();
+  const { token } = useToken();
   const { mutate } = useDeleteAccount();
 
   const deleteHandler = () => {

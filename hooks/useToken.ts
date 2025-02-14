@@ -1,12 +1,25 @@
+"use client";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 
 export const useToken = () => {
-  const tk = Cookies.get("tk");
+  const [token, setToken] = useState<string>("");
+  const [expired, setExpired] = useState<boolean>(false);
 
-  if (tk) {
-    const beautyTk = window.atob(tk);
-    return beautyTk;
-  } else {
-    return "";
-  }
+  useEffect(() => {
+    const tk = Cookies.get("tk");
+
+    if (tk) {
+      const beautyTk = window.atob(tk);
+      const decoded = jwtDecode(beautyTk);
+
+      const expiration = decoded.exp! < Date.now() / 1000;
+
+      setToken(beautyTk);
+      setExpired(expiration);
+    }
+  }, []);
+
+  return { token, expired };
 };

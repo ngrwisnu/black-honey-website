@@ -11,6 +11,8 @@ import CartLoading from "@/app/(cart)/cart/[subPage]/loading";
 import { findUserCart } from "@/lib/utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import Link from "next/link";
+import { useToken } from "@/hooks/useToken";
+import ExpiredSession from "../expired-session";
 
 interface CheckoutCompProps {
   addresses: FetchResponse | undefined;
@@ -21,6 +23,7 @@ const CheckoutComp = ({ addresses }: CheckoutCompProps) => {
   const [existAddresses, setExistAddresses] = useState<AddressType[]>();
   const [userItems, setUserItems] = useState<CartItems[] | []>([]);
 
+  const { expired } = useToken();
   const router = useRouter();
 
   const items = useCart((state) => state.items);
@@ -43,6 +46,10 @@ const CheckoutComp = ({ addresses }: CheckoutCompProps) => {
   const checkoutDetail = {
     address_id: selectedAddress,
   };
+
+  if (expired) {
+    return <ExpiredSession />;
+  }
 
   if (!addresses) {
     return <CartLoading />;

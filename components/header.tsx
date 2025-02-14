@@ -11,7 +11,8 @@ import Logo from "./logo";
 import { findUserCart, getUserInitial } from "@/lib/utils";
 import Image from "next/image";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { oauthLogout } from "@/lib/api/auth";
+import { oauthLogout, sessionLogout } from "@/lib/api/auth";
+import { useToken } from "@/hooks/useToken";
 
 interface HeaderProps {
   logoCenter?: boolean;
@@ -21,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [initial, setInitial] = useState<string | undefined>();
+  const { token } = useToken();
 
   const items = useCart((state) => state.items);
   const userProfile = useUserProfile();
@@ -48,12 +50,15 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   };
 
   const logoutHandler = async () => {
+    sessionLogout(token);
+    oauthLogout();
+
     if (userProfile) {
       Cookies.remove("tk");
+      Cookies.remove("_tk_csrf");
 
       router.push("/login");
     }
-    oauthLogout();
   };
 
   return (

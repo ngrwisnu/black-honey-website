@@ -38,7 +38,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   const { push } = useRouter();
   const url = usePathname();
-  const token = useToken();
+  const { token } = useToken();
   const path = useGetPathname(url);
 
   let subTotal = 0;

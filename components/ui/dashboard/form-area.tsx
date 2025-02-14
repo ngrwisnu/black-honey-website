@@ -39,7 +39,7 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
 
   const router = useRouter();
 
-  const token = useToken();
+  const { token } = useToken();
 
   const { mutate } = useAddAddress();
 

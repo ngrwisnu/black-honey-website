@@ -25,8 +25,10 @@ const Page = () => {
           const result = await loginWithOauth(search);
 
           if (!result?.isError) {
-            const uglyTk = window.btoa(result?.data.data.token);
-            Cookies.set("tk", uglyTk, { expires: 5 });
+            const uglyTk = window.btoa(result?.data.data.token.access);
+            Cookies.set("tk", uglyTk, {
+              expires: Date.now() + 6 * 60 * 60 * 1000,
+            });
           }
         }
 
