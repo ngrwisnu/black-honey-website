@@ -27,6 +27,7 @@ import { useToken } from "@/hooks/useToken";
 import DashboardError from "./error";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import ExpiredSession from "../expired-session";
 
 const ContentBody = dynamic(() => import("./content-body"));
 
@@ -34,7 +35,7 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
   const [rating, setRating] = useState(5);
   const [reviews, setReviews] = useState<[] | undefined>([]);
 
-  const token = useToken();
+  const { token, expired } = useToken();
   const router = useRouter();
 
   useEffect(() => {
@@ -75,6 +76,10 @@ const ReviewPage = ({ review }: { review: FetchResponse | undefined }) => {
 
     router.refresh();
   };
+
+  if (expired) {
+    return <ExpiredSession />;
+  }
 
   if (!reviews) {
     return <DashboardError />;

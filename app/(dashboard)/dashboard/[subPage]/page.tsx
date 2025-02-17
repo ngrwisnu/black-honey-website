@@ -6,6 +6,8 @@ import { getAllReviews, getTransactionsHistory } from "@/lib/api/dashboard";
 import { getAllAddresses } from "@/lib/api/address";
 import { cookies } from "next/headers";
 import NotFound from "@/components/ui/not-found";
+import ExpiredSession from "@/components/ui/expired-session";
+import { redirect } from "next/navigation";
 
 export const generateMetadata = async ({
   params,
@@ -27,27 +29,35 @@ const SubPage = async ({ params }: { params: { subPage: string } }) => {
   const cookieStore = cookies();
   const tk = cookieStore.get("tk");
 
-  const decodedTk = Buffer.from(tk!.value, "base64").toString("ascii");
-
-  if (params.subPage === "transactions") {
-    const orders = await getTransactionsHistory(decodedTk);
-
-    return <HistoryPage orders={orders} />;
+  if (!tk) {
+    redirect("/login");
   }
 
-  if (params.subPage === "setting") {
-    const addresses = await getAllAddresses(decodedTk);
+  const decodedTk = Buffer.from(tk.value, "base64").toString("ascii");
 
-    return <SettingPage addresses={addresses} />;
-  }
+  const pages: Record<
+    string,
+    (decodedTk: string) => Promise<React.JSX.Element>
+  > = {
+    transactions: async (token) => {
+      const orders = await getTransactionsHistory(token);
+      return <HistoryPage orders={orders} />;
+    },
+    setting: async (token) => {
+      const addresses = await getAllAddresses(token);
+      return <SettingPage addresses={addresses} />;
+    },
+    review: async (token) => {
+      const review = await getAllReviews(token);
+      return <ReviewPage review={review} />;
+    },
+  };
 
-  if (params.subPage === "review") {
-    const review = await getAllReviews(decodedTk);
-
-    return <ReviewPage review={review} />;
-  }
-
-  return <NotFound />;
+  return pages[params.subPage] ? (
+    pages[params.subPage](decodedTk)
+  ) : (
+    <NotFound />
+  );
 };
 
 export default SubPage;

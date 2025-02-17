@@ -20,6 +20,7 @@ export interface PaymentType {
 
 export interface OrderType {
   id: number;
+  invoice_id: string;
   qty: number;
   total_price: number;
   status: string;

@@ -26,7 +26,7 @@ import { useToken } from "@/hooks/useToken";
 const PasswordModal = () => {
   const [isEqual, setIsEqual] = useState(true);
 
-  const token = useToken();
+  const { token } = useToken();
 
   const modal = useModal();
 

@@ -1,9 +1,10 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
-import { CouponType, UserPayload } from "@/types/types";
-import jwt_decode from "jwt-decode";
+import { UserPayload } from "@/types/types";
+import { jwtDecode } from "jwt-decode";
 import { CartItems } from "@/store/cart";
+import { customAlphabet } from "nanoid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -52,10 +53,14 @@ export function getUserProfile() {
 
   if (tk) {
     const beautyTk = window.atob(tk);
-    const decodedTk: UserPayload = jwt_decode(beautyTk);
+    const decodedTk: UserPayload = jwtDecode(beautyTk);
 
     return decodedTk.customer;
   }
+}
+
+export function removeAccessToken() {
+  Cookies.remove("tk");
 }
 
 export function findUserCart(items: CartItems[], uid: string | undefined) {
@@ -83,3 +88,8 @@ export function getUserInitial(username: string) {
     }
   }
 }
+
+export const nanoid = customAlphabet(
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  23,
+);

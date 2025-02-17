@@ -3,13 +3,17 @@
 import useCheckout from "@/store/checkout";
 import { useEffect, useState } from "react";
 import { SummaryItem, SummaryList, SummaryTitle } from "./summary-item";
-import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
+import {
+  currencyFormatter,
+  nanoid,
+  removeAccessToken,
+  subTotalCalculation,
+} from "@/lib/utils";
 import { Button } from "../button";
 import { Check } from "lucide-react";
 import { useToken } from "@/hooks/useToken";
 import Link from "next/link";
 import { CreateOrderPayload, MidtransPayload } from "@/types/types";
-import { v4 as uuidv4 } from "uuid";
 import { getMidtransToken } from "@/lib/api/checkout";
 import useCart from "@/store/cart";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
@@ -21,7 +25,7 @@ const PaymentComp = () => {
 
   const checkout = useCheckout();
   const cart = useCart();
-  const token = useToken();
+  const { token } = useToken();
 
   const { mutate } = useCreateOrder();
 
@@ -54,7 +58,7 @@ const PaymentComp = () => {
     ) as number;
 
     const body: MidtransPayload = {
-      order_id: uuidv4(),
+      order_id: nanoid(),
       gross_amount: totalPurchase,
       coupon_details: JSON.stringify({
         id: checkout.items[0].coupon?.id,
@@ -65,7 +69,20 @@ const PaymentComp = () => {
     };
 
     const response = await getMidtransToken(body, token);
-    console.log(response);
+
+    if (response?.isError && response.data.message === "jwt expired") {
+      removeAccessToken();
+
+      Swal.fire({
+        icon: "error",
+        title: "Session Expired",
+        text: "Please try to login again",
+        confirmButtonText: `
+        <a href="/" class="">Re-login</a>
+      `,
+        confirmButtonColor: "#030712",
+      });
+    }
 
     // @ts-ignore
     window.snap.pay(response?.data.data.token, {
@@ -193,8 +210,9 @@ const PaymentComp = () => {
         </span>
       </Button>
       <p className="mt-6 w-full bg-red-100 p-4 md:w-[506px]">
-        All transaction made in this environment is <strong>not real</strong>{" "}
-        and does not require <strong>real payment</strong>. You can use this{" "}
+        All transaction made in this environment is for{" "}
+        <strong>demo purpose only</strong> and does not require{" "}
+        <strong>real payment</strong>. You can use this{" "}
         <Link href="https://simulator.sandbox.midtrans.com/" target="_blank">
           <span className="text-blue-400">link</span>
         </Link>{" "}

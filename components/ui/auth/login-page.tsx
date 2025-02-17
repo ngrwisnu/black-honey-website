@@ -51,8 +51,11 @@ const LoginPage = () => {
         message: "",
       });
 
-      const encodedTk = window.btoa(data?.data.data.token);
-      Cookies.set("tk", encodedTk, { expires: 5 });
+      const encodedTk = window.btoa(data?.data.data.token.access);
+      Cookies.set("tk", encodedTk, {
+        expires: Date.now() + 6 * 60 * 60 * 1000,
+      });
+      Cookies.set("_tk_csrf", data?.data.data.token.csrf);
 
       router.push("/");
     }

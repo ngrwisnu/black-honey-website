@@ -13,6 +13,8 @@ import { Copy } from "lucide-react";
 import { toast } from "../use-toast";
 import DashboardError from "./error";
 import dynamic from "next/dynamic";
+import { useToken } from "@/hooks/useToken";
+import ExpiredSession from "../expired-session";
 
 interface HistoryPageProps {
   orders: FetchResponse | undefined;
@@ -23,6 +25,7 @@ const ContentBody = dynamic(() => import("./content-body"));
 const HistoryPage = ({ orders }: HistoryPageProps) => {
   const [orderHistory, setOrderHistory] = useState<OrderType[] | undefined>([]);
 
+  const { expired } = useToken();
   const receiptRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
@@ -46,6 +49,10 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
     }
   };
 
+  if (expired) {
+    return <ExpiredSession />;
+  }
+
   if (!orderHistory) {
     return <DashboardError />;
   }
@@ -68,24 +75,30 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                 aria-label="order-card"
               >
                 <CardHeader className="flex items-start self-stretch border-b-[1px] border-b-gray-200 pb-2 pl-2">
-                  <div
-                    className="flex gap-4"
-                    aria-label="Date purchase and status"
-                  >
-                    <span className="text-sm text-body-secondary">
-                      {dateFormatter(order.createdAt)}
-                    </span>
-                    <Badge
-                      className={`${
-                        order.status === "pending" && "bg-[#FFECBD]"
-                      } ${order.status === "success" && "bg-[#D2ECEC]"} ${
-                        order.status === "pre_order" && "bg-[#bdacfb]"
-                      } ${
-                        order.status === "reject" && "bg-[#FBB8AC]"
-                      } font-medium text-body-primary`}
+                  <div className="flex w-full justify-between">
+                    <div
+                      className="flex justify-center gap-4"
+                      aria-label="Date purchase and status"
                     >
-                      {order.status}
-                    </Badge>
+                      <div className="text-sm text-body-secondary">
+                        {dateFormatter(order.createdAt)}
+                      </div>
+                      <Badge
+                        className={`${
+                          order.status === "pending" && "bg-[#FFECBD]"
+                        } ${order.status === "success" && "bg-[#D2ECEC]"} ${
+                          order.status === "pre_order" && "bg-[#bdacfb]"
+                        } ${
+                          order.status === "reject" && "bg-[#FBB8AC]"
+                        } font-medium text-body-primary`}
+                      >
+                        {order.status}
+                      </Badge>
+                    </div>
+                    <div className="flex gap-1 text-base text-orange-500">
+                      <div className="">#Invoice: </div>
+                      <div className="">{order.invoice_id}</div>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="flex flex-col items-start gap-4 self-stretch sm:flex-row sm:justify-between sm:gap-0">

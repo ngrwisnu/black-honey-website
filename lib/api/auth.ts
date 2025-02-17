@@ -39,3 +39,14 @@ export const oauthLogout = () => {
     withCredentials: true,
   });
 };
+
+export const sessionLogout = (token: string) => {
+  const url = `${API_ROOT}/logout`;
+
+  return callAPI({
+    url,
+    method: "PUT",
+    token,
+    withCredentials: true,
+  });
+};
