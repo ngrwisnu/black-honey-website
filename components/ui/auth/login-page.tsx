@@ -43,7 +43,6 @@ const LoginPage = () => {
   });
 
   const onLoginSuccess = (data: FetchResponse | undefined) => {
-    console.log(data);
     if (data?.isError) {
       setLoginValid({
         isError: true,
