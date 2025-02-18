@@ -8,7 +8,19 @@ export const login = (data: { email: string; password: string }) => {
   return callAPI({
     url,
     method: "POST",
+    withCredentials: true,
     data,
+  });
+};
+
+export const sessionLogin = (csrfToken: string) => {
+  const url = `${API_ROOT}/login`;
+
+  return callAPI({
+    url,
+    method: "PUT",
+    withCredentials: true,
+    token: csrfToken,
   });
 };
 
