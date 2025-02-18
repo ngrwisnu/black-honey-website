@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 export const useToken = () => {
   const [token, setToken] = useState<string>("");
+  const [csrf, setCSRF] = useState<string>("");
   const [expired, setExpired] = useState<boolean>(false);
 
   useEffect(() => {
@@ -21,5 +22,13 @@ export const useToken = () => {
     }
   }, []);
 
-  return { token, expired };
+  useEffect(() => {
+    const csrfToken = Cookies.get("_tk_csrf");
+
+    if (csrfToken) {
+      setCSRF(csrfToken);
+    }
+  }, []);
+
+  return { token, csrf, expired };
 };

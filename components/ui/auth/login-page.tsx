@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import FormContainer from "./form-container";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "@/validations/auth-form";
@@ -20,6 +20,8 @@ import { useLogin } from "@/hooks/useAuth";
 import { FetchResponse } from "@/types/types";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useToken } from "@/hooks/useToken";
+import { sessionLogin } from "@/lib/api/auth";
 
 const LoginPage = () => {
   const [loginValid, setLoginValid] = useState({
@@ -29,6 +31,7 @@ const LoginPage = () => {
 
   const router = useRouter();
 
+  const { csrf } = useToken();
   const { mutate } = useLogin();
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -40,6 +43,7 @@ const LoginPage = () => {
   });
 
   const onLoginSuccess = (data: FetchResponse | undefined) => {
+    console.log(data);
     if (data?.isError) {
       setLoginValid({
         isError: true,
@@ -67,7 +71,15 @@ const LoginPage = () => {
     });
   };
 
-  const formContent = (
+  const updateSessionHandler = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const response = await sessionLogin(csrf);
+
+    onLoginSuccess(response);
+  };
+
+  const formContent = !csrf ? (
     <Form {...form}>
       <form
         action=""
@@ -115,6 +127,12 @@ const LoginPage = () => {
         </Button>
       </form>
     </Form>
+  ) : (
+    <form onSubmit={updateSessionHandler} className="flex flex-col gap-4">
+      <Button variant="default" type="submit" className="mt-2 w-full">
+        Login
+      </Button>
+    </form>
   );
 
   return (
