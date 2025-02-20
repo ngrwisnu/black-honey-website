@@ -1,10 +1,10 @@
 "use client";
 
 import useCart from "@/store/cart";
-import { X } from "lucide-react";
+import { Bolt, CreditCard, LogOut, ReceiptText, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import Logo from "./logo";
@@ -22,8 +22,10 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [initial, setInitial] = useState<string | undefined>();
-  const { token } = useToken();
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { token } = useToken();
   const items = useCart((state) => state.items);
   const userProfile = useUserProfile();
 
@@ -36,6 +38,25 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
     userCart.length !== 0 ? setIsEmpty(false) : setIsEmpty(true);
     setInitial(initial);
   }, [userProfile, items]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsClicked(false);
+      }
+    }
+
+    if (isClicked) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isClicked]);
 
   const clickHandler = () => {
     if (userProfile) {
@@ -61,9 +82,15 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
     }
   };
 
+  const navList = [
+    { link: "/dashboard/transactions", icon: <CreditCard />, name: "History" },
+    { link: "/dashboard/review", icon: <ReceiptText />, name: "Review" },
+    { link: "/dashboard/setting", icon: <Bolt />, name: "Setting" },
+  ];
+
   return (
     <header
-      className={`static top-0 z-50 flex max-h-20 w-full items-center justify-center self-stretch px-4 py-4 sm:fixed sm:bg-white/50 sm:backdrop-blur-md md:justify-between ${
+      className={`fixed top-0 z-[9999] flex max-h-20 w-full items-center justify-center self-stretch bg-white px-4 py-4 md:justify-between ${
         logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"
       }`}
     >
@@ -128,50 +155,51 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
             {initial && !userProfile?.avatar ? initial?.toUpperCase() : ""}
             {isClicked && (
               <div
-                className={`dropdown fixed bottom-0 left-0 right-0 z-[999] flex min-w-[180px] flex-col items-start gap-[10px] rounded-md bg-white py-2 shadow-section sm:absolute sm:-bottom-[171px] sm:left-auto`}
+                ref={dropdownRef}
+                className={`dropdown absolute left-auto right-0 top-[calc(100%_+_8px)] z-[999] flex min-w-[180px] flex-col items-start rounded-md bg-white py-2 drop-shadow-xl`}
               >
                 <ul
-                  className="order-2 flex w-full flex-col gap-[10px]"
+                  className="order-2 flex w-full flex-col gap-[10px] bg-slate-200"
                   aria-label="dropdown"
                 >
-                  <li>
-                    <Link
-                      href={"/dashboard/setting"}
-                      className="flex items-center justify-center gap-2 self-stretch px-4 py-2 text-gray-800 hover:bg-gray-100 sm:justify-start"
-                    >
-                      <span className="h-6 w-6 bg-[url(/images/person.svg)] bg-no-repeat"></span>
-                      <span>Profile</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href={"/dashboard/transactions"}
-                      className="flex items-center justify-center gap-2 self-stretch px-4 py-2 text-gray-800 hover:bg-gray-100 sm:justify-start"
-                    >
-                      <span className="h-6 w-6 bg-[url(/images/contract.svg)] bg-no-repeat"></span>
-                      <span>History</span>
-                    </Link>
-                  </li>
-                  <li
-                    className="h-[1px] w-full bg-gray-200"
-                    aria-label="divider"
-                  ></li>
-                  <li onClick={logoutHandler}>
-                    <Button
-                      variant="ghost"
-                      className="flex w-full items-center justify-center gap-2 self-stretch px-4 py-2 text-red-500 hover:bg-gray-100 hover:text-red-500 sm:justify-start"
-                    >
-                      <span className="h-6 w-6 bg-[url(/images/logout.svg)] bg-no-repeat"></span>
-                      <span>Logout</span>
-                    </Button>
-                  </li>
+                  <div className="flex w-full flex-col bg-white">
+                    {navList.map((list) => (
+                      <li key={list.name}>
+                        <Link
+                          href={list.link}
+                          className="flex gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100 sm:items-center sm:justify-start sm:self-stretch"
+                        >
+                          <span>
+                            <div className="h-6 w-6">{list.icon}</div>
+                          </span>
+                          <span className="basis-full">{list.name}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </div>
+
+                  <div className="flex w-full flex-col bg-white">
+                    <li onClick={logoutHandler}>
+                      <Button
+                        variant="ghost"
+                        className="flex w-full gap-2 px-4 py-2 text-red-500 hover:bg-gray-100 hover:text-red-500 sm:items-center sm:justify-start sm:self-stretch"
+                      >
+                        <span>
+                          <div className="h-6 w-6">
+                            <LogOut />
+                          </div>
+                        </span>
+                        <span className="basis-full text-left">Logout</span>
+                      </Button>
+                    </li>
+                  </div>
                 </ul>
-                <button
+                {/* <button
                   className="order-1 flex w-full justify-end px-4 py-2 sm:hidden"
                   onClick={() => setIsClicked(false)}
                 >
                   <X size={18} />
-                </button>
+                </button> */}
               </div>
             )}
           </div>

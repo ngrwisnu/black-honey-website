@@ -75,16 +75,16 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                 aria-label="order-card"
               >
                 <CardHeader className="flex items-start self-stretch border-b-[1px] border-b-gray-200 pb-2 pl-2">
-                  <div className="flex w-full justify-between">
+                  <div className="flex w-full flex-col justify-between gap-2 sm:flex-row sm:gap-0">
                     <div
-                      className="flex justify-center gap-4"
+                      className="flex justify-start gap-4 max-sm:order-2"
                       aria-label="Date purchase and status"
                     >
                       <div className="text-sm text-body-secondary">
                         {dateFormatter(order.createdAt)}
                       </div>
                       <Badge
-                        className={`${
+                        className={`h-fit ${
                           order.status === "pending" && "bg-[#FFECBD]"
                         } ${order.status === "success" && "bg-[#D2ECEC]"} ${
                           order.status === "pre_order" && "bg-[#bdacfb]"
@@ -95,7 +95,7 @@ const HistoryPage = ({ orders }: HistoryPageProps) => {
                         {order.status}
                       </Badge>
                     </div>
-                    <div className="flex gap-1 text-base text-orange-500">
+                    <div className="flex gap-1 text-base font-medium max-sm:order-1">
                       <div className="">#Invoice: </div>
                       <div className="">{order.invoice_id}</div>
                     </div>
