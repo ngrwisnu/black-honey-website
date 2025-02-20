@@ -6,7 +6,6 @@ import { getAllReviews, getTransactionsHistory } from "@/lib/api/dashboard";
 import { getAllAddresses } from "@/lib/api/address";
 import { cookies } from "next/headers";
 import NotFound from "@/components/ui/not-found";
-import ExpiredSession from "@/components/ui/expired-session";
 import { redirect } from "next/navigation";
 
 export const generateMetadata = async ({
