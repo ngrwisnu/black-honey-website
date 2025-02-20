@@ -16,7 +16,7 @@ import {
 } from "../form";
 import { Input } from "../input";
 import { Button } from "../button";
-import { useLogin } from "@/hooks/useAuth";
+import { useLogin, useSessionLogin } from "@/hooks/useAuth";
 import { FetchResponse } from "@/types/types";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,9 @@ const LoginPage = () => {
   const router = useRouter();
 
   const { csrf } = useToken();
-  const { mutate } = useLogin();
+  const { mutate, isLoading } = useLogin();
+  const { mutate: mutateSessionLogin, isLoading: isSessionLoginLoading } =
+    useSessionLogin();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -73,9 +75,9 @@ const LoginPage = () => {
   const updateSessionHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    const response = await sessionLogin(csrf);
-
-    onLoginSuccess(response);
+    mutateSessionLogin(csrf, {
+      onSuccess: onLoginSuccess,
+    });
   };
 
   const formContent = !csrf ? (
@@ -121,14 +123,24 @@ const LoginPage = () => {
             </FormItem>
           )}
         />
-        <Button variant="default" type="submit" className="mt-2 w-full">
+        <Button
+          variant="default"
+          type="submit"
+          disabled={isLoading}
+          className="mt-2 w-full"
+        >
           Continue
         </Button>
       </form>
     </Form>
   ) : (
     <form onSubmit={updateSessionHandler} className="flex flex-col gap-4">
-      <Button variant="default" type="submit" className="mt-2 w-full">
+      <Button
+        variant="default"
+        type="submit"
+        className="mt-2 w-full"
+        disabled={isSessionLoginLoading}
+      >
         Login
       </Button>
     </form>
