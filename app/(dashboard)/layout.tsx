@@ -23,7 +23,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <PasswordModal />
       <Header />
       <SideNav />
-      <Container className="my-14 px-4">{children}</Container>
+      <Container className="my-20 px-4">{children}</Container>
     </div>
   );
 };
