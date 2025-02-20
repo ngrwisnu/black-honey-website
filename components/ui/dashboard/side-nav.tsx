@@ -22,7 +22,7 @@ const SideNav = () => {
   return (
     <>
       <div
-        className="absolute left-0 top-20 z-10 flex w-full p-4 sm:hidden"
+        className="absolute left-0 top-20 z-[51] flex w-full p-4 sm:hidden"
         aria-label="hamburger-menu"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -31,7 +31,7 @@ const SideNav = () => {
       <div
         className={cx(
           isOpen ? "-left-0" : "-left-full",
-          "absolute bottom-0 top-20 flex w-4/5 flex-col items-center justify-start bg-white shadow-xl transition-all duration-300 sm:relative sm:left-0 sm:top-0 sm:mt-20 sm:w-full sm:flex-row sm:justify-center sm:bg-transparent sm:shadow-none",
+          "fixed bottom-0 top-20 z-50 flex w-4/5 flex-col items-center justify-start bg-white shadow-xl transition-all duration-300 max-sm:h-[calc(100vh_-_80px)] sm:relative sm:left-0 sm:top-0 sm:mt-20 sm:w-full sm:flex-row sm:justify-center sm:bg-transparent sm:shadow-none",
         )}
         aria-label="nav-wrapper"
       >

@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
 
   return (
     <header
-      className={`static top-0 z-50 flex max-h-20 w-full items-center justify-center self-stretch px-4 py-4 sm:fixed sm:bg-white/50 sm:backdrop-blur-md md:justify-between ${
+      className={`fixed top-0 z-[9999] flex max-h-20 w-full items-center justify-center self-stretch bg-white px-4 py-4 md:justify-between ${
         logoCenter ? "" : "border-b-[1px] border-b-[#F2DC99]"
       }`}
     >
