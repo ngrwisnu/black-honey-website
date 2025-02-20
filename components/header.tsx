@@ -4,7 +4,7 @@ import useCart from "@/store/cart";
 import { Bolt, CreditCard, LogOut, ReceiptText, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import Logo from "./logo";
@@ -22,8 +22,10 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [initial, setInitial] = useState<string | undefined>();
-  const { token } = useToken();
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { token } = useToken();
   const items = useCart((state) => state.items);
   const userProfile = useUserProfile();
 
@@ -36,6 +38,25 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
     userCart.length !== 0 ? setIsEmpty(false) : setIsEmpty(true);
     setInitial(initial);
   }, [userProfile, items]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsClicked(false);
+      }
+    }
+
+    if (isClicked) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isClicked]);
 
   const clickHandler = () => {
     if (userProfile) {
@@ -134,7 +155,8 @@ const Header: React.FC<HeaderProps> = ({ logoCenter }) => {
             {initial && !userProfile?.avatar ? initial?.toUpperCase() : ""}
             {isClicked && (
               <div
-                className={`dropdown absolute left-auto right-0 top-[calc(100%_+_8px)] z-[999] flex min-w-[180px] flex-col items-start rounded-md bg-white py-2 shadow-section`}
+                ref={dropdownRef}
+                className={`dropdown absolute left-auto right-0 top-[calc(100%_+_8px)] z-[999] flex min-w-[180px] flex-col items-start rounded-md bg-white py-2 drop-shadow-xl`}
               >
                 <ul
                   className="order-2 flex w-full flex-col gap-[10px] bg-slate-200"
