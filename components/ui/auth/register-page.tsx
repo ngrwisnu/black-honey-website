@@ -21,6 +21,7 @@ import { Button } from "../button";
 import { useRegister } from "@/hooks/useAuth";
 import { FetchResponse } from "@/types/types";
 import { useRouter } from "next/navigation";
+import { sanitizeFormData } from "@/lib/utils";
 
 const RegisterPage = () => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -55,7 +56,9 @@ const RegisterPage = () => {
   };
 
   const submitHandler = (data: z.infer<typeof registerSchema>) => {
-    mutate(data, {
+    const cleanData = sanitizeFormData(data);
+
+    mutate(cleanData, {
       onSuccess: onRegisterSuccess,
     });
   };

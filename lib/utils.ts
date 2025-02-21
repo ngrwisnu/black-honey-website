@@ -5,6 +5,7 @@ import { UserPayload } from "@/types/types";
 import { jwtDecode } from "jwt-decode";
 import { CartItems } from "@/store/cart";
 import { customAlphabet } from "nanoid";
+import DOMPurify from "dompurify";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -93,3 +94,19 @@ export const nanoid = customAlphabet(
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
   23,
 );
+
+export const sanitizeData = (data: string) => {
+  return DOMPurify.sanitize(data);
+};
+
+export const sanitizeFormData = <T extends Record<string, string>>(
+  data: T,
+): T => {
+  const sanitizedData: T = { ...data };
+
+  for (const key in sanitizedData) {
+    sanitizedData[key] = DOMPurify.sanitize(data[key]) as T[typeof key];
+  }
+
+  return sanitizedData;
+};
