@@ -21,7 +21,7 @@ import { FetchResponse } from "@/types/types";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useToken } from "@/hooks/useToken";
-import { sessionLogin } from "@/lib/api/auth";
+import { sanitizeFormData } from "@/lib/utils";
 
 const LoginPage = () => {
   const [loginValid, setLoginValid] = useState({
@@ -67,7 +67,9 @@ const LoginPage = () => {
   };
 
   const submitHandler = (data: z.infer<typeof loginSchema>) => {
-    mutate(data, {
+    const cleanData = sanitizeFormData(data);
+
+    mutate(cleanData, {
       onSuccess: onLoginSuccess,
     });
   };

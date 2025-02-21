@@ -7,7 +7,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useGetPathname } from "@/hooks/useGetPathname";
 import { Input } from "@/components/ui/input";
 import { CartItems } from "@/store/cart";
-import { currencyFormatter, subTotalCalculation } from "@/lib/utils";
+import {
+  currencyFormatter,
+  sanitizeData,
+  subTotalCalculation,
+} from "@/lib/utils";
 import { toast } from "../use-toast";
 import useCheckout from "@/store/checkout";
 import { useGetCouponByCode } from "@/hooks/useCoupon";
@@ -189,7 +193,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                   id="coupon"
                   placeholder="Coupon code"
                   value={coupon}
-                  onChange={(e) => setCoupon(e.target.value)}
+                  onChange={(e) => setCoupon(sanitizeData(e.target.value))}
                 />
               </div>
               <Button variant="main" onClick={applyCouponHandler}>

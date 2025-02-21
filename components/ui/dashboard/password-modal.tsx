@@ -22,6 +22,7 @@ import { Button } from "../button";
 import { useUpdateProfile } from "@/hooks/useUpdateProfile";
 import Swal from "sweetalert2";
 import { useToken } from "@/hooks/useToken";
+import { sanitizeData } from "@/lib/utils";
 
 const PasswordModal = () => {
   const [isEqual, setIsEqual] = useState(true);
@@ -48,7 +49,7 @@ const PasswordModal = () => {
       setIsEqual(false);
     } else {
       const profileData = {
-        password: data.newPassword,
+        password: sanitizeData(data.newPassword),
       };
 
       const required = {

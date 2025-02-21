@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import AddressList from "./address-list";
 import { useToken } from "@/hooks/useToken";
 import { useRouter } from "next/navigation";
+import { sanitizeFormData } from "@/lib/utils";
 
 interface FormAreaProps {
   fields: { name: string; type: string }[];
@@ -60,8 +61,10 @@ const FormArea = ({ fields, addresses }: FormAreaProps) => {
   }, [form.formState.isSubmitSuccessful]);
 
   const submitHandler = (data: z.infer<typeof addressSchema>) => {
+    const cleanData = sanitizeFormData(data);
+
     const required = {
-      data,
+      data: cleanData,
       token,
     };
 
